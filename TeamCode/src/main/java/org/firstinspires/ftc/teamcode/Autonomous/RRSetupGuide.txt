@@ -1,0 +1,109 @@
+Check for if using drive encoders (run_with_encoder)
+Input drive constants in drive.driveConstants. Ignore PID and feedforward parameters for now.
+WARNING: Make sure to analyze programs for gamepad controls first.
+WARNING: Steps are designed for dead wheel setups WITHOUT drive encoders. If using them, will need
+a lot of extra steps and stuff. Some major differences btwn drive and dead wheel tuning are noted
+in this document.
+WARNING: RoadRunner uses inches not centimeters, and radians not degrees.
+
+Tune odometry in drive.opmode.StandardTrackingWheelLocalizer:
+1. Add tuning constant variables
+2. Run drive.opmode.LocalizationTest WITH HANDS
+3. Repeat tuning constant variables with newConstant = distance / estimated distance
+4. Remember that x is up/down and y is strafe.
+5. Tune LATERAL_DISTANCE by running drive.opmode.TrackingWheelLateralDistanceTuner. Follow steps provided in class.
+6. Verify that left = y+ and forward = x+ with substep 2 WITH CONTROLLER.
+7. Recommended to delete IMU in drive.SampleMecanumDrive. Follow online procedure.
+8. You should also have learned how the dashboard works.
+9. If needed, troubleshoot with directions online.
+10. Congratulations on completing steps 1-2/9! :) ;(
+11. Optional: Find where localization is calculated to see how it works
+
+If NOT using drive encoders, skip step 3 (tuning the PIDF).
+Instead, step 4 (opened-loop control) with feedforward is recommended.
+Tuning DriveVelocityPIDTuner directions in this url: https://learnroadrunner.com/drive-velocity-pid-tuning
+
+Dashboard will be at the address <Control Hub Network>/dash, such as 192.168.43.1:8080/dash.
+FF tuning can be done automatically, but not recommended bc inaccurate. Manual steps:
+1. Run drive.opmode.ManualFeedforwardTuner with dashboard with all activations
+2. "In the ManualFeedforwardTuner dropdown, ensure that the DISTANCE variable is big enough so the
+targetVelocity line has a plateau. If it resembles a series of triangles, increase the DISTANCE."
+3. "At this point, once you have run the opmode, the bot should be moving back and forth along the
+distance specified in the opmode file. The goal is for the poseVelocity line to match the targetVelocity line."
+4. "kV should initially be set to 1 / max velocity. The poseVelocity line should be touching
+the top of the targetVelocity plateau. If not, increase kV."
+5. "increase kA to try and get the slope of the poseVelocity line to match targetVelocity."
+6. Reference https://learnroadrunner.com/feedforward-tuning.html#tuning for good visual.
+7. Copy tuned values into drive.DriveConstants, else they will be yeeted.
+8. "Note: The graph doesn't need to be perfect. Just "good enough."
+You can waste an infinite amount of time trying to perfect it.
+In addition to that, the Rev Hub's internal motor controller is a little odd and
+you will have a slight bump on deceleration that will be impossible to get rid of."
+9. Troubleshoot with the link in substep 6 if nessecary.
+10. Fun fact: like 30% of all FTC programming pleas for help are for this subject.
+
+Welcome to Hell, also known as testing if all this works.
+Step 5: If using encoders, tune using drive.opmode.StraightTest and drive.opmode.StrafeTest.
+Else,
+1. Run drive.opmode.StraightTest. It should run forwards 60 inches +- 1-2 in
+2. AS LONG AS THE ROBOT DRIVES CONSISTANTLY ALONG THE Y-AXIS, EVERYTHING IS FINE.
+PID WILL BE IMPLEMENTED LATER. INACCURACIES ALONG X-AXIS ARE FINE.
+3. ALSO, OVERSHOOTS WILL BE EXPECTED BC MOTORS SUCK WITH DECELERATION RIGHT NOW.
+PID WILL FIX THIS. STOP PANICKING.
+4. If the robot undershoots or is inconsistant in error, repeat/review steps 1-4 or the hardware. :/
+Optional (bc if your lazy one of the PIDs should fix this anyways):
+5. Run drive.opmode.StrafeTest. It will go right 60 in with maybe an undershoot.
+6. If undershoots, take 60 / actual distance = LATERAL_MULTIPLIER in drive.SampleMecanumDrive line 57.
+7. Repeat substeps 5-7 as needed.
+8. Troubleshooting for anything on this step can be found at https://learnroadrunner.com/straight-test.html#troubleshooting
+
+Step 6: Tuning the trackwidth, bc physical trackwidth is not nessecarily true trackwidth. \_(:/)_/
+This involves limiting angular velocity, then tuning trackwidth twice.
+1. Run drive.opmode.MaxAngularVelocityTuner. It telemetries a value which goes in MAX_ANG_VEL in drive.DriveConstants.
+2. Run drive.opmode.TrackWidthTuner. It will spin 2.5 times and then telemetry a value.
+3. If this value is close to the physical TW, replace TRACK_WIDTH in drive.DriveConstants with that.
+If not, or retesting shows that this sucks, keep going.
+4. Number-guessing time! Raise the trackwidth if it underturns, and vice versa for overturns.
+Remember: without closed-loop control this need not be perfect - up to 3 degrees off is ok.
+If this is being infuriatingly annoying, try reducing MAX_ANG_VEL.
+
+Step 7: Basically checking for if you did not completely goof the last step.
+1. Run drive.opmode.TurnTest. It will turn the robot 90 degrees counterclockwise.
+2. If it does do this within a degree, congrats! go to step 8.
+3. If it doesn't, go into drive.opmode.TurnTest and change ANGLE to 180 degrees.
+4. Rerun the program. It should work; this is what you did last step.
+If it doesn't work, you goofed and need to redo step 6.
+Remember, if 90 degrees is not so good but 180 degrees is, this is fine.
+
+Step 8: This is to test the drive encoders.
+
+Step 8 for real: PIDs. :( :( :(
+1. Run drive.opmode.BackAndForth. It will drive 50 in forwards and back forever.
+2. Open dashboard in Field view, and then open the SampleMecanumDrive dropdown.
+3. Open HEADING_PID and increase kP (to around 8 apparently) until the robot maintains heading.
+Recommended not to touch kD or kI for heading.
+4. Open TRANSLATION_PID and increase kP (to around 8) until it follows the path.
+Again, recommended not to touch kD or kI.
+5. Copy over both kPs into their relative variables in drive.SampleMecanumDrive.
+6. Repeat substeps 1-5 with drive.opmode.FollowerPIDTuner for increased accuracy.
+It will drive the robot in a counterclockwise square of sides 48 inches.
+7. "kD actually indirectly functions as a P Controller on pose velocity.
+Therefore, setting kD to a non-zero value (1 or something), IF you are using feedforward
+instead of velocity pid, may help keep your pose velocity constant across battery voltages."
+8. hmm that seemed too easy
+
+Step 9: Spline test
+1. Run drive.opmode.SplineTest. It will move in a sort of S in a 30 in x 30 in range.
+2. Open dashboard to make sure that the robot is following the path.
+3. If there are oscillations with following, one of the kPs are too big. Enjoy troubleshooting which one.
+4. Other errors should be consulted with the FTC Discord. This makes up 40% of all help requests.
+However, https://learnroadrunner.com/spline-test.html#diagnostic-tips gives a great guide on troubleshooting.
+5. @Disabled all of the testing/tuner programs. You're done!
+
+Looking forwards:
+- investigate trajectories, which have motion profiling, and paths, which don't
+- look into markers, which allow for actions during trajectories
+- RR teleop?
+- background tasks - trajectories usually force all code to stop and wait, like a while loop
+- admissible error/timeout - RR is time based on tasks (??), this changes that
+- RRPathVisualizer - cool, requires knowing Kotlin
