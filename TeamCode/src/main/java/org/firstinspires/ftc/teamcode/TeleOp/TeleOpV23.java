@@ -1,7 +1,4 @@
-//functioning arm v2 teleop program
-//goals: do everything and add arm modulation to v21
-
-/*
+/*functioning arm v2 teleop program
 Stack 5: rot 11.5 elbow 69.5
 Stack 4: rot 10.5 elbow 69.5
 Stack 3: rot 10 elbow 69.5
@@ -16,7 +13,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -28,7 +24,6 @@ import java.lang.Math;
 
 @TeleOp(name = "TeleOpV23", group = "Linear Opmode")
 public class TeleOpV23 extends LinearOpMode {
-
     private ElapsedTime runtime = new ElapsedTime();
     private Servo rotator;
     private Servo extender;
@@ -117,11 +112,11 @@ public class TeleOpV23 extends LinearOpMode {
 
             if (gamepad1.right_bumper == true) {
                 popper.setPosition(0.35);
-// sleep(300);
+                // sleep(300);
             } else {
                 popper.setPosition(0.19);
             }
-//cycling high - rotator 0.285, elbow 0.65, cone 0.14
+            //cycling high - rotator 0.285, elbow 0.65, cone 0.14
             if (gamepad1.b == true) {
                 counter1 = 0;
                 counter2 = 0;
@@ -131,7 +126,7 @@ public class TeleOpV23 extends LinearOpMode {
                 cone.setPosition(0.14);
                 armPos = "highDrop";
             }
-//high drop off - rotator 0.26, elbow 0.65, cone 0.135     
+            //high drop off - rotator 0.26, elbow 0.65, cone 0.135
             if (gamepad1.y == true) {
                 counter1 = 0;
                 counter2 = 0;
@@ -141,7 +136,7 @@ public class TeleOpV23 extends LinearOpMode {
                 cone.setPosition(0.135);
                 armPos = "highDrop";
             }
-//medium drop off - rotator 0.095, elbow 0.515, cone 0.16
+            //medium drop off - rotator 0.095, elbow 0.515, cone 0.16
             if (gamepad1.x == true) {
                 counter1 = 0;
                 counter2 = 0;
@@ -157,7 +152,7 @@ public class TeleOpV23 extends LinearOpMode {
                 cone.setPosition(0.16);
                 armPos = "medDrop";
             }
-//low drop off - rotator 0.0, elbow 0.455, cone 0.17
+            //low drop off - rotator 0.0, elbow 0.455, cone 0.17
             if (gamepad1.a == true) {
                 counter1 = 0;
                 counter2 = 0;
@@ -173,7 +168,7 @@ public class TeleOpV23 extends LinearOpMode {
                 cone.setPosition(0.17);
                 armPos = "lowDrop";
             }
-//far pick up - rotator 0.020, elbow 0.65, cone 0.075
+            //far pick up - rotator 0.020, elbow 0.65, cone 0.075
             if (gamepad1.dpad_left == true) {
                 sleep(300);
                 counter2 = 0;
@@ -199,7 +194,7 @@ public class TeleOpV23 extends LinearOpMode {
                     counter1 += 1;
                 }
             }
-//medium pick up - rotator 0.12, elbow 0.745, cone 0.055
+            //medium pick up - rotator 0.12, elbow 0.745, cone 0.055
             if (gamepad1.dpad_down == true) {
                 sleep(300);
                 counter1 = 0;
@@ -224,7 +219,7 @@ public class TeleOpV23 extends LinearOpMode {
                     armPos = "medGrab";
                 }
             }
-//lift off stack
+            //lift off stack
             if (gamepad1.dpad_up == true) {
                 sleep(300);
                 counter1 = 0;
@@ -242,7 +237,7 @@ public class TeleOpV23 extends LinearOpMode {
                 armPos = "medGrab";
             }
 
-//close pick up - rotator 0.16, elbow 0.775, cone 0.04
+            //close pick up - rotator 0.16, elbow 0.775, cone 0.04
             if (gamepad1.dpad_right == true) {
                 counter2 = 0;
                 counter1 = 0;
@@ -280,7 +275,7 @@ public class TeleOpV23 extends LinearOpMode {
             releasePos = release.getPosition();
             elbowPos = elbow.getPosition();
 
-// Get joystick values
+            // Get joystick values
             Y1 = gamepad1.right_stick_y;
             X1 = -gamepad1.right_stick_x;
             Y2 = -gamepad1.left_stick_y;
