@@ -14,7 +14,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@Autonomous(name="OpenCV Testing", group="Linear Opmode")
+@Autonomous(name="OpenCV Testing", group="Vision")
 public class OpenCVTesting extends LinearOpMode {
 
     OpenCvWebcam webcam;
