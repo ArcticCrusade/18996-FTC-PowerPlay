@@ -70,7 +70,7 @@ public class TeleOpV23 extends LinearOpMode {
         rightFront = hardwareMap.dcMotor.get("rightFront"); //slot 1
         leftRear = hardwareMap.dcMotor.get("leftRear"); //slot 2
         rightRear = hardwareMap.dcMotor.get("rightRear"); //slot 3
-        rotator = hardwareMap.servo.get("rotator");
+        /*rotator = hardwareMap.servo.get("rotator");
         extender = hardwareMap.servo.get("extender");
         cone = hardwareMap.servo.get("cone");
         popper = hardwareMap.servo.get("popper");
@@ -78,7 +78,7 @@ public class TeleOpV23 extends LinearOpMode {
         elbow = hardwareMap.servo.get("elbow");
 
         armSensor = hardwareMap.get(AnalogInput.class, "armSensor");
-        distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
+        distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");*/
         // Set the drive motor direction:
         // "Reverse" the motor that runs backwards when connected directly to the battery
         leftFront.setDirection(DcMotor.Direction.REVERSE);
@@ -86,12 +86,12 @@ public class TeleOpV23 extends LinearOpMode {
         leftRear.setDirection(DcMotor.Direction.REVERSE);
         rightRear.setDirection(DcMotor.Direction.FORWARD);
         //set servo directions
-        rotator.setDirection(Servo.Direction.FORWARD);
+        /*rotator.setDirection(Servo.Direction.FORWARD);
         extender.setDirection(Servo.Direction.FORWARD);
         cone.setDirection(Servo.Direction.FORWARD);
         popper.setDirection(Servo.Direction.FORWARD);
         release.setDirection(Servo.Direction.FORWARD);
-        elbow.setDirection(Servo.Direction.FORWARD);
+        elbow.setDirection(Servo.Direction.FORWARD);*/
 
 
         // Set the drive motor run modes:
@@ -104,7 +104,7 @@ public class TeleOpV23 extends LinearOpMode {
         runtime.reset();
 
         while (opModeIsActive()) {
-            rotatorPos = rotator.getPosition();
+            /*rotatorPos = rotator.getPosition();
             extenderPos = extender.getPosition();
             conePos = cone.getPosition();
             popperPos = popper.getPosition();
@@ -257,7 +257,7 @@ public class TeleOpV23 extends LinearOpMode {
                     armPos = "closeGrab";
                 }
             }
-
+            */
             // Reset speed variables
             LF = 0;
             RF = 0;
@@ -268,12 +268,12 @@ public class TeleOpV23 extends LinearOpMode {
             Y2 = 0;
             X2 = 0;
 
-            rotatorPos = rotator.getPosition();
+            /*rotatorPos = rotator.getPosition();
             extenderPos = extender.getPosition();
             conePos = cone.getPosition();
             popperPos = popper.getPosition();
             releasePos = release.getPosition();
-            elbowPos = elbow.getPosition();
+            elbowPos = elbow.getPosition();*/
 
             // Get joystick values
             Y1 = gamepad1.right_stick_y;
@@ -294,7 +294,7 @@ public class TeleOpV23 extends LinearOpMode {
             leftRear.setPower(LR * powerScale);
             rightRear.setPower(RR * powerScale);
 
-            distanceValues[0] = distanceSensor.getDistance(DistanceUnit.CM);
+            /*distanceValues[0] = distanceSensor.getDistance(DistanceUnit.CM);
             distanceValues[1] = distanceSensor.getDistance(DistanceUnit.CM);
             distanceValues[2] = distanceSensor.getDistance(DistanceUnit.CM);
             distanceValues[3] = distanceSensor.getDistance(DistanceUnit.CM);
@@ -320,7 +320,7 @@ public class TeleOpV23 extends LinearOpMode {
             telemetry.addData("Arm Potentiometer", armSensor.getVoltage());
             telemetry.addData("Distance", distanceSensor.getDistance(DistanceUnit.CM));
             telemetry.addData("Distance Average", distanceRounded);
-            telemetry.update();
+            telemetry.update();*/
         }
     }
 }

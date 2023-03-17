@@ -44,7 +44,7 @@ import java.util.Objects;
 @Config
 @Autonomous(group = "drive")
 public class ManualFeedforwardTuner extends LinearOpMode {
-    public static double DISTANCE = 72; // in
+    public static double DISTANCE = 50; // in
 
     private FtcDashboard dashboard = FtcDashboard.getInstance();
 
@@ -116,7 +116,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
                     double targetPower = Kinematics.calculateMotorFeedforward(motionState.getV(), motionState.getA(), kV, kA, kStatic);
 
                     final double NOMINAL_VOLTAGE = 12.0;
-                    final double voltage = voltageSensor.getVoltage();
+                    final double voltage = voltageSensor.getVoltage(); //i changed this
                     drive.setDrivePower(new Pose2d(NOMINAL_VOLTAGE / voltage * targetPower, 0, 0));
                     drive.updatePoseEstimate();
 

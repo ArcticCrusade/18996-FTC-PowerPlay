@@ -18,30 +18,97 @@ import org.openftc.easyopencv.OpenCvWebcam;
 public class OpenCVTesting extends LinearOpMode {
 
     OpenCvWebcam webcam;
-    class SamplePipeline extends OpenCvPipeline {
+
+
+    public void runOpMode() {
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        DetectionPipeline usedPipeline = new DetectionPipeline();
+        webcam.setPipeline(usedPipeline);
+        webcam.setMillisecondsPermissionTimeout(5000); // Timeout for obtaining permission is configurable. Set before opening.
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                /*
+                 * Tell the webcam to start streaming images to us! Note that you must make sure
+                 * the resolution you specify is supported by the camera. If it is not, an exception
+                 * will be thrown.
+                 *
+                 * Keep in mind that the SDK's UVC driver (what OpenCvWebcam uses under the hood) only
+                 * supports streaming from the webcam in the uncompressed YUV image format. This means
+                 * that the maximum resolution you can stream at and still get up to 30FPS is 480p (640x480).
+                 * Streaming at e.g. 720p will limit you to up to 10FPS and so on and so forth.
+                 *
+                 * Also, we specify the rotation that the webcam is used in. This is so that the image
+                 * from the camera sensor can be rotated such that it is always displayed with the image upright.
+                 * For a front facing camera, rotation is defined assuming the user is looking at the screen.
+                 * For a rear facing camera or a webcam, rotation is defined assuming the camera is facing
+                 * away from the user.
+                 */
+                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode)
+            {
+                /*
+                 * This will be called if the camera could not be opened
+                 */
+            }
+        });
+        waitForStart();
+        usedPipeline.setPhase(2);
+        while (opModeIsActive()) {
+            telemetry.addLine("COLOR SEEN: " + usedPipeline.getViewedColor());
+            telemetry.update();
+        }
+    }
+    class DetectionPipeline extends OpenCvPipeline {
         boolean viewportPaused;
+        int phase;
+        private String viewedColor;
+
+        public DetectionPipeline() {
+            phase = 1;
+        }
+
+        public void setPhase(int phase) {
+            this.phase = phase;
+        }
 
         @Override
         public Mat processFrame(Mat input) {
-            Imgproc.rectangle(
-                    input,
-                    new Point(
-                            input.cols()/4,
-                            input.rows()/4),
-                    new Point(
-                            input.cols()*(3f/4f),
-                            input.rows()*(3f/4f)),
-                    new Scalar(0, 255, 0), 4);
-
-            /**
-             * NOTE: to see how to get data from your pipeline to your OpMode as well as how
-             * to change which stage of the pipeline is rendered to the viewport when it is
-             * tapped, please see {@link PipelineStageSwitchingExample}
-             */
-
+            if (phase == 1) {
+                double[] colorsSeen = input.get(120, 160);
+                int red = (int) colorsSeen[0];
+                int green = (int) colorsSeen[1];
+                int blue = (int) colorsSeen[2];
+                if (red > blue && red > green) {
+                    viewedColor = "RED";
+                } else if (blue > red && blue > green) {
+                    viewedColor = "BLUE";
+                } else if (green > red && green > blue) {
+                    viewedColor = "GREEN";
+                }
+                Imgproc.rectangle(
+                        input,
+                        new Point(
+                                7 * input.cols() / 16,
+                                7 * input.rows() / 16),
+                        new Point(
+                                input.cols() * (9f / 16f),
+                                input.rows() * (9f / 16f)),
+                        new Scalar(red, green, blue), 4);
+            }
+            else if (phase == 2) {
+                // crazy shit
+            }
             return input;
         }
 
+        public String getViewedColor() {
+            return viewedColor;
+        }
         @Override
         public void onViewportTapped() {
 
@@ -55,15 +122,6 @@ public class OpenCVTesting extends LinearOpMode {
             {
                 webcam.resumeViewport();
             }
-        }
-    }
-
-    public void runOpMode() {
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        webcam.setPipeline(new SamplePipeline());
-        while (opModeIsActive()) {
-
         }
     }
 }
