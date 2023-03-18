@@ -6,7 +6,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+
+import java.sql.Array;
 import java.util.ArrayList;
+
+import org.opencv.core.MatOfInt;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
@@ -32,31 +36,13 @@ public class OpenCVTesting extends LinearOpMode {
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
-                /*
-                 * Tell the webcam to start streaming images to us! Note that you must make sure
-                 * the resolution you specify is supported by the camera. If it is not, an exception
-                 * will be thrown.
-                 *
-                 * Keep in mind that the SDK's UVC driver (what OpenCvWebcam uses under the hood) only
-                 * supports streaming from the webcam in the uncompressed YUV image format. This means
-                 * that the maximum resolution you can stream at and still get up to 30FPS is 480p (640x480).
-                 * Streaming at e.g. 720p will limit you to up to 10FPS and so on and so forth.
-                 *
-                 * Also, we specify the rotation that the webcam is used in. This is so that the image
-                 * from the camera sensor can be rotated such that it is always displayed with the image upright.
-                 * For a front facing camera, rotation is defined assuming the user is looking at the screen.
-                 * For a rear facing camera or a webcam, rotation is defined assuming the camera is facing
-                 * away from the user.
-                 */
                 webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
             public void onError(int errorCode)
             {
-                /*
-                 * This will be called if the camera could not be opened
-                 */
+
             }
         });
         waitForStart();
@@ -71,9 +57,15 @@ public class OpenCVTesting extends LinearOpMode {
         int phase;
         private String viewedColor;
 
+        Mat filteredImage;
+        Mat grayImage;
+        MatOfInt fromTo;
 
         public DetectionPipeline() {
+
             phase = 1;
+            filteredImage = new Mat();
+            grayImage = new Mat();
         }
 
         public void setPhase(int phase) {
@@ -91,16 +83,17 @@ public class OpenCVTesting extends LinearOpMode {
         }
 
         private Mat processPhase2(Mat input) {
-            Mat filteredImage = new Mat();
-            Imgproc.medianBlur(input, filteredImage, 21);
-            Core.extractChannel(filteredImage, filteredImage, 2);
-            Core.extractChannel(filteredImage, filteredImage, 1);
-            Imgproc.cvtColor(filteredImage, filteredImage, Imgproc.COLOR_GRAY2RGB);
-            Imgproc.threshold(filteredImage, filteredImage, 2, 29, Imgproc.THRESH_BINARY);
+            ArrayList<Mat> channels = new ArrayList<>();
+            Core.split(input, channels);
+            channels.get(0).setTo(new Scalar(0));
+            Core.merge(channels, input);
+            Imgproc.cvtColor(input, grayImage, Imgproc.COLOR_RGB2GRAY); // look into HSV color filtering, current method could be inaccurate
+            Imgproc.threshold(grayImage, filteredImage, 2, 29, Imgproc.THRESH_BINARY);
             ArrayList<MatOfPoint> contours = new ArrayList<>();
             Imgproc.findContours(filteredImage, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-
             double maxArea = 0;
+
+
             int maxContourIndex = -1;
             for (int i = 0; i < contours.size(); i++) {
                 double area = Imgproc.contourArea(contours.get(i));
@@ -110,6 +103,8 @@ public class OpenCVTesting extends LinearOpMode {
                 }
             }
             Imgproc.drawContours(input, contours, maxContourIndex, new Scalar(255, 255, 0), 7);
+
+
             return input;
         }
 
