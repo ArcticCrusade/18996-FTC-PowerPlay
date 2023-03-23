@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
+@Autonomous(name="RRTest", group="Linear Opmode")
 public class RRTest extends LinearOpMode {
     @Override
     public void runOpMode() {
@@ -19,13 +20,19 @@ public class RRTest extends LinearOpMode {
 
         //declare all trajectories
         Trajectory t1 = drive.trajectoryBuilder(new Pose2d(0, 0, 0))
-                .strafeRight(10)
+                .splineTo(new Vector2d(0, -30), 0)
                 .build();
         Trajectory t2 = drive.trajectoryBuilder(t1.end())
-                .splineTo(new Vector2d(20, 20), Math.toRadians(90))
+                .splineToSplineHeading(new Pose2d(40, 20, Math.toRadians(45)), 0)
                 .build();
         Trajectory t3 = drive.trajectoryBuilder(t2.end())
-                .lineToLinearHeading(new Pose2d(0, 0, 0))
+                .splineToLinearHeading(new Pose2d(-10, -10, Math.toRadians(90)), 0)
+                .build();
+        Trajectory t4 = drive.trajectoryBuilder(t3.end())
+                .splineTo(new Vector2d(-20, 30), 0)
+                .build();
+        Trajectory t5 = drive.trajectoryBuilder(t4.end())
+                .splineToLinearHeading(new Pose2d(0, 0, Math.toRadians(0)), 0)
                 .build();
 
         waitForStart();
@@ -33,5 +40,7 @@ public class RRTest extends LinearOpMode {
         drive.followTrajectory(t1);
         drive.followTrajectory(t2);
         drive.followTrajectory(t3);
+        drive.followTrajectory(t4);
+        drive.followTrajectory(t5);
     }
 }
