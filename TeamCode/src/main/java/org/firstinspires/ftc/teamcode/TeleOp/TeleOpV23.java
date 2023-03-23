@@ -8,6 +8,7 @@ Stack 1: rot 9 elbow 70
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -18,6 +19,7 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.util.Encoder;
 
 import java.util.Arrays;
 import java.lang.Math;
@@ -35,6 +37,9 @@ public class TeleOpV23 extends LinearOpMode {
     private DcMotor rightFront;
     private DcMotor leftRear;
     private DcMotor rightRear;
+    private DcMotor leftEncoder;
+    private DcMotor rightEncoder;
+    private DcMotor frontEncoder;
 
     AnalogInput armSensor;
     DistanceSensor distanceSensor;
@@ -64,7 +69,12 @@ public class TeleOpV23 extends LinearOpMode {
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-
+        leftEncoder = hardwareMap.get(DcMotorEx.class, "rightRear"); //leftfront /bk
+        rightEncoder = hardwareMap.get(DcMotorEx.class, "leftFront"); //rightrear /bk
+        frontEncoder = hardwareMap.get(DcMotorEx.class, "leftRear"); //bk
+        leftEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //initialize motor variables
         leftFront = hardwareMap.dcMotor.get("leftFront"); //slot 0
         rightFront = hardwareMap.dcMotor.get("rightFront"); //slot 1
@@ -85,6 +95,9 @@ public class TeleOpV23 extends LinearOpMode {
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         leftRear.setDirection(DcMotor.Direction.REVERSE);
         rightRear.setDirection(DcMotor.Direction.FORWARD);
+        leftEncoder.setDirection(DcMotor.Direction.FORWARD);
+        rightEncoder.setDirection(DcMotor.Direction.FORWARD);
+        frontEncoder.setDirection(DcMotor.Direction.FORWARD);
         //set servo directions
         /*rotator.setDirection(Servo.Direction.FORWARD);
         extender.setDirection(Servo.Direction.FORWARD);
@@ -309,18 +322,11 @@ public class TeleOpV23 extends LinearOpMode {
             distanceSum = distanceValues[2] + distanceValues[3] + distanceValues[4] + distanceValues[5] + distanceValues[6] + distanceValues[7];
             distanceAverage = Math.round(10 * distanceSum / 6);
             distanceRounded = distanceAverage / 10;
-
-            telemetry.addData("Rotator Position", rotatorPos);
-            telemetry.addData("Extender Position", extenderPos);
-            telemetry.addData("Cone Position", conePos);
-            telemetry.addData("Popper Position", popperPos);
-            telemetry.addData("Release Position", releasePos);
-            telemetry.addData("Elbow Position", elbowPos);
-            telemetry.addData("Arm State", armPos);
-            telemetry.addData("Arm Potentiometer", armSensor.getVoltage());
-            telemetry.addData("Distance", distanceSensor.getDistance(DistanceUnit.CM));
-            telemetry.addData("Distance Average", distanceRounded);
-            telemetry.update();*/
+            */
+            telemetry.addData("left", leftEncoder.getCurrentPosition());
+            telemetry.addData("right", rightEncoder.getCurrentPosition());
+            telemetry.addData("front", frontEncoder.getCurrentPosition());
+            telemetry.update();
         }
     }
 }
