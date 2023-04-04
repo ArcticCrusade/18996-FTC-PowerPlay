@@ -24,7 +24,7 @@ public class RRPractical extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         //set starting position
-        Pose2d startPose = new Pose2d(34.4, -56.83, 0);
+        Pose2d startPose = new Pose2d(56.83, 34.4, 0);
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence t = drive.trajectorySequenceBuilder(startPose)
@@ -35,10 +35,10 @@ public class RRPractical extends LinearOpMode {
                 .addDisplacementMarker(() -> {
                     drive.operateClaw(1);
                 })
-                .splineTo(new Vector2d(x2, y2), angle)
                 .addDisplacementMarker(() -> {
                     drive.servosGoToPickup();
                 })
+                .splineTo(new Vector2d(x2, y2), angle)
                 .build();
         waitForStart();
         if (isStopRequested()) return;
