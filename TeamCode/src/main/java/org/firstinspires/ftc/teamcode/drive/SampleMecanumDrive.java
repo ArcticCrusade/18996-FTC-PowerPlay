@@ -24,6 +24,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
@@ -55,8 +56,8 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
  */
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0);
 
     public static double LATERAL_MULTIPLIER = 1.488;
 
@@ -73,6 +74,7 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private List<DcMotorEx> motors;
+    private Servo cone, upArm, popper, light, lowArm;
 
     private IMU imu;
     private VoltageSensor batteryVoltageSensor;
@@ -98,6 +100,12 @@ public class SampleMecanumDrive extends MecanumDrive {
         leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
         rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
         rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+
+        lowArm = hardwareMap.servo.get("rotator"); //0e
+        upArm = hardwareMap.servo.get("extender"); //0
+        cone = hardwareMap.servo.get("cone"); //2
+        popper = hardwareMap.servo.get("popper"); //3
+        light = hardwareMap.servo.get("release");//1e
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
@@ -134,7 +142,21 @@ public class SampleMecanumDrive extends MecanumDrive {
                 lastEncPositions, lastEncVels, lastTrackingEncPositions, lastTrackingEncVels
         );
     }
-
+    public void servosGoToUpright() {
+        cone.setPosition(0.6);
+        upArm.setPosition(0.64);
+        lowArm.setPosition(0.25);
+        light.setPosition(0);
+    }
+    public void servosGoToPickup() {
+        cone.setPosition(0.53);
+        upArm.setPosition(0.65);
+        lowArm.setPosition(0.01);
+        light.setPosition(0);
+    }
+    public void operateClaw(int state) {
+        popper.setPosition(0.13 + state * 0.22);
+    }
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
         return new TrajectoryBuilder(startPose, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
     }

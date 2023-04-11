@@ -1,4 +1,7 @@
-/*functioning arm v2 teleop program
+//functioning arm v2 teleop program
+//goals: do everything and add arm modulation to v21
+
+/*
 Stack 5: rot 11.5 elbow 69.5
 Stack 4: rot 10.5 elbow 69.5
 Stack 3: rot 10 elbow 69.5
@@ -13,17 +16,45 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
-
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Collections;
 import java.lang.Math;
+@Disabled
+@TeleOp(name="TeleOpV23", group="Linear Opmode")
+public class TeleOpV23 extends LinearOpMode{
+    public double findMedianDistance1() {
 
-@TeleOp(name = "TeleOpV23", group = "Linear Opmode")
-public class TeleOpV23 extends LinearOpMode {
+        readings1.addFirst(distanceSensor1.getDistance(DistanceUnit.MM));
+        sortedReadings1 = (LinkedList) readings1.clone();
+        Collections.sort(sortedReadings1);
+        readings1.removeLast();
+        return sortedReadings1.get(9);
+
+    }
+    public double findMedianDistance2() {
+
+        readings2.addLast(distanceSensor2.getDistance(DistanceUnit.MM));
+        sortedReadings2 = (LinkedList) readings2.clone();
+        Collections.sort(sortedReadings2);
+        readings2.removeFirst();
+        return sortedReadings2.get(9);
+
+    }
+    public double findMedianDistance3() {
+
+        readings3.addLast(distanceSensor3.getDistance(DistanceUnit.MM));
+        sortedReadings3 = (LinkedList) readings3.clone();
+        Collections.sort(sortedReadings3);
+        readings3.removeFirst();
+        return sortedReadings3.get(9);
+
+    }
     private ElapsedTime runtime = new ElapsedTime();
     private Servo rotator;
     private Servo extender;
@@ -37,28 +68,30 @@ public class TeleOpV23 extends LinearOpMode {
     private DcMotor rightRear;
 
     AnalogInput armSensor;
-    DistanceSensor distanceSensor;
+    DistanceSensor distanceSensor1;
+    DistanceSensor distanceSensor2;
+    DistanceSensor distanceSensor3;
+
+    LinkedList<Double> readings1 = new LinkedList<>();
+    LinkedList<Double> sortedReadings1 = new LinkedList<>();
+    LinkedList<Double> readings2 = new LinkedList<>();
+    LinkedList<Double> sortedReadings2 = new LinkedList<>();
+    LinkedList<Double> readings3 = new LinkedList<>();
+    LinkedList<Double> sortedReadings3 = new LinkedList<>();
 
     double rotatorPos, extenderPos, conePos, popperPos, releasePos, elbowPos;
     //declare position/speed variables
-    double RF, LF, RR, LR;
+    double RF,LF,RR,LR;
     //declare gamepad position/state variables
-    double X1, Y1, X2, Y2;
+    double X1,Y1,X2,Y2;
     //set the power scale
     double powerScale;
-    //distance average
-    double distanceAverage;
-    int distanceCounter = 0;
-    double[] distanceValues = new double[10];
-    double distanceSum;
-    double distanceRounded;
     //stores the position of the whole arm
     String armPos;
     int counter1 = 0;
     int counter2 = 0;
     int counter3 = 0;
     Boolean stack = false;
-
 
     @Override
     public void runOpMode() {
@@ -70,15 +103,18 @@ public class TeleOpV23 extends LinearOpMode {
         rightFront = hardwareMap.dcMotor.get("rightFront"); //slot 1
         leftRear = hardwareMap.dcMotor.get("leftRear"); //slot 2
         rightRear = hardwareMap.dcMotor.get("rightRear"); //slot 3
-        /*rotator = hardwareMap.servo.get("rotator");
+        rotator = hardwareMap.servo.get("rotator");
         extender = hardwareMap.servo.get("extender");
         cone = hardwareMap.servo.get("cone");
         popper = hardwareMap.servo.get("popper");
         release = hardwareMap.servo.get("release");
         elbow = hardwareMap.servo.get("elbow");
 
-        armSensor = hardwareMap.get(AnalogInput.class, "armSensor");
-        distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");*/
+        armSensor = hardwareMap.get(AnalogInput.class,"armSensor");
+        distanceSensor1 = hardwareMap.get(DistanceSensor.class, "distanceSensor1");
+        distanceSensor2 = hardwareMap.get(DistanceSensor.class, "distanceSensor2");
+        distanceSensor3 = hardwareMap.get(DistanceSensor.class, "distanceSensor3");
+
         // Set the drive motor direction:
         // "Reverse" the motor that runs backwards when connected directly to the battery
         leftFront.setDirection(DcMotor.Direction.REVERSE);
@@ -86,12 +122,12 @@ public class TeleOpV23 extends LinearOpMode {
         leftRear.setDirection(DcMotor.Direction.REVERSE);
         rightRear.setDirection(DcMotor.Direction.FORWARD);
         //set servo directions
-        /*rotator.setDirection(Servo.Direction.FORWARD);
+        rotator.setDirection(Servo.Direction.FORWARD);
         extender.setDirection(Servo.Direction.FORWARD);
         cone.setDirection(Servo.Direction.FORWARD);
         popper.setDirection(Servo.Direction.FORWARD);
         release.setDirection(Servo.Direction.FORWARD);
-        elbow.setDirection(Servo.Direction.FORWARD);*/
+        elbow.setDirection(Servo.Direction.FORWARD);
 
 
         // Set the drive motor run modes:
@@ -102,91 +138,101 @@ public class TeleOpV23 extends LinearOpMode {
 
         waitForStart();
         runtime.reset();
+        for (double i = 18.0; i > 0; i--) {
+            readings1.add(0.0);
+            readings2.add(0.0);
+            readings3.add(0.0);
+        }
+
+
 
         while (opModeIsActive()) {
-            /*rotatorPos = rotator.getPosition();
+
+            rotatorPos = rotator.getPosition();
             extenderPos = extender.getPosition();
             conePos = cone.getPosition();
-            popperPos = popper.getPosition();
+            popperPos =popper.getPosition();
             releasePos = release.getPosition();
 
-            if (gamepad1.right_bumper == true) {
+            if (gamepad2.right_bumper==true){
                 popper.setPosition(0.35);
-                // sleep(300);
-            } else {
+// sleep(300);
+            }
+            else {
                 popper.setPosition(0.19);
             }
-            //cycling high - rotator 0.285, elbow 0.65, cone 0.14
-            if (gamepad1.b == true) {
+//cycling high - rotator 0.285, elbow 0.65, cone 0.14
+            if (gamepad2.b == true){
                 counter1 = 0;
                 counter2 = 0;
                 counter3 = 0;
-                rotator.setPosition(0.29);
+                rotator.setPosition(0.635);
                 elbow.setPosition(0.65);
                 cone.setPosition(0.14);
                 armPos = "highDrop";
             }
-            //high drop off - rotator 0.26, elbow 0.65, cone 0.135
-            if (gamepad1.y == true) {
+//high drop off - rotator 0.26, elbow 0.65, cone 0.135
+            if (gamepad2.y == true){
                 counter1 = 0;
                 counter2 = 0;
                 counter3 = 0;
-                rotator.setPosition(0.26);
+                rotator.setPosition(0.59);
                 elbow.setPosition(0.65);
                 cone.setPosition(0.135);
                 armPos = "highDrop";
             }
-            //medium drop off - rotator 0.095, elbow 0.515, cone 0.16
-            if (gamepad1.x == true) {
+//medium drop off - rotator 0.095, elbow 0.515, cone 0.16
+            if (gamepad2.x == true){
                 counter1 = 0;
                 counter2 = 0;
                 counter3 = 0;
-                if (armPos == "medGrab" || armPos == "closeGrab") {
-                    elbow.setPosition(0.515);
+                if (armPos == "medGrab" || armPos == "closeGrab"){
+                    elbow.setPosition(0.38);
                     sleep(500);
-                    rotator.setPosition(0.095);
+                    rotator.setPosition(0.26);
                 } else {
-                    rotator.setPosition(0.095);
-                    elbow.setPosition(0.515);
+                    rotator.setPosition(0.26);
+                    elbow.setPosition(0.38);
                 }
                 cone.setPosition(0.16);
                 armPos = "medDrop";
             }
-            //low drop off - rotator 0.0, elbow 0.455, cone 0.17
-            if (gamepad1.a == true) {
+//low drop off - rotator 0.0, elbow 0.455, cone 0.17
+            if (gamepad2.a == true){
                 counter1 = 0;
                 counter2 = 0;
                 counter3 = 0;
-                if (armPos == "medGrab" || armPos == "closeGrab") {
-                    elbow.setPosition(0.455);
+                if (armPos == "medGrab" || armPos == "closeGrab"){
+                    elbow.setPosition(0.265);
                     sleep(1000);
-                    rotator.setPosition(0.0);
+                    rotator.setPosition(0.11);
                 } else {
-                    rotator.setPosition(0.0);
-                    elbow.setPosition(0.455);
+                    rotator.setPosition(0.11);
+                    elbow.setPosition(0.265);
                 }
                 cone.setPosition(0.17);
                 armPos = "lowDrop";
             }
-            //far pick up - rotator 0.020, elbow 0.65, cone 0.075
-            if (gamepad1.dpad_left == true) {
+//far pick up - rotator 0.020, elbow 0.65, cone 0.075
+            if (gamepad2.dpad_left == true){
                 sleep(300);
                 counter2 = 0;
                 counter3 = 0;
                 if (counter1 % 2 == 0) {
-                    if (armPos == "medGrab" || armPos == "closeGrab") {
+                    if (armPos == "medGrab" || armPos == "closeGrab"){
                         elbow.setPosition(0.65);
                         sleep(150);
-                        rotator.setPosition(0.05);
+                        rotator.setPosition(0.125);
                     } else {
-                        rotator.setPosition(0.05);
+                        rotator.setPosition(0.125);
                         elbow.setPosition(0.65);
                     }
                     cone.setPosition(0.075);
                     armPos = "farGrab";
                     counter1 += 1;
-                } else if (counter1 % 2 == 1) {
-                    rotator.setPosition(0);
+                }
+                else if (counter1 % 2 == 1) {
+                    rotator.setPosition(0.105);
                     elbow.setPosition(0.65);
                     cone.setPosition(0.075);
                     armPos = "farGrab";
@@ -194,88 +240,92 @@ public class TeleOpV23 extends LinearOpMode {
                     counter1 += 1;
                 }
             }
-            //medium pick up - rotator 0.12, elbow 0.745, cone 0.055
-            if (gamepad1.dpad_down == true) {
+//medium pick up - rotator 0.12, elbow 0.745, cone 0.055
+            if (gamepad2.dpad_down == true){
                 sleep(300);
                 counter1 = 0;
                 counter3 = 0;
                 if (counter2 % 2 == 0) {
-                    if (armPos == "closeGrab") {
-                        elbow.setPosition(0.745);
+                    if (armPos == "closeGrab"){
+                        elbow.setPosition(0.86);
                         sleep(100);
-                        rotator.setPosition(0.16);
+                        rotator.setPosition(0.375);
                     } else {
-                        rotator.setPosition(0.16);
-                        elbow.setPosition(0.745);
+                        rotator.setPosition(0.375);
+                        elbow.setPosition(0.86);
                     }
                     cone.setPosition(0.06);
                     armPos = "medGrab";
                     counter2 += 1;
-                } else {
-                    rotator.setPosition(0.12);
-                    elbow.setPosition(0.745);
+                }
+                else {
+                    rotator.setPosition(0.325);
+                    elbow.setPosition(0.845);
                     cone.setPosition(0.055);
                     counter2 += 1;
                     armPos = "medGrab";
                 }
             }
-            //lift off stack
-            if (gamepad1.dpad_up == true) {
-                sleep(300);
-                counter1 = 0;
-                counter2 = 0;
-                counter3 = 0;
-                if (armPos == "closeGrab") {
-                    elbow.setPosition(0.745);
-                    sleep(100);
-                    rotator.setPosition(0.20);
-                } else {
-                    rotator.setPosition(0.20);
-                    elbow.setPosition(0.755);
-                }
-                cone.setPosition(0.06);
-                armPos = "medGrab";
-            }
-
-            //close pick up - rotator 0.16, elbow 0.775, cone 0.04
-            if (gamepad1.dpad_right == true) {
+//lift off stack
+/*if (gamepad2.dpad_up == true){
+ sleep(300);
+ counter1 = 0;
+ counter2 = 0;
+ counter3 = 0;
+    if (armPos == "closeGrab"){
+     elbow.setPosition(0.745);
+     sleep(100);
+     rotator.setPosition(0.20);
+    } else {
+     rotator.setPosition(0.20);
+     elbow.setPosition(0.755);
+    }
+    cone.setPosition(0.06);
+    armPos = "medGrab";
+  }
+*/
+//close pick up - rotator 0.16, elbow 0.775, cone 0.04
+            if (gamepad2.dpad_right == true){
                 counter2 = 0;
                 counter1 = 0;
                 sleep(300);
                 if (counter3 % 2 == 0) {
                     sleep(200);
-                    rotator.setPosition(0.195);
-                    elbow.setPosition(0.77);
+                    rotator.setPosition(0.44);
+                    elbow.setPosition(0.905);
                     cone.setPosition(0.05);
                     armPos = "closeGrab";
                     counter3 += 1;
-                } else {
-                    rotator.setPosition(0.155);
-                    elbow.setPosition(0.775);
-                    cone.setPosition(0.045);
+                }
+                else {
+                    rotator.setPosition(0.385);
+                    elbow.setPosition(0.905);
+                    cone.setPosition(0.05);
                     counter3 += 1;
                     armPos = "closeGrab";
                 }
             }
-            */
-            // Reset speed variables
-            LF = 0;
-            RF = 0;
-            LR = 0;
-            RR = 0;
-            Y1 = 0;
-            X1 = 0;
-            Y2 = 0;
-            X2 = 0;
 
-            /*rotatorPos = rotator.getPosition();
+//ground junction
+            if (gamepad2.right_stick_button == true){
+                rotator.setPosition(0.4);
+                elbow.setPosition(0.905);
+                cone.setPosition(0.045);
+                armPos = "closeGrab";
+            }
+
+            // Reset speed variables
+            LF = 0; RF = 0; LR = 0; RR = 0;
+            Y1 = 0; X1 = 0; Y2 = 0; X2 = 0;
+
+            rotatorPos = rotator.getPosition();
             extenderPos = extender.getPosition();
             conePos = cone.getPosition();
             popperPos = popper.getPosition();
             releasePos = release.getPosition();
-            elbowPos = elbow.getPosition();*/
+            elbowPos = elbow.getPosition();
 
-            // Get joystick values
+// Get joystick values
             Y1 = gamepad1.right_stick_y;
             X1 = -gamepad1.right_stick_x;
             Y2 = -gamepad1.left_stick_y;
@@ -287,40 +337,28 @@ public class TeleOpV23 extends LinearOpMode {
             LR = Y1 + X1 + X2;
             RR = Y1 - X1 - X2;
 
-            powerScale = ((gamepad1.right_trigger) * 0.7) + 0.3;
+            powerScale = ((gamepad1.right_trigger)*0.7)+0.3-((gamepad1.left_trigger) * .15);
             //set motor commands
-            leftFront.setPower(LF * powerScale);
-            rightFront.setPower(RF * powerScale);
-            leftRear.setPower(LR * powerScale);
-            rightRear.setPower(RR * powerScale);
+            leftFront.setPower(LF*powerScale);
+            rightFront.setPower(RF*powerScale);
+            leftRear.setPower(LR*powerScale);
+            rightRear.setPower(RR*powerScale);
 
-            /*distanceValues[0] = distanceSensor.getDistance(DistanceUnit.CM);
-            distanceValues[1] = distanceSensor.getDistance(DistanceUnit.CM);
-            distanceValues[2] = distanceSensor.getDistance(DistanceUnit.CM);
-            distanceValues[3] = distanceSensor.getDistance(DistanceUnit.CM);
-            distanceValues[4] = distanceSensor.getDistance(DistanceUnit.CM);
-            distanceValues[5] = distanceSensor.getDistance(DistanceUnit.CM);
-            distanceValues[6] = distanceSensor.getDistance(DistanceUnit.CM);
-            distanceValues[7] = distanceSensor.getDistance(DistanceUnit.CM);
-            distanceValues[8] = distanceSensor.getDistance(DistanceUnit.CM);
-            distanceValues[9] = distanceSensor.getDistance(DistanceUnit.CM);
+            double potentiometerRound = Math.round(armSensor.getVoltage()*1000);
 
-            Arrays.sort(distanceValues);
-            distanceSum = distanceValues[2] + distanceValues[3] + distanceValues[4] + distanceValues[5] + distanceValues[6] + distanceValues[7];
-            distanceAverage = Math.round(10 * distanceSum / 6);
-            distanceRounded = distanceAverage / 10;
-
-            telemetry.addData("Rotator Position", rotatorPos);
-            telemetry.addData("Extender Position", extenderPos);
-            telemetry.addData("Cone Position", conePos);
-            telemetry.addData("Popper Position", popperPos);
-            telemetry.addData("Release Position", releasePos);
-            telemetry.addData("Elbow Position", elbowPos);
-            telemetry.addData("Arm State", armPos);
-            telemetry.addData("Arm Potentiometer", armSensor.getVoltage());
-            telemetry.addData("Distance", distanceSensor.getDistance(DistanceUnit.CM));
-            telemetry.addData("Distance Average", distanceRounded);
-            telemetry.update();*/
+            telemetry.addData("Rotator Position",rotatorPos);
+            telemetry.addData("Extender Position",extenderPos);
+            telemetry.addData("Cone Position",conePos);
+            telemetry.addData("Popper Position",popperPos);
+            telemetry.addData("Release Position",releasePos);
+            telemetry.addData("Elbow Position",elbowPos);
+            telemetry.addData("Arm State",armPos);
+            telemetry.addData("Arm Potentiometer",potentiometerRound/1000);
+            telemetry.addData("Distance 1",findMedianDistance1());
+            telemetry.addData("Distance 2",findMedianDistance2());
+            telemetry.addData("Distance 3",findMedianDistance3());
+            telemetry.addData("please work", readings1);
+            telemetry.update();
         }
     }
 }
