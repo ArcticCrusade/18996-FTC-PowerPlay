@@ -13,9 +13,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 @Config
 @Autonomous(name="RRPractical", group="Linear Opmode")
 public class RRPractical extends LinearOpMode {
-    public static double x = -28;
-    public static double y = -1;
-    public static double angle = -10;
+
     @Override
     public void runOpMode() {
         //yoink all of the motor declarations and their methods
@@ -25,38 +23,44 @@ public class RRPractical extends LinearOpMode {
         Pose2d startPose = new Pose2d(-36, 72, Math.toRadians(270));
         drive.setPoseEstimate(startPose);
 
-        TrajectorySequence firstToHigh = drive.trajectorySequenceBuilder(startPose)
+        TrajectorySequence startAlign = drive.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> {
                     drive.servosGoToUpright();
                     drive.operateClaw(0);
                 })
-                .splineTo(new Vector2d(-32, 7.25), Math.toRadians(270))
+                .splineTo(new Vector2d(-30, 8), Math.toRadians(270))
+                .setReversed(true)
+                .addDisplacementMarker(() -> {
+                    drive.operateClaw(1);
+                })
+                .splineToLinearHeading(new Pose2d(-42.67, 6, Math.toRadians(-10)), Math.toRadians(-10))
                 .build();
-        Trajectory toPosition = drive.trajectoryBuilder(firstToHigh.end(), true)
-                .splineToLinearHeading(new Pose2d(-43.5, 6, Math.toRadians(-10)), Math.toRadians(-10))
-                .build();
-        Trajectory cycleFwd = drive.trajectoryBuilder(toPosition.end())
-                .splineTo(new Vector2d(x, y), Math.toRadians(angle))
-                .build();
-        Trajectory cycleBk = drive.trajectoryBuilder(cycleFwd.end(), true)
-                .splineToLinearHeading(new Pose2d(-43.5, 8, Math.toRadians(-10)), Math.toRadians(-10))
+        TrajectorySequence cycle = drive.trajectorySequenceBuilder(new Pose2d(-42.67, 6, Math.toRadians(-10)))
+                .addTemporalMarker(0, () -> {
+                    drive.servosGoToPickup();
+                })
+                .addTemporalMarker(1.5, () -> {
+                    drive.operateClaw(0);
+                })
+                .addTemporalMarker(2, () -> {
+                    drive.servosGoToUpright();
+                })
+                .waitSeconds(2)
+                .splineToConstantHeading(new Vector2d(-26.5, -4.5), Math.toRadians(-10))
+                .strafeLeft(5)
+                .addDisplacementMarker(() -> {
+                    drive.operateClaw(1);
+                })
+                .strafeRight(5)
+                .splineToConstantHeading(new Vector2d(-42.67, 6), Math.toRadians(-10))
                 .build();
         waitForStart();
         if (isStopRequested()) return;
-        drive.followTrajectorySequence(firstToHigh);
-        drive.operateClaw(1);
-        sleep(300);
-        drive.followTrajectory(toPosition);
-        for (int i = 1; i <= 5; i++) {
-            drive.operateClaw(0);
-            drive.servosGoToPickup();
-            sleep(1400);
-            drive.servosGoToUpright();
-            sleep(450);
-            drive.followTrajectory(cycleFwd);
-            drive.operateClaw(1);
-            drive.followTrajectory(cycleBk);
-            sleep(500);
-        }
+        drive.followTrajectorySequence(startAlign);
+        drive.followTrajectorySequence(cycle);
+        drive.followTrajectorySequence(cycle);
+        drive.followTrajectorySequence(cycle);
+        drive.followTrajectorySequence(cycle);
+        drive.followTrajectorySequence(cycle);
     }
 }
