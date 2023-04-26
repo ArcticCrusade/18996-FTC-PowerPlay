@@ -1,3 +1,6 @@
+//currently not in use - i use the samplemechdrive class and put all the auto methods in there
+//which is all the arm moving stuff. for teleop do your own thing or whatever
+//-- clark
 package org.firstinspires.ftc.teamcode;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
