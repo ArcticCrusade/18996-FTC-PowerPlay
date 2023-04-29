@@ -47,7 +47,7 @@ public class BlockToBlock extends LinearOpMode {
         telemetry.addData("State", "Accepting Inputs...");
         telemetry.update();
         while (!isStopRequested()) {
-            if (time.seconds() < 10 && debounceTime.seconds() > 0.4) {
+            if (debounceTime.seconds() > 0.3) {
                 if (gamepad1.dpad_up) {
                     trajQueue.add(f);
                     debounceTime.reset();
@@ -65,14 +65,14 @@ public class BlockToBlock extends LinearOpMode {
                     debounceTime.reset();
                 }
             }
-            if (time.seconds() > 11 && !trajQueue.isEmpty()) {
+            if (!trajQueue.isEmpty()) {
                 telemetry.addData("State", "Running!");
                 telemetry.update();
                 drive.setPoseEstimate(new Pose2d());
                 drive.followTrajectory(trajQueue.poll());
-            }
-            if (time.seconds() > 11 && trajQueue.isEmpty()) {
-                throw new RuntimeException("Program is complete!");
+            } else {
+                telemetry.addData("State", "Accepting Inputs...");
+                telemetry.update();
             }
         }
     }
