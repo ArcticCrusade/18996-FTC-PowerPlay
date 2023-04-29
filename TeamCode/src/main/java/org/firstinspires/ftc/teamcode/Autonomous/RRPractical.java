@@ -1,3 +1,4 @@
+
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -8,40 +9,64 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.StandardTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Config
-@Autonomous(name="RRPractical", group="Linear Opmode")
+@Autonomous(name="AAAARRPractical", group="Linear Opmode")
 public class RRPractical extends LinearOpMode {
-    public static double x1 = 28;
-    public static double y1 = -5;
-    public static double angle = 104;
-    public static double x2 = 47;
-    public static double y2 = -12;
+
     @Override
     public void runOpMode() {
         //yoink all of the motor declarations and their methods
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         //set starting position
-        Pose2d startPose = new Pose2d(56.83, 34.4, 0);
+        Pose2d startPose = new Pose2d(-36, 72, Math.toRadians(270));
         drive.setPoseEstimate(startPose);
-
-        TrajectorySequence t = drive.trajectorySequenceBuilder(startPose)
+        TrajectorySequence startAlign = drive.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> {
                     drive.servosGoToUpright();
+                    drive.operateClaw(0);
                 })
-                .splineTo(new Vector2d(x1, y1), 0)
-                .addDisplacementMarker(() -> {
+                .addSpatialMarker(new Vector2d(-30, 6), () -> {
                     drive.operateClaw(1);
                 })
-                .addDisplacementMarker(() -> {
-                    drive.servosGoToPickup();
+                .splineTo(new Vector2d(-30, 6), Math.toRadians(270))
+                .setReversed(true)
+                .splineToLinearHeading(new Pose2d(-42, 6, Math.toRadians(-8)), Math.toRadians(-8))
+                .build();
+        TrajectorySequence cycle = drive.trajectorySequenceBuilder(startAlign.end())
+                .addTemporalMarker(1.5, () -> {
+                    drive.operateClaw(0);
                 })
-                .splineTo(new Vector2d(x2, y2), angle)
+                .addTemporalMarker(2, () -> {
+                    drive.servosGoToUpright();
+                })
+                .setReversed(false)
+                .waitSeconds(3.5)
+                .splineToConstantHeading(new Vector2d(-36.5, -4), Math.toRadians(-10))
+                .addSpatialMarker(new Vector2d(-26, 0.5), () -> {
+                    drive.operateClaw(1);
+                })
+                .splineToConstantHeading(new Vector2d(-26, 0.5), Math.toRadians(-10))
+                .waitSeconds(2)
+                .setReversed(true)
+                .splineToConstantHeading(new Vector2d(-36.5, -4), Math.toRadians(-10))
+                .splineToConstantHeading(new Vector2d(-42, 6), Math.toRadians(-8))
                 .build();
         waitForStart();
         if (isStopRequested()) return;
-        drive.followTrajectorySequence(t);
+        drive.followTrajectorySequence(startAlign);
+        drive.servosGoToPickup(0.53, 0.675, 0.12);
+        drive.followTrajectorySequence(cycle);
+        drive.servosGoToPickup(0.53, 0.68, 0.045);
+        drive.followTrajectorySequence(cycle);
+        drive.servosGoToPickup(0.525, 0.67, 0.04);
+        drive.followTrajectorySequence(cycle);
+        drive.servosGoToPickup(0.53, 0.665, 0.025);
+        drive.followTrajectorySequence(cycle);
+        drive.servosGoToPickup(0.535, 0.66, 0.015);
+        drive.followTrajectorySequence(cycle);
     }
 }

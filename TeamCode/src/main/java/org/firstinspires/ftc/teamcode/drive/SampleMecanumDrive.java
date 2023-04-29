@@ -145,7 +145,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     public void servosGoToUpright() {
         cone.setPosition(0.6);
         upArm.setPosition(0.64);
-        lowArm.setPosition(0.25);
+        lowArm.setPosition(0.26 + 0.07);
         light.setPosition(0);
     }
     public void servosGoToPickup() {
@@ -153,6 +153,11 @@ public class SampleMecanumDrive extends MecanumDrive {
         upArm.setPosition(0.65);
         lowArm.setPosition(0.01);
         light.setPosition(0);
+    }
+    public void servosGoToPickup(double c, double u, double l) {
+        cone.setPosition(c);
+        upArm.setPosition(u);
+        lowArm.setPosition(l);
     }
     public void operateClaw(int state) {
         popper.setPosition(0.13 + state * 0.22);
