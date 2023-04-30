@@ -1,18 +1,11 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
-import android.service.quickaccesswallet.SelectWalletCardRequest;
-
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.opencv.core.Core;
+import org.openftc.easyopencv.OpenCvWebcam;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.opencv.core.Mat;
-
-import java.sql.Array;
 import java.util.ArrayList;
-
-import org.opencv.core.MatOfInt;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
@@ -21,18 +14,23 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
-import org.openftc.easyopencv.OpenCvWebcam;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 /*
-On hold until ML stuff done
+Things to do:
+Finish robot class
+Add OpenCV implementation for phase 1
+Fix/Redo phase 2 (figure out HSV in python)
  */
-@Autonomous(name="OpenCV Testing", group="Vision")
-public class OpenCVTesting extends LinearOpMode {
 
+@Autonomous(name="Robot Class - Ignore", group="Linear OpMode")
+public class RightsideAuto extends LinearOpMode {
     OpenCvWebcam webcam;
 
-
+    @Override
     public void runOpMode() {
+        waitForStart();
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         DetectionPipeline usedPipeline = new DetectionPipeline();
@@ -57,17 +55,23 @@ public class OpenCVTesting extends LinearOpMode {
             telemetry.update();
         }
     }
+
+
+    class Robot {
+        OpenCvWebcam webcam;
+        private DcMotor motor;
+        private Servo servo;
+        Robot() {
+            motor = hardwareMap.dcMotor.get("motor-name");
+            servo = hardwareMap.servo.get("servo=name");
+        }
+    }
+
+
     class DetectionPipeline extends OpenCvPipeline {
         boolean viewportPaused;
         private int phase;
         private String viewedColor;
-        private ArrayList<Mat> channels = new ArrayList<>();
-        private Mat filteredImage = new Mat();
-        private Mat grayImage = new Mat();
-        private ArrayList<MatOfPoint> contours = new ArrayList<>();
-        private Mat preventMemoryLeak = new Mat();
-        private Scalar zeroScalar = new Scalar(0);
-        private Scalar contourColor = new Scalar(255, 255, 0);
         public DetectionPipeline() {
 
             phase = 1;
@@ -138,6 +142,3 @@ public class OpenCVTesting extends LinearOpMode {
         }
     }
 }
-
-
-
