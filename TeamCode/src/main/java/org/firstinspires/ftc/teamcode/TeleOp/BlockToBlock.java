@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.common.Hardware.OldArm;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 import java.util.LinkedList;
@@ -21,6 +22,7 @@ public class BlockToBlock extends LinearOpMode {
     @Override
     public void runOpMode() {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        OldArm arm = new OldArm(hardwareMap);
         drive.setPoseEstimate(new Pose2d());
         Queue<Trajectory> trajQueue = new LinkedList<Trajectory>();
         ElapsedTime time = new ElapsedTime();
@@ -40,7 +42,7 @@ public class BlockToBlock extends LinearOpMode {
                 .build();
         telemetry.addData("State", "Waiting...");
         telemetry.update();
-        drive.servosGoToPickup(0.53, 0.65, 0.27);
+        arm.servosGoToPickup(0.53, 0.65, 0.27);
         waitForStart();
         time.reset();
         debounceTime.reset();

@@ -8,8 +8,8 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.common.Hardware.OldArm;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.drive.StandardTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Config
@@ -20,17 +20,17 @@ public class RRPractical extends LinearOpMode {
     public void runOpMode() {
         //yoink all of the motor declarations and their methods
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-
+        OldArm arm = new OldArm(hardwareMap);
         //set starting position
         Pose2d startPose = new Pose2d(-36, 72, Math.toRadians(270));
         drive.setPoseEstimate(startPose);
         TrajectorySequence startAlign = drive.trajectorySequenceBuilder(startPose)
                 .addDisplacementMarker(() -> {
-                    drive.servosGoToUpright();
-                    drive.operateClaw(0);
+                    arm.servosGoToUpright();
+                    arm.operateClaw(0);
                 })
                 .addSpatialMarker(new Vector2d(-30, 6), () -> {
-                    drive.operateClaw(1);
+                    arm.operateClaw(1);
                 })
                 .splineTo(new Vector2d(-30, 6), Math.toRadians(270))
                 .setReversed(true)
@@ -38,16 +38,16 @@ public class RRPractical extends LinearOpMode {
                 .build();
         TrajectorySequence cycle = drive.trajectorySequenceBuilder(startAlign.end())
                 .addTemporalMarker(1.5, () -> {
-                    drive.operateClaw(0);
+                    arm.operateClaw(0);
                 })
                 .addTemporalMarker(2, () -> {
-                    drive.servosGoToUpright();
+                    arm.servosGoToUpright();
                 })
                 .setReversed(false)
                 .waitSeconds(3.5)
                 .splineToConstantHeading(new Vector2d(-36.5, -4), Math.toRadians(-10))
                 .addSpatialMarker(new Vector2d(-26, 0.5), () -> {
-                    drive.operateClaw(1);
+                    arm.operateClaw(1);
                 })
                 .splineToConstantHeading(new Vector2d(-26, 0.5), Math.toRadians(-10))
                 .waitSeconds(2)
@@ -58,15 +58,15 @@ public class RRPractical extends LinearOpMode {
         waitForStart();
         if (isStopRequested()) return;
         drive.followTrajectorySequence(startAlign);
-        drive.servosGoToPickup(0.53, 0.675, 0.12);
+        arm.servosGoToPickup(0.53, 0.675, 0.12);
         drive.followTrajectorySequence(cycle);
-        drive.servosGoToPickup(0.53, 0.68, 0.045);
+        arm.servosGoToPickup(0.53, 0.68, 0.045);
         drive.followTrajectorySequence(cycle);
-        drive.servosGoToPickup(0.525, 0.67, 0.04);
+        arm.servosGoToPickup(0.525, 0.67, 0.04);
         drive.followTrajectorySequence(cycle);
-        drive.servosGoToPickup(0.53, 0.665, 0.025);
+        arm.servosGoToPickup(0.53, 0.665, 0.025);
         drive.followTrajectorySequence(cycle);
-        drive.servosGoToPickup(0.535, 0.66, 0.015);
+        arm.servosGoToPickup(0.535, 0.66, 0.015);
         drive.followTrajectorySequence(cycle);
     }
 }

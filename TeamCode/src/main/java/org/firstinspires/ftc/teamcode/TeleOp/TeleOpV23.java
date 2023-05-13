@@ -25,59 +25,19 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Collections;
 import java.lang.Math;
-@Disabled
+
 @TeleOp(name="TeleOpV23", group="Linear Opmode")
 public class TeleOpV23 extends LinearOpMode{
-    public double findMedianDistance1() {
-
-        readings1.addFirst(distanceSensor1.getDistance(DistanceUnit.MM));
-        sortedReadings1 = (LinkedList) readings1.clone();
-        Collections.sort(sortedReadings1);
-        readings1.removeLast();
-        return sortedReadings1.get(9);
-
-    }
-    public double findMedianDistance2() {
-
-        readings2.addLast(distanceSensor2.getDistance(DistanceUnit.MM));
-        sortedReadings2 = (LinkedList) readings2.clone();
-        Collections.sort(sortedReadings2);
-        readings2.removeFirst();
-        return sortedReadings2.get(9);
-
-    }
-    public double findMedianDistance3() {
-
-        readings3.addLast(distanceSensor3.getDistance(DistanceUnit.MM));
-        sortedReadings3 = (LinkedList) readings3.clone();
-        Collections.sort(sortedReadings3);
-        readings3.removeFirst();
-        return sortedReadings3.get(9);
-
-    }
     private ElapsedTime runtime = new ElapsedTime();
-    private Servo rotator;
-    private Servo extender;
-    private Servo cone;
-    private Servo popper;
-    private Servo release;
+    private Servo rotator; //
+    private Servo cone; //
+    private Servo popper; //
+    private Servo release; //
     private Servo elbow;
     private DcMotor leftFront;
     private DcMotor rightFront;
     private DcMotor leftRear;
     private DcMotor rightRear;
-
-    AnalogInput armSensor;
-    DistanceSensor distanceSensor1;
-    DistanceSensor distanceSensor2;
-    DistanceSensor distanceSensor3;
-
-    LinkedList<Double> readings1 = new LinkedList<>();
-    LinkedList<Double> sortedReadings1 = new LinkedList<>();
-    LinkedList<Double> readings2 = new LinkedList<>();
-    LinkedList<Double> sortedReadings2 = new LinkedList<>();
-    LinkedList<Double> readings3 = new LinkedList<>();
-    LinkedList<Double> sortedReadings3 = new LinkedList<>();
 
     double rotatorPos, extenderPos, conePos, popperPos, releasePos, elbowPos;
     //declare position/speed variables
@@ -91,8 +51,6 @@ public class TeleOpV23 extends LinearOpMode{
     int counter1 = 0;
     int counter2 = 0;
     int counter3 = 0;
-    Boolean stack = false;
-
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -104,16 +62,11 @@ public class TeleOpV23 extends LinearOpMode{
         leftRear = hardwareMap.dcMotor.get("leftRear"); //slot 2
         rightRear = hardwareMap.dcMotor.get("rightRear"); //slot 3
         rotator = hardwareMap.servo.get("rotator");
-        extender = hardwareMap.servo.get("extender");
+        elbow = hardwareMap.servo.get("extender");
         cone = hardwareMap.servo.get("cone");
         popper = hardwareMap.servo.get("popper");
         release = hardwareMap.servo.get("release");
-        elbow = hardwareMap.servo.get("elbow");
 
-        armSensor = hardwareMap.get(AnalogInput.class,"armSensor");
-        distanceSensor1 = hardwareMap.get(DistanceSensor.class, "distanceSensor1");
-        distanceSensor2 = hardwareMap.get(DistanceSensor.class, "distanceSensor2");
-        distanceSensor3 = hardwareMap.get(DistanceSensor.class, "distanceSensor3");
 
         // Set the drive motor direction:
         // "Reverse" the motor that runs backwards when connected directly to the battery
@@ -123,7 +76,6 @@ public class TeleOpV23 extends LinearOpMode{
         rightRear.setDirection(DcMotor.Direction.FORWARD);
         //set servo directions
         rotator.setDirection(Servo.Direction.FORWARD);
-        extender.setDirection(Servo.Direction.FORWARD);
         cone.setDirection(Servo.Direction.FORWARD);
         popper.setDirection(Servo.Direction.FORWARD);
         release.setDirection(Servo.Direction.FORWARD);
@@ -138,18 +90,10 @@ public class TeleOpV23 extends LinearOpMode{
 
         waitForStart();
         runtime.reset();
-        for (double i = 18.0; i > 0; i--) {
-            readings1.add(0.0);
-            readings2.add(0.0);
-            readings3.add(0.0);
-        }
-
-
 
         while (opModeIsActive()) {
 
             rotatorPos = rotator.getPosition();
-            extenderPos = extender.getPosition();
             conePos = cone.getPosition();
             popperPos =popper.getPosition();
             releasePos = release.getPosition();
@@ -319,7 +263,6 @@ public class TeleOpV23 extends LinearOpMode{
             Y1 = 0; X1 = 0; Y2 = 0; X2 = 0;
 
             rotatorPos = rotator.getPosition();
-            extenderPos = extender.getPosition();
             conePos = cone.getPosition();
             popperPos = popper.getPosition();
             releasePos = release.getPosition();
@@ -344,8 +287,6 @@ public class TeleOpV23 extends LinearOpMode{
             leftRear.setPower(LR*powerScale);
             rightRear.setPower(RR*powerScale);
 
-            double potentiometerRound = Math.round(armSensor.getVoltage()*1000);
-
             telemetry.addData("Rotator Position",rotatorPos);
             telemetry.addData("Extender Position",extenderPos);
             telemetry.addData("Cone Position",conePos);
@@ -353,11 +294,6 @@ public class TeleOpV23 extends LinearOpMode{
             telemetry.addData("Release Position",releasePos);
             telemetry.addData("Elbow Position",elbowPos);
             telemetry.addData("Arm State",armPos);
-            telemetry.addData("Arm Potentiometer",potentiometerRound/1000);
-            telemetry.addData("Distance 1",findMedianDistance1());
-            telemetry.addData("Distance 2",findMedianDistance2());
-            telemetry.addData("Distance 3",findMedianDistance3());
-            telemetry.addData("please work", readings1);
             telemetry.update();
         }
     }
