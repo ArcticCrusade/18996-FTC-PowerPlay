@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import java.util.Queue;
 import java.util.LinkedList;
-@TeleOp(name="Kalman Testing", group="Linear Opmode")
+@TeleOp(name="Filter Testing", group="Linear Opmode")
 public class AverageMovingFilter extends LinearOpMode {
     Queue<Double> Q = new LinkedList<>();
     DistanceSensor distanceSensor;
