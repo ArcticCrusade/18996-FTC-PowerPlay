@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.common.Hardware;
+package org.firstinspires.ftc.common.Config;
 
 public class DimensionalMovementConfig {
     private double minInput;
@@ -13,8 +13,8 @@ public class DimensionalMovementConfig {
         logarithmic,
     };
 
-    public double calculateSpeed(int input) {
-        if (minInput > input) return 0.0;
+    public double calculateSpeed(double input) { // TODO: fix negative inputs
+        if (minInput > Math.abs(input)) return 0.0;
         double processedInput = (input - minInput) / (1 - minInput);
         if (type == functionType.linear) {
             double slope = maxSpeed - minSpeed;
@@ -103,6 +103,7 @@ public class DimensionalMovementConfig {
                 break;
             }
         }
+        if (type == null) throw new NullPointerException("contact chris - no type for dimensional movement in his dumbass code");
         base = baseVal;
     }
 }
