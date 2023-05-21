@@ -4,8 +4,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.common.Hardware.TeleOpSpeedConfigs;
-import org.firstinspires.ftc.common.Hardware.TeleOpStateConfig;
+import org.firstinspires.ftc.common.Hardware.DimensionalMovementConfig;
 
 
 public class DrivingConfig extends LinearOpMode {
@@ -13,37 +12,39 @@ public class DrivingConfig extends LinearOpMode {
     private DcMotor rightFront;
     private DcMotor leftRear;
     private DcMotor rightRear;
-    private double LF, RF, LR, RR, Y1, X1, Y2, X2, powerScale;
-    TeleOpSpeedConfigs stateMachine;
+    private double LF, RF, LR, RR, rightY, rightX, leftY, leftX;
     @Override
     public void runOpMode() {
         leftFront = hardwareMap.dcMotor.get("leftFront");
         rightFront = hardwareMap.dcMotor.get("rightFront");
         leftRear = hardwareMap.dcMotor.get("leftRear");
         rightRear = hardwareMap.dcMotor.get("rightRear");
+        DimensionalMovementConfig X1 = new DimensionalMovementConfig(0.0, 0.2, 0.3, "linear", 2.1);
+        DimensionalMovementConfig X2 = new DimensionalMovementConfig(0.0, 0.2, 0.3, "linear", 2.1);
+        DimensionalMovementConfig Y1 = new DimensionalMovementConfig(0.0, 0.2, 0.3, "linear", 2.1);
+        DimensionalMovementConfig Y2 = new DimensionalMovementConfig(0.0, 0.2, 0.3, "linear", 2.1);
 
         while (opModeIsActive()) {
-            TeleOpStateConfig currentState = stateMachine.getConfig();
             LF = 0; RF = 0; LR = 0; RR = 0;
-            Y1 = 0; X1 = 0; Y2 = 0; X2 = 0;
+
 
             // Get joystick values
-            Y1 = gamepad1.right_stick_y;
-            X1 = -gamepad1.right_stick_x;
-            Y2 = -gamepad1.left_stick_y;
-            X2 = gamepad1.left_stick_x;
+            rightY = -gamepad1.right_stick_y;
+            rightX = gamepad1.right_stick_x;
+            leftY = -gamepad1.left_stick_y;
+            leftX = gamepad1.left_stick_x;
 
             //calculate motor output from joysticks
-            LF = Y1 - X1 + X2;
-            RF = Y1 + X1 - X2;
-            LR = Y1 + X1 + X2;
-            RR = Y1 - X1 - X2;
+            LF = rightY - rightX + leftX;
+            RF = rightY + rightX - leftX;
+            LR = rightY + rightX + leftX;
+            RR = rightY - rightX - leftX;
 
             //set motor commands
-            leftFront.setPower(LF * powerScale);
-            rightFront.setPower(RF * powerScale);
-            leftRear.setPower(LR * powerScale);
-            rightRear.setPower(RR * powerScale);
+            leftFront.setPower(LF);
+            rightFront.setPower(RF);
+            leftRear.setPower(LR);
+            rightRear.setPower(RR);
 
             telemetry.update();
         }
