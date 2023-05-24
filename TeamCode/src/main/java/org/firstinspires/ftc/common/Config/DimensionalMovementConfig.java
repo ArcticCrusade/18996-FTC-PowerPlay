@@ -93,20 +93,7 @@ public class DimensionalMovementConfig {
         minSpeed = minSpeedVal;
         maxSpeed = maxSpeedVal;
         currentlyChanging = "minInput";
-        switch (typeVal) {
-            case "linear": {
-                type = functionType.linear;
-                break;
-            }
-            case "exponential": {
-                type = functionType.exponential;
-                break;
-            }
-            case "logarithmic": {
-                type = functionType.logarithmic;
-                break;
-            }
-        }
+        type = functionType.valueOf(typeVal);
         if (type == null) throw new NullPointerException("contact chris - no type for dimensional movement in his dumbass code");
         base = baseVal;
     }
