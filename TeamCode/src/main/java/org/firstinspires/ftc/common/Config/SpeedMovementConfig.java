@@ -27,21 +27,7 @@ public class SpeedMovementConfig {
     }
 
     public String getChanging() {
-        switch (index) {
-            case 0: {
-                return "X1";
-            }
-            case 1: {
-                return "Y1";
-            }
-            case 2: {
-                return "X2";
-            }
-            case 3: {
-                return "Y2";
-            }
-        }
-        return "broken - contact chris, i don't even know how this would happen";
+        return configs[index].toString();
     }
 
     public SpeedMovementConfig(String newName) {
