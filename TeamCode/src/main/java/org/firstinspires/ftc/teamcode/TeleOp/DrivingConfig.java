@@ -1,5 +1,28 @@
-package org.firstinspires.ftc.teamcode.TeleOp;
+/* 
+ * HOW TO USE
+ * 
+ * -----------
+ * 
+ * BUTTONS
+ * A - CHANGES SPEED
+ * B - CHANGES DIMENSIONAL MOVEMENT FOR SPEED
+ * X - DOES NOTHING
+ * Y - CHANGES CONFIG VALUE FOR DIMENSIONAL MOVEMENT FOR SPEED
+ * 
+ * DPAD UP - INCREMENT CONFIG
+ * DPAD DOWN - DECREMENT CONFIG
+ * 
+ * RIGHT STICK - NON TURNING DRIVING
+ * LEFT STICK - TURNING
+ * 
+ * NOTES:
+ * Y2 IS USELESS 
+ * CURRENTLY ONLY SUPPORTS LINEAR
+ */
 
+
+
+package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
