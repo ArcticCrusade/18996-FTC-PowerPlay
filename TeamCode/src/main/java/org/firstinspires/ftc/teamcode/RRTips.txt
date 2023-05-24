@@ -1,0 +1,14 @@
+Tips from experience:
+- Lines tend to be inaccurate when it comes to odometry but is direct.
+- Splines are ultra smooth but tend to do stupid things.
+- Trajectory sequence just better.
+- The endTangent is the same as ending heading.
+- Don't bother with using UNSTABLE commands.
+- Falling-command rule: non-temporal markers and waits are executed in groups up to the next
+movement command. Waits are prioritized. In other words NEVER chain a marker and a wait.
+- Coordinates: Uses standard odometry coordinates, where the field center is (0, 0).
+Going "forwards" in our perspective is -y direction.
+- Don't add displacement markers at the very end. It won't work.
+- To ignore the traj.end(pos) condition:
+-- set pos = getPoseEstimate (may not work)
+-- use relative from (0, 0) position using setPoseEstimate(0, 0) first
