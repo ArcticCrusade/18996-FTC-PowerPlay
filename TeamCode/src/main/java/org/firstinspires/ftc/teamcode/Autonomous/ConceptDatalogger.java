@@ -19,7 +19,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@TeleOp(name = "Concept Datalogger v01", group = "Datalogging")
+@TeleOp(name = "Concept Datalogger IMU", group = "Datalogging")
 public class ConceptDatalogger extends LinearOpMode
 {
     Datalog datalog;
