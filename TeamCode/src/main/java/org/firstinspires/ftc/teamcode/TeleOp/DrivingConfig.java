@@ -17,7 +17,8 @@
  * 
  * NOTES:
  * Y2 IS USELESS 
- * CURRENTLY ONLY SUPPORTS LINEAR
+ * CURRENTLY ONLY SUPPORTS LINEAR 
+ * LOGGING WILL BE IMPLEMENTED SOON (hopefully)
  */
 
 
@@ -38,6 +39,8 @@ public class DrivingConfig extends LinearOpMode {
     private DcMotor leftRear;
     private DcMotor rightRear;
     private double LF, RF, LR, RR, rightY, rightX, leftY, leftX;
+    private int index = 0;
+
     @Override
     public void runOpMode() {
         leftFront = hardwareMap.dcMotor.get("leftFront");
@@ -48,7 +51,6 @@ public class DrivingConfig extends LinearOpMode {
         SpeedMovementConfig normal = new SpeedMovementConfig("Normal");
         SpeedMovementConfig fast = new SpeedMovementConfig("Fast");
         SpeedMovementConfig[] speeds = {slow, normal, fast};
-        int index = 0;
 
         while (opModeIsActive()) {
             if (gamepad1.a) {
