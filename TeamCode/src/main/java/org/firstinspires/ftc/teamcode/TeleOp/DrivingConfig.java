@@ -21,9 +21,9 @@ public class DrivingConfig extends LinearOpMode {
         rightFront = hardwareMap.dcMotor.get("rightFront");
         leftRear = hardwareMap.dcMotor.get("leftRear");
         rightRear = hardwareMap.dcMotor.get("rightRear");
-        SpeedMovementConfig slow = new SpeedMovementConfig();
-        SpeedMovementConfig normal = new SpeedMovementConfig();
-        SpeedMovementConfig fast = new SpeedMovementConfig();
+        SpeedMovementConfig slow = new SpeedMovementConfig("Slow");
+        SpeedMovementConfig normal = new SpeedMovementConfig("Normal");
+        SpeedMovementConfig fast = new SpeedMovementConfig("Fast");
         SpeedMovementConfig[] speeds = {slow, normal, fast};
         int index = 0;
 
@@ -79,23 +79,11 @@ public class DrivingConfig extends LinearOpMode {
             leftRear.setPower(LR);
             rightRear.setPower(RR);
 
-            switch (index) {
-                case 1: {
-                    telemetry.addLine("Currently Modifying Slow Speed");
-                    break;
-                }
-                case 2: {
-                    telemetry.addLine("Currently Modifying Normal Speed");
-                    break;
-                }
-                case 3: {
-                    telemetry.addLine("Currently Modifying Fast Speed");
-                    break;
-                }
-            }
 
-            telemetry.addLine(speeds[index].getName());
+            telemetry.addLine("Currently Modifying: " + speeds[index].getName());
+            telemetry.addLine("Currently Modifying: " + speeds[index].getChanging());
             telemetry.addLine(speeds[index].getConfig().getCurrentlyChanging());
+            telemetry.addData("Value:", speeds[index].getConfig().currentValue());
             telemetry.update();
         }
     }

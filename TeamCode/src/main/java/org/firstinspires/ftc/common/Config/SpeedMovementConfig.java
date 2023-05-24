@@ -6,6 +6,7 @@ public class SpeedMovementConfig {
     private DimensionalMovementConfig Y1;
     private DimensionalMovementConfig Y2;
     private int index = 0;
+    private String name;
 
     public DimensionalMovementConfig getConfig() {
         DimensionalMovementConfig[] configs = {X1, Y1, X2, Y2};
@@ -17,11 +18,15 @@ public class SpeedMovementConfig {
         return configs;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void changeConfig() {
         index = (index + 1) % 4;
     }
 
-    public String getName() {
+    public String getChanging() {
         switch (index) {
             case 0: {
                 return "X1";
@@ -39,11 +44,12 @@ public class SpeedMovementConfig {
         return "broken - contact chris, i don't even know how this would happen";
     }
 
-    public SpeedMovementConfig() {
+    public SpeedMovementConfig(String newName) {
         X1 = new DimensionalMovementConfig(0.0, 0.2, 0.3, "linear", 2.1);
         X2 = new DimensionalMovementConfig(0.0, 0.2, 0.3, "linear", 2.1);
         Y1 = new DimensionalMovementConfig(0.0, 0.2, 0.3, "linear", 2.1);
         Y2 = new DimensionalMovementConfig(0.0, 0.2, 0.3, "linear", 2.1);
+        name = newName;
     }
 }
 

@@ -13,20 +13,21 @@ public class DimensionalMovementConfig {
         logarithmic,
     };
 
-    public double calculateSpeed(double input) { // TODO: fix negative inputs
+    public double calculateSpeed(double input) {
+        int negative = input < 0 ? -1 : 1;
         if (minInput > Math.abs(input)) return 0.0;
         double processedInput = (input - minInput) / (1 - minInput);
         if (type == functionType.linear) {
             double slope = maxSpeed - minSpeed;
-            return (processedInput * slope) + minSpeed;
+            return negative * ((processedInput * slope) + minSpeed);
         }
         else if (type == functionType.exponential) {
             double exponent = Math.log(maxSpeed - minSpeed) / Math.log(base);
-            return minSpeed + Math.pow(base, exponent * processedInput);
+            return negative * (minSpeed + Math.pow(base, exponent * processedInput));
         }
         else if (type == functionType.logarithmic) {
             double val = Math.pow(base, maxSpeed - minSpeed);
-            return minSpeed + (Math.log(val) / Math.log(base));
+            return negative * (minSpeed + (Math.log(val) / Math.log(base)));
         }
         return 0.0;
     }
