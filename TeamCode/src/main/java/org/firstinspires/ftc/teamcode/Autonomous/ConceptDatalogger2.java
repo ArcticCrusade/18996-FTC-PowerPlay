@@ -7,61 +7,30 @@ still under testing and review
 */
 package org.firstinspires.ftc.teamcode.Autonomous;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.VoltageSensor;
-
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-
-@TeleOp(name = "Concept Datalogger Single-Var", group = "Datalogging")
+import java.util.LinkedList;
+import java.util.Queue;
 public class ConceptDatalogger2 {
-    Datalog datalog;
-
-    public ConceptDatalogger2(int numvar) {
-        // Initialize the datalog
-        datalog = new Datalog("s_datalog_01", numvar);
+    private Datalogger.Builder builtlogger = new Datalogger.Builder();
+    private Datalogger datalogger = builtlogger.build();
+    private int numvar;
+    public Queue<Datalogger.GenericField> fields;
+    public ConceptDatalogger2(String name, int numVar) {
+        fields = new LinkedList<Datalogger.GenericField>();
+        builtlogger.setFilename(name);
     }
-    public void addVariable(double var, int num) {
-        datalog.add(var, num);
+    public void add(double var, int num) {
+        Datalogger.GenericField field = new Datalogger.GenericField("Variable " + num);
+        field.set(var);
+        fields.offer(field);
     }
-    public void addVariable(String var, int num) {
-        datalog.add(var, num);
+    public void add(String var, int num) {
+        Datalogger.GenericField field = new Datalogger.GenericField("Variable " + num);
+        field.set(var);
+        fields.offer(field);
     }
     public void execute() {
-        datalog.finish();
-        datalog.writeLine();
-    }
-
-    public static class Datalog {
-        private final Datalogger datalogger;
-        public Datalogger.GenericField[] fields;
-
-        public Datalogger.GenericField f = new Datalogger.GenericField("Variable");
-
-        public Datalog(String name, double numvar)
-        {
-            fields = new Datalogger.GenericField[numVar];
-            datalogger = new Datalogger.Builder()
-                    .setFilename(name)
-                    .setFields(fields);
-        }
-        public void add(double var, int num) {
-            Datalogger.GenericField field = new Datalogger.GenericField("Variable " + num);
-            this.field.set(var);
-            fields.add(field);
-        }
-        public void add(String var, int num) {
-            Datalogger.GenericField field = new Datalogger.GenericField("Variable " + num);
-            this.field.set(var);
-            fields.add(field);
-        }
-        public void writeLine() {
-            datalogger.writeLine();
-        }
-        public void finished() {
-            datalogger.build();
-        }
+        datalogger = builtlogger.setFields(fields.toArray(new Datalogger.GenericField[numvar])).build();
+        datalogger.writeLine();
     }
 }
 

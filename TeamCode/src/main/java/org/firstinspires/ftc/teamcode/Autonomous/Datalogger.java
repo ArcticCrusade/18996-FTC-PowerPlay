@@ -261,11 +261,6 @@ public class Datalogger
             this.fields = fields;
             return this;
         }
-        public Builder setFields(LoggableField[] fields)
-        {
-            this.fields = fields;
-            return this;
-        }
 
         public Builder setAutoTimestamp(AutoTimestamp autoTimestamp)
         {
