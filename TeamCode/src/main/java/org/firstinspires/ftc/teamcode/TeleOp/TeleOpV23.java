@@ -40,7 +40,7 @@ public class TeleOpV23 extends LinearOpMode{
     private DcMotor rightFront;
     private DcMotor leftRear;
     private DcMotor rightRear;
-
+    DistanceSensor distanceSensor;
     double rotatorPos, extenderPos, conePos, popperPos, releasePos, elbowPos;
     //declare position/speed variables
     double RF,LF,RR,LR;
@@ -68,7 +68,7 @@ public class TeleOpV23 extends LinearOpMode{
         cone = hardwareMap.servo.get("cone");
         popper = hardwareMap.servo.get("popper");
         release = hardwareMap.servo.get("release");
-
+        distanceSensor = hardwareMap.get(DistanceSensor.class, "distanceSensor");
 
         // Set the drive motor direction:
         // "Reverse" the motor that runs backwards when connected directly to the battery
@@ -89,8 +89,9 @@ public class TeleOpV23 extends LinearOpMode{
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        String string = new String("hi");
-        ConceptDatalogger2 data = new ConceptDatalogger2("s_datalog_test");
+        ConceptDatalogger2 data = new ConceptDatalogger2("s_datalog_2");
+        data.add(distanceSensor.getDistance(DistanceUnit.CM), 1);
+        data.execute();
         waitForStart();
         runtime.reset();
 
@@ -298,14 +299,8 @@ public class TeleOpV23 extends LinearOpMode{
             telemetry.addData("Elbow Position",elbowPos);
             telemetry.addData("Arm State",armPos);
             telemetry.update();
-            if (isStopRequested()) {
-                data.add(rotatorPos, 1);
-                data.add(powerScale, 2);
-                data.add(string, 3);
-                data.add("to", 4);
-                data.execute();
-                wait(5000);
-            }
+            data.writeLine();
+            data.execute();
         }
     }
 }

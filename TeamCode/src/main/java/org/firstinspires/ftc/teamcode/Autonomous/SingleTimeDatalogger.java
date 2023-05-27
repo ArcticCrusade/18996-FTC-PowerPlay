@@ -9,11 +9,11 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import java.util.LinkedList;
 import java.util.Queue;
-public class ConceptDatalogger2 {
+public class SingleTimeDatalogger {
     private Datalogger.Builder builtlogger;
     private Datalogger datalogger;
     public LinkedList<Datalogger.GenericField> fields = new LinkedList<Datalogger.GenericField>();
-    public ConceptDatalogger2(String name) {
+    public SingleTimeDatalogger(String name) {
         builtlogger = new Datalogger.Builder()
                 .setFilename(name)
                 .setAutoTimestamp(Datalogger.AutoTimestamp.DECIMAL_SECONDS);
@@ -35,4 +35,5 @@ public class ConceptDatalogger2 {
         datalogger.writeLine();
     }
 }
+
 
