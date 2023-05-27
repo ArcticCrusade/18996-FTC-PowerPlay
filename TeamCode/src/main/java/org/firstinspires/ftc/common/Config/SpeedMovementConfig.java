@@ -27,14 +27,15 @@ public class SpeedMovementConfig {
     }
 
     public String getChanging() {
+        DimensionalMovementConfig[] configs = {X1, Y1, X2, Y2};
         return configs[index].toString();
     }
 
     public SpeedMovementConfig(String newName) {
-        X1 = new DimensionalMovementConfig(0.0, 0.2, 0.3, "linear", 2.1);
-        X2 = new DimensionalMovementConfig(0.0, 0.2, 0.3, "linear", 2.1);
-        Y1 = new DimensionalMovementConfig(0.0, 0.2, 0.3, "linear", 2.1);
-        Y2 = new DimensionalMovementConfig(0.0, 0.2, 0.3, "linear", 2.1);
+        X1 = new DimensionalMovementConfig(0.05, 0.2, 0.3, "linear", 2.1);
+        X2 = new DimensionalMovementConfig(0.05, 0.2, 0.3, "linear", 2.1);
+        Y1 = new DimensionalMovementConfig(0.05, 0.2, 0.3, "linear", 2.1);
+        Y2 = new DimensionalMovementConfig(0.05, 0.2, 0.3, "linear", 2.1);
         name = newName;
     }
 }

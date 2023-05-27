@@ -52,6 +52,8 @@ public class DrivingConfig extends LinearOpMode {
         SpeedMovementConfig fast = new SpeedMovementConfig("Fast");
         SpeedMovementConfig[] speeds = {slow, normal, fast};
 
+        waitForStart();
+
         while (opModeIsActive()) {
             if (gamepad1.a) {
                 index = (index + 1) % 3;
@@ -70,10 +72,12 @@ public class DrivingConfig extends LinearOpMode {
 
             if (gamepad1.dpad_up) {
                 speeds[index].getConfig().changeVal(0.01);
+                sleep(100);
             }
 
             if (gamepad1.dpad_down) {
                 speeds[index].getConfig().changeVal(-0.01);
+                sleep(100);
             }
 
 
