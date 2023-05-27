@@ -10,11 +10,13 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 import java.util.LinkedList;
 import java.util.Queue;
 public class ConceptDatalogger2 {
-    private Datalogger.Builder builtlogger = new Datalogger.Builder();
-    private Datalogger datalogger = builtlogger.build();
-    public Queue<Datalogger.GenericField> fields = new LinkedList<Datalogger.GenericField>();
+    private Datalogger.Builder builtlogger;
+    private Datalogger datalogger;
+    public LinkedList<Datalogger.GenericField> fields = new LinkedList<Datalogger.GenericField>();
     public ConceptDatalogger2(String name) {
-        builtlogger.setFilename(name);
+        builtlogger = new Datalogger.Builder()
+                .setFilename(name)
+                .setAutoTimestamp(Datalogger.AutoTimestamp.DECIMAL_SECONDS);
     }
     public void add(double var, int num) {
         Datalogger.GenericField field = new Datalogger.GenericField("Variable " + num);

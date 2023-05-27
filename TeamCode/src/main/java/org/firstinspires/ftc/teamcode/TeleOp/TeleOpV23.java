@@ -54,7 +54,7 @@ public class TeleOpV23 extends LinearOpMode{
     int counter2 = 0;
     int counter3 = 0;
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -89,7 +89,8 @@ public class TeleOpV23 extends LinearOpMode{
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
+        String string = new String("hi");
+        ConceptDatalogger2 data = new ConceptDatalogger2("s_datalog_test");
         waitForStart();
         runtime.reset();
 
@@ -297,14 +298,13 @@ public class TeleOpV23 extends LinearOpMode{
             telemetry.addData("Elbow Position",elbowPos);
             telemetry.addData("Arm State",armPos);
             telemetry.update();
-            String string = new String("hi");
-            ConceptDatalogger2 data = new ConceptDatalogger2("s_datalog_test");
             if (isStopRequested()) {
                 data.add(rotatorPos, 1);
                 data.add(powerScale, 2);
                 data.add(string, 3);
                 data.add("to", 4);
                 data.execute();
+                wait(5000);
             }
         }
     }
