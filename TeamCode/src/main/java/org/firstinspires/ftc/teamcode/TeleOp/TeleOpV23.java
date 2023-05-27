@@ -21,6 +21,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.Autonomous.ConceptDatalogger2;
+
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Collections;
@@ -295,6 +297,15 @@ public class TeleOpV23 extends LinearOpMode{
             telemetry.addData("Elbow Position",elbowPos);
             telemetry.addData("Arm State",armPos);
             telemetry.update();
+            String string = new String("hi");
+            ConceptDatalogger2 data = new ConceptDatalogger2("s_datalog_test");
+            if (isStopRequested()) {
+                data.add(rotatorPos, 1);
+                data.add(powerScale, 2);
+                data.add(string, 3);
+                data.add("to", 4);
+                data.execute();
+            }
         }
     }
 }
