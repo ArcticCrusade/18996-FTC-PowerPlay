@@ -18,15 +18,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.Autonomous.ConceptDatalogger2;
-
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Collections;
-import java.lang.Math;
+import org.firstinspires.ftc.teamcode.Autonomous.RepeatedDatalogger;
+import org.firstinspires.ftc.teamcode.Autonomous.SingleTimeDatalogger;
 
 @TeleOp(name="TeleOpV23", group="Linear Opmode")
 public class TeleOpV23 extends LinearOpMode{
@@ -89,9 +84,11 @@ public class TeleOpV23 extends LinearOpMode{
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        ConceptDatalogger2 data = new ConceptDatalogger2("s_datalog_2");
-        data.add(distanceSensor.getDistance(DistanceUnit.CM), 1);
-        data.execute();
+
+        RepeatedDatalogger data = new RepeatedDatalogger("datalog_4");
+        data.add(1);
+        data.build();
+
         waitForStart();
         runtime.reset();
 
@@ -299,8 +296,8 @@ public class TeleOpV23 extends LinearOpMode{
             telemetry.addData("Elbow Position",elbowPos);
             telemetry.addData("Arm State",armPos);
             telemetry.update();
+            data.modify("Variable 1", distanceSensor.getDistance(DistanceUnit.CM));
             data.writeLine();
-            data.execute();
         }
     }
 }

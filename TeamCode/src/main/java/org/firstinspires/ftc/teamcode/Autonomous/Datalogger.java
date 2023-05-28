@@ -150,6 +150,7 @@ public class Datalogger
         {
             super(name);
         }
+        public String getName() {return name;}
 
         @Override
         public void writeToBuffer(StringBuilder out)
