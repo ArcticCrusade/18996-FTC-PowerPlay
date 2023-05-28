@@ -57,27 +57,27 @@ public class DrivingConfig extends LinearOpMode {
         while (opModeIsActive()) {
             if (gamepad1.a) {
                 index = (index + 1) % 3;
-                sleep(100);
+                sleep(200);
             }
 
             if (gamepad1.b) {
                 speeds[index].changeConfig();
-                sleep(100);
+                sleep(200);
             }
 
             if (gamepad1.y) {
                 speeds[index].getConfig().changeMode();
-                sleep(100);
+                sleep(200);
             }
 
             if (gamepad1.dpad_up) {
                 speeds[index].getConfig().changeVal(0.01);
-                sleep(100);
+                sleep(200);
             }
 
             if (gamepad1.dpad_down) {
                 speeds[index].getConfig().changeVal(-0.01);
-                sleep(100);
+                sleep(200);
             }
 
 
@@ -97,10 +97,10 @@ public class DrivingConfig extends LinearOpMode {
             double Y2 = configs[3].calculateSpeed(leftY);
 
             //calculate motor output from joysticks
-            LF = Y1 - X1 + X2;
-            RF = Y1 + X1 - X2;
-            LR = Y1 + X1 + X2;
-            RR = Y1 - X1 - X2;
+            LF = -(Y1 + X1 + X2);
+            RF = Y1 - X1 - X2;
+            LR = -(Y1 - X1 + X2);
+            RR = Y1 + X1 - X2;
 
             //set motor commands
             leftFront.setPower(LF);
@@ -111,7 +111,7 @@ public class DrivingConfig extends LinearOpMode {
 
             telemetry.addLine("Currently Modifying: " + speeds[index].getName());
             telemetry.addLine("Currently Modifying: " + speeds[index].getChanging());
-            telemetry.addLine(speeds[index].getConfig().getCurrentlyChanging());
+            telemetry.addLine("Currently Modifying: " + speeds[index].getConfig().getCurrentlyChanging());
             telemetry.addData("Value:", speeds[index].getConfig().currentValue());
             telemetry.update();
         }

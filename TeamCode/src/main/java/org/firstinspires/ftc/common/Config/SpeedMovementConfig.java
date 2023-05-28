@@ -28,7 +28,14 @@ public class SpeedMovementConfig {
 
     public String getChanging() {
         DimensionalMovementConfig[] configs = {X1, Y1, X2, Y2};
-        return configs[index].toString();
+        switch (index) {
+            case 0: { return "X1"; }
+            case 1: { return "Y1"; }
+            case 2: { return "X2"; }
+            case 3: { return "Y2"; }
+
+        }
+        return "getChanging() in SpeedMovementConfig Broken";
     }
 
     public SpeedMovementConfig(String newName) {
