@@ -37,6 +37,7 @@ public class DrivingConfig extends LinearOpMode {
     private DcMotor leftFront;
     private DcMotor rightFront;
     private DcMotor leftRear;
+    private boolean aPressed, bPressed, xPressed, yPressed;
     private DcMotor rightRear;
     private double LF, RF, LR, RR, rightY, rightX, leftY, leftX;
     private int index = 0;
@@ -56,18 +57,30 @@ public class DrivingConfig extends LinearOpMode {
 
         while (opModeIsActive()) {
             if (gamepad1.a) {
-                index = (index + 1) % 3;
-                sleep(200);
+                if (!aPressed) {
+                    index = (index + 1) % 3;
+                } 
+                aPressed = true;
+            } else {
+                aPressed = false;
             }
 
             if (gamepad1.b) {
-                speeds[index].changeConfig();
-                sleep(200);
+                if (!bPressed) {
+                    speeds[index].changeConfig();
+                }
+                bPressed = true;
+            } else {
+                bPressed = false;
             }
 
             if (gamepad1.y) {
-                speeds[index].getConfig().changeMode();
-                sleep(200);
+                if (!yPressed) {
+                    speeds[index].getConfig().changeMode();
+                }
+                yPressed = true;
+            } else {
+                yPressed = false;
             }
 
             if (gamepad1.dpad_up) {
@@ -111,8 +124,8 @@ public class DrivingConfig extends LinearOpMode {
 
             telemetry.addLine("Currently Modifying: " + speeds[index].getName());
             telemetry.addLine("Currently Modifying: " + speeds[index].getChanging());
-            telemetry.addLine("Currently Modifying: " + speeds[index].getConfig().getCurrentlyChanging());
-            telemetry.addData("Value:", speeds[index].getConfig().currentValue());
+            telemetry.addLine(speeds[index].getConfig().getCurrentlyChanging());
+            telemetry.addData("Value:", Math.round(speeds[index].getConfig().currentValue() * 100) / 100);
             telemetry.update();
         }
     }
