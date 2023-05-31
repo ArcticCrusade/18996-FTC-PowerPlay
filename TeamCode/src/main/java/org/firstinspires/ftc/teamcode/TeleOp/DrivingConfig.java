@@ -125,7 +125,7 @@ public class DrivingConfig extends LinearOpMode {
             telemetry.addLine("Currently Modifying: " + speeds[index].getName());
             telemetry.addLine("Currently Modifying: " + speeds[index].getChanging());
             telemetry.addLine(speeds[index].getConfig().getCurrentlyChanging());
-            telemetry.addData("Value:", Math.round(speeds[index].getConfig().currentValue() * 100) / 100);
+            telemetry.addData("Value:", speeds[index].getConfig().currentValue());
             telemetry.update();
         }
     }

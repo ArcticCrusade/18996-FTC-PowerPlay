@@ -1,19 +1,10 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
-
-import android.service.quickaccesswallet.SelectWalletCardRequest;
+package org.firstinspires.ftc.common.Hardware;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.common.Interfaces.Subsystem;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
-
-import java.sql.Array;
-import java.util.ArrayList;
-
-import org.opencv.core.MatOfInt;
-import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
@@ -21,23 +12,19 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
-import org.openftc.easyopencv.OpenCvWebcam;
+import org.opencv.core.Size;
 
-/*
-On hold until ML stuff done
- */
-@Autonomous(name="OpenCV Testing", group="Vision")
-public class OpenCVTesting extends LinearOpMode {
+public class Camera implements Subsystem {
+    OpenCvCamera webcam;
+    SignalDetection usedPipeline;
 
-    OpenCvWebcam webcam;
-
-
-    public void runOpMode() {
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        DetectionPipeline usedPipeline = new DetectionPipeline();
+    @Override
+    public void initialize(LinearOpMode opMode) {
+        int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(opMode.hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        usedPipeline = new SignalDetection();
         webcam.setPipeline(usedPipeline);
-        webcam.setMillisecondsPermissionTimeout(7000); // Timeout for obtaining permission is configurable. Set before opening.
+        // webcam.setMillisecondsPermissionTimeout(7000); // Timeout for obtaining permission is configurable. Set before opening.
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
@@ -45,56 +32,24 @@ public class OpenCVTesting extends LinearOpMode {
             }
 
             @Override
-            public void onError(int errorCode)
-            {
+            public void onError(int errorCode) {
 
             }
         });
-        waitForStart();
-        usedPipeline.setPhase(2);
-        while (opModeIsActive()) {
-            telemetry.addLine("COLOR SEEN: " + usedPipeline.getViewedColor());
-            telemetry.update();
-        }
     }
-    class DetectionPipeline extends OpenCvPipeline {
+
+    public String getColor() {
+        return usedPipeline.getViewedColor();
+    }
+
+    class SignalDetection extends OpenCvPipeline {
         boolean viewportPaused;
         private int phase;
         private String viewedColor;
-        private ArrayList<Mat> channels = new ArrayList<>();
-        private Mat filteredImage = new Mat();
-        private Mat grayImage = new Mat();
-        private ArrayList<MatOfPoint> contours = new ArrayList<>();
-        private Mat preventMemoryLeak = new Mat();
-        private Scalar zeroScalar = new Scalar(0);
-        private Scalar contourColor = new Scalar(255, 255, 0);
-        public DetectionPipeline() {
 
-            phase = 1;
-
-        }
-
-        public void setPhase(int phase) {
-            this.phase = phase;
-        }
 
         @Override
         public Mat processFrame(Mat input) {
-            if (phase == 2) {
-                input = processPhase1(input);
-            }
-            else if (phase == 1) {
-                input = processPhase2(input);
-            }
-            return input;
-        }
-
-        private Mat processPhase2(Mat input) {
-
-            return input;
-        }
-
-        private Mat processPhase1(Mat input) {
             double[] colorsSeen = input.get(120, 160);
             int red = (int) colorsSeen[0];
             int green = (int) colorsSeen[1];
@@ -137,7 +92,23 @@ public class OpenCVTesting extends LinearOpMode {
             }
         }
     }
+
+    class RedConeDetection extends OpenCvPipeline {
+
+
+
+        @Override
+        public Mat processFrame(Mat mat) {
+            double scalePercent = 50;
+            int width = (int) Math.round(mat.size().width * scalePercent / 100);
+            int height = (int) Math.round(mat.size().height * scalePercent / 100);
+            Size dimensions = new Size(width, height);
+            Imgproc.resize(mat, mat, dimensions);
+            return mat;
+        }
+    }
+
+
+
+
 }
-
-
-
