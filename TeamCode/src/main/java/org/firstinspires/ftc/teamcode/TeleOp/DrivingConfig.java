@@ -93,6 +93,7 @@ public class DrivingConfig extends LinearOpMode {
                 sleep(200);
             }
 
+            SpeedMovementConfig currentSpeed = speeds[index];
 
             LF = 0; RF = 0; LR = 0; RR = 0;
 
@@ -103,7 +104,7 @@ public class DrivingConfig extends LinearOpMode {
             leftY = -gamepad1.left_stick_y;
             leftX = gamepad1.left_stick_x;
 
-            DimensionalMovementConfig[] configs = speeds[index].getConfigList();
+            DimensionalMovementConfig[] configs = currentSpeed.getConfigList();
             double X1 = configs[0].calculateSpeed(rightX);
             double Y1 = configs[1].calculateSpeed(rightY);
             double X2 = configs[2].calculateSpeed(leftX);
@@ -122,10 +123,10 @@ public class DrivingConfig extends LinearOpMode {
             rightRear.setPower(RR);
 
 
-            telemetry.addLine("Currently Modifying: " + speeds[index].getName());
-            telemetry.addLine("Currently Modifying: " + speeds[index].getChanging());
-            telemetry.addLine(speeds[index].getConfig().getCurrentlyChanging());
-            telemetry.addData("Value:", speeds[index].getConfig().currentValue());
+            telemetry.addLine("Currently Modifying: " + currentSpeed.getName());
+            telemetry.addLine("Currently Modifying: " + currentSpeed.getChanging());
+            telemetry.addLine(currentSpeed.getConfig().getCurrentlyChanging());
+            telemetry.addData("Value:", currentSpeed.getConfig().currentValue());
             telemetry.update();
         }
     }
