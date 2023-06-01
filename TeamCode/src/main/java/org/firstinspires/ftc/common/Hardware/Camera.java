@@ -13,6 +13,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.opencv.core.Size;
+import org.opencv.core;
 
 public class Camera implements Subsystem {
     OpenCvCamera webcam;
@@ -94,21 +95,26 @@ public class Camera implements Subsystem {
     }
 
     class RedConeDetection extends OpenCvPipeline {
-
-
+        Mat hsvImage;
+        Mat inRange;
+        Scalar lowerRange = new Scalar(150, 150, 59);
+        Scalar upperRange = new Scalar(180, 180, 255);
 
         @Override
         public Mat processFrame(Mat mat) {
+
+            // Scale Down Image
             double scalePercent = 50;
             int width = (int) Math.round(mat.size().width * scalePercent / 100);
             int height = (int) Math.round(mat.size().height * scalePercent / 100);
             Size dimensions = new Size(width, height);
             Imgproc.resize(mat, mat, dimensions);
-            return mat;
+
+            // Convert to HSV and filter
+            hsvImage = new Mat();
+            Imgproc.cvtColor(mat, hsvVersion, Imgproc.COLOR_RGB2HSV);
+            Core.inRange(hsvImage, lowerRange, upperRange, inRange);
+            return inRange;
         }
     }
-
-
-
-
 }
