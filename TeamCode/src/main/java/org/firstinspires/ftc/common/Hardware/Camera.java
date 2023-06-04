@@ -13,18 +13,21 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.opencv.core.Size;
-import org.opencv.core;
+import org.opencv.core.Core;
 
 public class Camera implements Subsystem {
     OpenCvCamera webcam;
-    SignalDetection usedPipeline;
+    SignalDetection SignalPipeline;
+    RedConeDetection RedConePipeline;
 
     @Override
     public void initialize(LinearOpMode opMode) {
         int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(opMode.hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        usedPipeline = new SignalDetection();
-        webcam.setPipeline(usedPipeline);
+        SignalPipeline = new SignalDetection();
+        RedConeDetection RedConePipeline = new RedConeDetection();
+
+        webcam.setPipeline(RedConePipeline);
         // webcam.setMillisecondsPermissionTimeout(7000); // Timeout for obtaining permission is configurable. Set before opening.
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
@@ -39,8 +42,14 @@ public class Camera implements Subsystem {
         });
     }
 
+    public void switchPipeline(String coneColor) {
+        switch (coneColor) {
+            case "Red": webcam.setPipeline(RedConePipeline);
+        }
+    }
+
     public String getColor() {
-        return usedPipeline.getViewedColor();
+        return SignalPipeline.getViewedColor();
     }
 
     class SignalDetection extends OpenCvPipeline {
@@ -104,7 +113,7 @@ public class Camera implements Subsystem {
         public Mat processFrame(Mat mat) {
 
             // Scale Down Image
-            double scalePercent = 50;
+            double scalePercent = 20;
             int width = (int) Math.round(mat.size().width * scalePercent / 100);
             int height = (int) Math.round(mat.size().height * scalePercent / 100);
             Size dimensions = new Size(width, height);
@@ -112,7 +121,8 @@ public class Camera implements Subsystem {
 
             // Convert to HSV and filter
             hsvImage = new Mat();
-            Imgproc.cvtColor(mat, hsvVersion, Imgproc.COLOR_RGB2HSV);
+            inRange = new Mat();
+            Imgproc.cvtColor(mat, hsvImage, Imgproc.COLOR_RGB2HSV);
             Core.inRange(hsvImage, lowerRange, upperRange, inRange);
             return inRange;
         }

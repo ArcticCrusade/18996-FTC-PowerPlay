@@ -13,14 +13,13 @@ public class CameraTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         camera.initialize(this);
-        String color;
+        String color = "temp";
 
         waitForStart();
 
-        color = camera.getColor();
-
         while (opModeIsActive()) {
             telemetry.addLine("Color Seen: " + color);
+            telemetry.update();
         }
     }
 }
