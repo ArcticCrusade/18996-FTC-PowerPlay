@@ -24,7 +24,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import java.util.List;
 
 @Config
-@Autonomous(name="AAAARRPractical", group="Linear Opmode")
+@Autonomous(name="Imitation Right-Auto", group="Linear Opmode")
 public class RRPractical extends LinearOpMode {
     private static final String[] LABELS = {
             "Donut",
@@ -57,20 +57,16 @@ public class RRPractical extends LinearOpMode {
         //yoink all of the motor declarations and their methods
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         //set starting position
-        Pose2d startPose = new Pose2d(-36, 72, Math.toRadians(270));
+        Pose2d startPose = new Pose2d(-35.6,-49.6, Math.toRadians(90));
         drive.setPoseEstimate(startPose);
-        TrajectorySequence startAlign = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(-30, 6), Math.toRadians(270))
-                .setReversed(true)
-                .splineToLinearHeading(new Pose2d(-42, 6, Math.toRadians(-8)), Math.toRadians(-8))
+        TrajectorySequence start = drive.trajectorySequenceBuilder(startPose)
+                .splineToSplineHeading(new Pose2d(-25.6,-2, Math.toRadians(47)), Math.toRadians(47))
                 .build();
         TrajectorySequence cycle = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                .setReversed(false)
-                .splineToConstantHeading(new Vector2d(-36.5, -4), Math.toRadians(-10))
-                .splineToConstantHeading(new Vector2d(-26, 0.5), Math.toRadians(-10))
                 .setReversed(true)
-                .splineToConstantHeading(new Vector2d(-36.5, -4), Math.toRadians(-10))
-                .splineToConstantHeading(new Vector2d(-42, 6), Math.toRadians(-8))
+                .splineToSplineHeading(new Pose2d(-53.6,-12.4, Math.toRadians(0)), Math.toRadians(0))
+                .setReversed(false)
+                .splineToSplineHeading(new Pose2d(-25.6,-2, Math.toRadians(47)), Math.toRadians(47))
                 .build();
         TrajectorySequence park1 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
 
@@ -107,7 +103,7 @@ public class RRPractical extends LinearOpMode {
                 }
             }
         }
-        drive.followTrajectorySequence(startAlign);
+        drive.followTrajectorySequence(start);
         for (int i = 1; i <= 5; i++) {
             drive.followTrajectorySequence(cycle);
         }
