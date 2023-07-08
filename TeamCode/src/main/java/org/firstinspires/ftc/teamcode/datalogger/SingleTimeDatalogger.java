@@ -5,7 +5,7 @@ Steps to use this single-time datalogger:
 3. use execute to finish and writeline to write a line or more
 still under testing and review
 */
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.datalogger;
 
 import java.util.LinkedList;
 

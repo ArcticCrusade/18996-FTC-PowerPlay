@@ -5,7 +5,7 @@ Steps to use this repeatable datalogger:
 3. use modify then writeline in while to write a line or more
 still under testing and review
 */
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.datalogger;
 
 import java.util.LinkedList;
 
