@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.teamcode.Autonomous.RepeatedDatalogger;
+import org.firstinspires.ftc.teamcode.datalogger.RepeatedDatalogger;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
 @TeleOp(name="Datalog Test", group="Linear Opmode")
