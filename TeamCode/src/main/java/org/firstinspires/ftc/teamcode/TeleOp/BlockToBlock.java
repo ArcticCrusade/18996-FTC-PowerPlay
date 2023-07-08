@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.opMode;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -19,10 +21,11 @@ import java.util.Queue;
 
 @TeleOp(name="BlockToBlock", group="Linear Opmode")
 public class BlockToBlock extends LinearOpMode {
+    OldArm arm = new OldArm();
     @Override
     public void runOpMode() {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        OldArm arm = new OldArm(hardwareMap);
+        arm.initialize(this);
         drive.setPoseEstimate(new Pose2d());
         Queue<Trajectory> trajQueue = new LinkedList<Trajectory>();
         ElapsedTime time = new ElapsedTime();
