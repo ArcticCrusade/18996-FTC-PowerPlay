@@ -10,7 +10,6 @@ public class DimensionalMovementConfig {
     private enum functionType {
         linear,
         exponential,
-        logarithmic,
     };
 
     public double calculateSpeed(double input) { // Some of this code might be scuffed
@@ -24,12 +23,9 @@ public class DimensionalMovementConfig {
                 return negative * ((processedInput * slope) + minSpeed);
             }
             case exponential: {
-                double exponent = Math.log(maxSpeed - minSpeed) / Math.log(base);
-                return negative * (minSpeed + Math.pow(base, exponent * processedInput));
-            }
-            case logarithmic: {
-                double val = Math.pow(base, maxSpeed - minSpeed);
-                return negative * (minSpeed + (Math.log(val) / Math.log(base)));
+                double a = (maxSpeed - minSpeed) / (base - 1);
+                double c = minSpeed - a;
+                return negative * (c + (a * Math.pow(base, processedInput)));
             }
         }
         return 0.0;
