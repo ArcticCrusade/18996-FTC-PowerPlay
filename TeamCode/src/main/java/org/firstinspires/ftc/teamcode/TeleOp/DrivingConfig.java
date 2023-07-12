@@ -111,10 +111,10 @@ public class DrivingConfig extends LinearOpMode {
             double Y2 = configs[3].calculateSpeed(leftY);
 
             //calculate motor output from joysticks
-            LF = -(Y1 + X1 + X2);
-            RF = Y1 - X1 - X2;
-            LR = -(Y1 - X1 + X2);
-            RR = Y1 + X1 - X2;
+            LF = -(X1 - Y1 + X2);
+            RF = -(Y1 + X1 + X2);
+            LR = -(X2 - X1 - Y1);
+            RR = -Y1 + X1 - X2;
 
             //set motor commands
             leftFront.setPower(LF);

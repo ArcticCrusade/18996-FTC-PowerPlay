@@ -1,10 +1,14 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.common.Config.*;
+import static org.firstinspires.ftc.common.Config.FinalDriveConfig.getTypes;
+import static org.firstinspires.ftc.common.Config.FinalDriveConfig.populateArray;
 
 import java.util.ArrayList;
 
@@ -27,16 +31,16 @@ public class FinalDrive extends LinearOpMode {
         ArrayList<ArrayList<Double>> slowConfig = new ArrayList<ArrayList<Double>>();
         ArrayList<ArrayList<Double>> normalConfig = new ArrayList<ArrayList<Double>>();
         ArrayList<ArrayList<Double>> fastConfig = new ArrayList<ArrayList<Double>>();
-        SpeedMovementConfig slow = new SpeedMovementConfig("Slow", FinalDriveConfig.populateArray("Slow"));
-        SpeedMovementConfig normal = new SpeedMovementConfig("Normal", FinalDriveConfig.populateArray("Normal"));
-        SpeedMovementConfig fast = new SpeedMovementConfig("Fast", FinalDriveConfig.populateArray("Fast"));
+        SpeedMovementConfig slow = new SpeedMovementConfig("Slow", populateArray("Slow"), getTypes("Slow"));
+        SpeedMovementConfig normal = new SpeedMovementConfig("Normal", populateArray("Normal"), getTypes("Normal"));
+        SpeedMovementConfig fast = new SpeedMovementConfig("Fast", populateArray("Fast"), getTypes("Fast"));
         SpeedMovementConfig[] speeds = {slow, normal, fast};
 
         waitForStart();
 
         while (opModeIsActive()) {
-
-            SpeedMovementConfig currentSpeed = speeds[gamepad1.right_bumper ? 2 : (gamepad1.left_bumper ? 0 : 1)];
+            int index = 1;
+            SpeedMovementConfig currentSpeed = speeds[(gamepad1.right_trigger > 0.3) ? 2 : ((gamepad1.left_trigger > 0.3) ? 0 : 1)];
 
             LF = 0; RF = 0; LR = 0; RR = 0;
 
@@ -54,23 +58,16 @@ public class FinalDrive extends LinearOpMode {
             double Y2 = configs[3].calculateSpeed(leftY);
 
             //calculate motor output from joysticks
-            LF = -(Y1 + X1 + X2);
-            RF = Y1 - X1 - X2;
-            LR = -(Y1 - X1 + X2);
-            RR = Y1 + X1 - X2;
+            LF = -X1 + Y1 - X2;
+            RF = -Y1 - X1 - X2;
+            LR = -X2 + X1 + Y1;
+            RR = -Y1 + X1 - X2;
 
             //set motor commands
             leftFront.setPower(LF);
             rightFront.setPower(RF);
             leftRear.setPower(LR);
             rightRear.setPower(RR);
-
-
-            telemetry.addLine("Currently Modifying: " + currentSpeed.getName());
-            telemetry.addLine("Currently Modifying: " + currentSpeed.getChanging());
-            telemetry.addLine(currentSpeed.getConfig().getCurrentlyChanging());
-            telemetry.addData("Value:", currentSpeed.getConfig().currentValue());
-            telemetry.update();
         }
     }
 }

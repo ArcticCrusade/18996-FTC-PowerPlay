@@ -48,11 +48,11 @@ public class SpeedMovementConfig {
         name = newName;
     }
 
-    public SpeedMovementConfig(String newName, ArrayList<ArrayList<Double>> inputList) { // other constructor for final model
-        X1 = new DimensionalMovementConfig(inputList.get(0).get(0), inputList.get(0).get(1), inputList.get(0).get(2), "linear", inputList.get(0).get(3));
-        X2 = new DimensionalMovementConfig(inputList.get(1).get(0), inputList.get(1).get(1), inputList.get(1).get(2), "linear", inputList.get(1).get(3));
-        Y1 = new DimensionalMovementConfig(inputList.get(2).get(0), inputList.get(2).get(1), inputList.get(2).get(2), "linear", inputList.get(2).get(3));
-        Y2 = new DimensionalMovementConfig(inputList.get(3).get(0), inputList.get(3).get(1), inputList.get(3).get(2), "linear", inputList.get(3).get(3));
+    public SpeedMovementConfig(String newName, ArrayList<ArrayList<Double>> inputList, ArrayList<String> types) { // other constructor for final model
+        X1 = new DimensionalMovementConfig(inputList.get(0).get(0), inputList.get(0).get(1), inputList.get(0).get(2), types.get(0), inputList.get(0).get(3));
+        X2 = new DimensionalMovementConfig(inputList.get(1).get(0), inputList.get(1).get(1), inputList.get(1).get(2), types.get(1), inputList.get(1).get(3));
+        Y1 = new DimensionalMovementConfig(inputList.get(2).get(0), inputList.get(2).get(1), inputList.get(2).get(2), types.get(2), inputList.get(2).get(3));
+        Y2 = new DimensionalMovementConfig(inputList.get(3).get(0), inputList.get(3).get(1), inputList.get(3).get(2), types.get(3), inputList.get(3).get(3));
         name = newName;
     }
 }

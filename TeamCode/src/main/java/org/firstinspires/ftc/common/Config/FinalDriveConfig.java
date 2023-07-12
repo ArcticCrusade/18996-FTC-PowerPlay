@@ -10,20 +10,20 @@ public class FinalDriveConfig {
     static double slowY1MinInput = 0.05;
     static double slowY2MinInput = 0.05;
 
-    static double slowX1MinSpeed = 0.2;
-    static double slowX2MinSpeed = 0.2;
-    static double slowY1MinSpeed = 0.2;
-    static double slowY2MinSpeed = 0.2;
+    static double slowX1MinSpeed = 0.1;
+    static double slowX2MinSpeed = 0.1;
+    static double slowY1MinSpeed = 0.1;
+    static double slowY2MinSpeed = 0.1;
 
-    static double slowX1MaxSpeed = 0.3;
-    static double slowX2MaxSpeed = 0.3;
-    static double slowY1MaxSpeed = 0.3;
-    static double slowY2MaxSpeed = 0.3;
+    static double slowX1MaxSpeed = 0.25;
+    static double slowX2MaxSpeed = 0.25;
+    static double slowY1MaxSpeed = 0.25;
+    static double slowY2MaxSpeed = 0.25;
 
     static String slowX1type = "linear";
     static String slowX2type = "linear";
-    static String slowX3type = "linear";
-    static String slowX4type = "linear";
+    static String slowY1type = "linear";
+    static String slowY2type = "linear";
 
     static double slowX1Base = 2.1;
     static double slowX2Base = 2.1;
@@ -40,15 +40,15 @@ public class FinalDriveConfig {
     static double medY1MinSpeed = 0.2;
     static double medY2MinSpeed = 0.2;
 
-    static double medX1MaxSpeed = 0.3;
-    static double medX2MaxSpeed = 0.3;
-    static double medY1MaxSpeed = 0.3;
-    static double medY2MaxSpeed = 0.3;
+    static double medX1MaxSpeed = 0.35;
+    static double medX2MaxSpeed = 0.35;
+    static double medY1MaxSpeed = 0.35;
+    static double medY2MaxSpeed = 0.35;
 
     static String medX1type = "linear";
     static String medX2type = "linear";
-    static String medX3type = "linear";
-    static String medX4type = "linear";
+    static String medY1type = "linear";
+    static String medY2type = "linear";
 
     static double medX1Base = 2.1;
     static double medX2Base = 2.1;
@@ -60,20 +60,20 @@ public class FinalDriveConfig {
     static double fastY1MinInput = 0.05;
     static double fastY2MinInput = 0.05;
 
-    static double fastX1MinSpeed = 0.2;
-    static double fastX2MinSpeed = 0.2;
-    static double fastY1MinSpeed = 0.2;
-    static double fastY2MinSpeed = 0.2;
+    static double fastX1MinSpeed = 0.45;
+    static double fastX2MinSpeed = 0.45;
+    static double fastY1MinSpeed = 0.45;
+    static double fastY2MinSpeed = 0.45;
 
-    static double fastX1MaxSpeed = 0.3;
-    static double fastX2MaxSpeed = 0.3;
-    static double fastY1MaxSpeed = 0.3;
-    static double fastY2MaxSpeed = 0.3;
+    static double fastX1MaxSpeed = 0.6;
+    static double fastX2MaxSpeed = 0.6;
+    static double fastY1MaxSpeed = 0.6;
+    static double fastY2MaxSpeed = 0.6;
 
     static String fastX1type = "linear";
     static String fastX2type = "linear";
-    static String fastX3type = "linear";
-    static String fastX4type = "linear";
+    static String fastY1type = "linear";
+    static String fastY2type = "linear";
 
     static double fastX1Base = 2.1;
     static double fastX2Base = 2.1;
@@ -160,6 +160,31 @@ public class FinalDriveConfig {
                 arr.add(X2);
                 arr.add(Y1);
                 arr.add(Y2);
+            }
+        }
+        return arr;
+    }
+
+    public static ArrayList<String> getTypes(String speed) {
+        ArrayList<String> arr = new ArrayList<>();
+        switch (speed) {
+            case "Slow": {
+                arr.add(slowX1type);
+                arr.add(slowX2type);
+                arr.add(slowY1type);
+                arr.add(slowY2type);
+            }
+            case "Normal": {
+                arr.add(medX1type);
+                arr.add(medX2type);
+                arr.add(medY1type);
+                arr.add(medY2type);
+            }
+            case "Fast": {
+                arr.add(fastX1type);
+                arr.add(fastX2type);
+                arr.add(fastY1type);
+                arr.add(fastY2type);
             }
         }
         return arr;
