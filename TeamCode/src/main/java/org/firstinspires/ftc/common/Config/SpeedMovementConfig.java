@@ -48,7 +48,8 @@ public class SpeedMovementConfig {
         name = newName;
     }
 
-    public SpeedMovementConfig(String newName, ArrayList<ArrayList<Double>> inputList, ArrayList<String> types) { // other constructor for final model
+    public SpeedMovementConfig(String newName, ArrayList<ArrayList<Double>> inputList, ArrayList<String> types) {
+        // this code is awful and disgusting but it works
         X1 = new DimensionalMovementConfig(inputList.get(0).get(0), inputList.get(0).get(1), inputList.get(0).get(2), types.get(0), inputList.get(0).get(3));
         X2 = new DimensionalMovementConfig(inputList.get(1).get(0), inputList.get(1).get(1), inputList.get(1).get(2), types.get(1), inputList.get(1).get(3));
         Y1 = new DimensionalMovementConfig(inputList.get(2).get(0), inputList.get(2).get(1), inputList.get(2).get(2), types.get(2), inputList.get(2).get(3));

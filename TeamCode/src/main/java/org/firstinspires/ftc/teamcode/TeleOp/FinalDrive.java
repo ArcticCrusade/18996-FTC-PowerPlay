@@ -28,9 +28,6 @@ public class FinalDrive extends LinearOpMode {
         rightFront = hardwareMap.dcMotor.get("rightFront");
         leftRear = hardwareMap.dcMotor.get("leftRear");
         rightRear = hardwareMap.dcMotor.get("rightRear");
-        ArrayList<ArrayList<Double>> slowConfig = new ArrayList<ArrayList<Double>>();
-        ArrayList<ArrayList<Double>> normalConfig = new ArrayList<ArrayList<Double>>();
-        ArrayList<ArrayList<Double>> fastConfig = new ArrayList<ArrayList<Double>>();
         SpeedMovementConfig slow = new SpeedMovementConfig("Slow", populateArray("Slow"), getTypes("Slow"));
         SpeedMovementConfig normal = new SpeedMovementConfig("Normal", populateArray("Normal"), getTypes("Normal"));
         SpeedMovementConfig fast = new SpeedMovementConfig("Fast", populateArray("Fast"), getTypes("Fast"));

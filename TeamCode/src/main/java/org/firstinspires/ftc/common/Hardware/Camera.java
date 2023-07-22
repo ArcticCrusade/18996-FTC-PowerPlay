@@ -14,20 +14,22 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.opencv.core.Size;
 import org.opencv.core.Core;
+import org.openftc.apriltag.AprilTagDetection;
 
 public class Camera implements Subsystem {
     OpenCvCamera webcam;
     SignalDetection SignalPipeline;
     RedConeDetection RedConePipeline;
+    AprilTagDetectionPipeline AprilTagPipeline;
+    double tagsize = .2; // in meters
 
     @Override
     public void initialize(LinearOpMode opMode) {
         int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(opMode.hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        SignalPipeline = new SignalDetection();
-        RedConeDetection RedConePipeline = new RedConeDetection();
+        AprilTagPipeline = new AprilTagDetectionPipeline(tagsize, 1430, 1430, 480, 620); // these values might be wrong I got them off some random website
 
-        webcam.setPipeline(RedConePipeline);
+        webcam.setPipeline(AprilTagPipeline);
         // webcam.setMillisecondsPermissionTimeout(7000); // Timeout for obtaining permission is configurable. Set before opening.
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
@@ -42,12 +44,19 @@ public class Camera implements Subsystem {
         });
     }
 
+    public AprilTagDetectionPipeline getAprilTagPipeline() {
+        return AprilTagPipeline;
+    }
+
     public void switchPipeline(String coneColor) {
         switch (coneColor) {
             case "Red": webcam.setPipeline(RedConePipeline);
         }
     }
 
+    public OpenCvCamera getWebcam() {
+        return webcam;
+    }
     public String getColor() {
         return SignalPipeline.getViewedColor();
     }
