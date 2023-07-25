@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.common.Software;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -6,6 +6,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.openftc.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.common.Hardware.Camera;
+import org.firstinspires.ftc.common.Software.AprilTagDetectionPipeline;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 

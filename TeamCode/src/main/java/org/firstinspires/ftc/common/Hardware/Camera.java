@@ -15,6 +15,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import org.opencv.core.Size;
 import org.opencv.core.Core;
 import org.openftc.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.common.Software.AprilTagDetectionPipeline;
 
 public class Camera implements Subsystem {
     OpenCvCamera webcam;
