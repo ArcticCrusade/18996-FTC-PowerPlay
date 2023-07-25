@@ -30,6 +30,8 @@ public class FourBarIndexer extends LinearOpMode {
                 upPressed = false;
             }
             telemetry.addData("Current Position:", fourBar.getLastSetPosition());
+            telemetry.update();
+            wait(20);
         }
     }
 }

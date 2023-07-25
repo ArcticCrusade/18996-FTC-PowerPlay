@@ -11,6 +11,7 @@ public class TurretIndexer extends LinearOpMode {
     boolean downPressed = false;
     @Override
     public void runOpMode() throws InterruptedException {
+
         if (gamepad1.dpad_up) {
             if (!upPressed) {
                 turret.incrementAndSetPosition();
@@ -30,5 +31,7 @@ public class TurretIndexer extends LinearOpMode {
         }
 
         telemetry.addData("Current Position:", turret.getLastSetPosition());
+        telemetry.update();
+        wait(20);
     }
 }
