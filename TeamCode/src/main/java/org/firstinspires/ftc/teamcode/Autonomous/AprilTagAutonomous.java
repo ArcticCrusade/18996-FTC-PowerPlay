@@ -21,7 +21,9 @@ package org.firstinspires.ftc.teamcode.Autonomous;
  */
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.sun.tools.javac.util.ArrayUtils;
 
+import org.firstinspires.ftc.common.Hardware.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -35,14 +37,12 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 import org.firstinspires.ftc.common.Hardware.AprilTagDetectionPipeline;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @TeleOp
-public class AprilTagAutonomousInitDetectionExample extends LinearOpMode {
-    OpenCvCamera camera;
-    AprilTagDetectionPipeline aprilTagDetectionPipeline;
-
+public class AprilTagAutonomous extends LinearOpMode {
+    Camera camera = new Camera();
     static final double FEET_PER_METER = 3.28084;
-
     // Lens intrinsics
     // UNITS ARE PIXELS
     // NOTE: this calibration is for the C920 webcam at 800x448.
@@ -55,36 +55,14 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode {
     // UNITS ARE METERS
     double tagsize = 0.166;
 
-    int tag1 = 1;
-    int tag2 = 2;
-    int tag3 = 3;
-
+    int tagIDs[] = new int[]{1, 2, 3};
 
     AprilTagDetection tagOfInterest = null;
 
     @Override
     public void runOpMode()
     {
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
-
-        camera.setPipeline(aprilTagDetectionPipeline);
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
-            @Override
-            public void onOpened()
-            {
-                camera.startStreaming(800,448, OpenCvCameraRotation.UPRIGHT);
-            }
-
-            @Override
-            public void onError(int errorCode)
-            {
-                throw new RuntimeException("Camera failed to open.");
-            }
-        });
-
+        camera.initialize(this);
         telemetry.setMsTransmissionInterval(50);
 
         /*
@@ -92,13 +70,13 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode {
          * This REPLACES waitForStart!
          */
         while (!isStarted() && !isStopRequested()) {
-            ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
+            ArrayList<AprilTagDetection> currentDetections = camera.getAprilTagPipeline().getLatestDetections();
 
             if (currentDetections.size() != 0) {
                 boolean tagFound = false;
 
                 for (AprilTagDetection tag : currentDetections) {
-                    if(tag.id == tag1 || tag.id == tag2 || tag.id == tag3) {
+                    if (Arrays.asList(tagIDs).contains(tag.id)) {
                         tagOfInterest = tag;
                         tagFound = true;
                         break;
@@ -108,10 +86,10 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode {
                     telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
                     tagToTelemetry(tagOfInterest);
                 } else {
-                    telemetry.addLine("Don't see tag of interest :(");
-                    if (tagOfInterest == null) { telemetry.addLine("(The tag has never been seen)");
+                    telemetry.addLine("Don't see any tag of interest :(");
+                    if (tagOfInterest == null) { telemetry.addLine("(The tags have never been seen)");
                     } else {
-                        telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
+                        telemetry.addLine("\nBut we HAVE seen a tag before; last seen at:");
                         tagToTelemetry(tagOfInterest);
                     }
                 }
@@ -137,6 +115,13 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode {
         if (tagOfInterest != null) {
             telemetry.addLine("Tag snapshot:\n");
             tagToTelemetry(tagOfInterest);
+            if (tagOfInterest.id == tagIDs[0]) {
+                telemetry.addLine("I will go LEFT.");
+            } else if (tagOfInterest.id == tagIDs[1]) {
+                telemetry.addLine("I will go FORWARD.");
+            } else if (tagOfInterest.id == tagIDs[2]) {
+                telemetry.addLine("I will go RIGHT.");
+            }
             telemetry.update();
         } else {
             telemetry.addLine("No tag snapshot available, it was never sighted during the init loop :(");
@@ -148,24 +133,15 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode {
             telemetry.addLine("What tag are you trying to find, you bozo?");
             telemetry.update();
         } else {
-            if (tagOfInterest.id == tag1) {
-                telemetry.addLine("I will go LEFT.");
-                telemetry.update();
-            } else if (tagOfInterest.id == tag2) {
-                telemetry.addLine("I will go FORWARD.");
-                telemetry.update();
-            } else if (tagOfInterest.id == tag3) {
-                telemetry.addLine("I will go RIGHT.");
-                telemetry.update();
+            if (tagOfInterest.id == tagIDs[0]) {
+                //left
+            } else if (tagOfInterest.id == tagIDs[1]) {
+                //fwd
+            } else if (tagOfInterest.id == tagIDs[2]) {
+                //right
             }
         }
-
-        /* You wouldn't have this in your autonomous, this is just to prevent the sample from ending */
-        while (opModeIsActive()) {
-            sleep(20);
-        }
     }
-
     void tagToTelemetry(AprilTagDetection detection)
     {
         Orientation rot = Orientation.getOrientation(detection.pose.R, AxesReference.INTRINSIC, AxesOrder.YXZ, AngleUnit.DEGREES);
