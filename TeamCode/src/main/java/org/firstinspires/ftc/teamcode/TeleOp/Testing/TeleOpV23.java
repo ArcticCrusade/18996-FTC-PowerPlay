@@ -8,7 +8,7 @@ Stack 3: rot 10 elbow 69.5
 Stack 2: rot 9.5 elbow 70
 Stack 1: rot 9 elbow 70
 */
-package org.firstinspires.ftc.teamcode.TeleOp;
+package org.firstinspires.ftc.teamcode.TeleOp.Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;

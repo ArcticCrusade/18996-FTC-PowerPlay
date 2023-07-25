@@ -1,6 +1,9 @@
-package org.firstinspires.ftc.teamcode.TeleOp;
+package org.firstinspires.ftc.teamcode.TeleOp.Testing;
+
+import android.annotation.SuppressLint;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.common.Hardware.Camera;
 import org.openftc.apriltag.AprilTagDetection;
@@ -11,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 import java.util.ArrayList;
 
+@TeleOp(name="April Tag Testing", group="Linear Opmode")
 public class AprilTagTesting extends LinearOpMode {
     Camera camera = new Camera();
     static final double FEET_PER_METER = 3.28084;
@@ -21,6 +25,7 @@ public class AprilTagTesting extends LinearOpMode {
     final float THRESHOLD_HIGH_DECIMATION_RANGE_METERS = 1.0f;
     final int THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION = 4;
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void runOpMode() {
         camera.initialize(this);
@@ -66,7 +71,6 @@ public class AprilTagTesting extends LinearOpMode {
                         telemetry.addLine(String.format("Rotation Roll: %.2f degrees", rot.thirdAngle));
                     }
                 }
-
                 telemetry.update();
             }
 

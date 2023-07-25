@@ -1,6 +1,6 @@
 //unknonwn state teleop program
 //goals: use servos through incrementation
-package org.firstinspires.ftc.teamcode.TeleOp;
+package org.firstinspires.ftc.teamcode.TeleOp.Indexers;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
