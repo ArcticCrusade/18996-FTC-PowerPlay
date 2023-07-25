@@ -26,7 +26,7 @@ public class Turret implements Subsystem {
         turretServo.setPosition(Math.max(turretServo.getPosition() - .01, 0));
     }
 
-    public double getPosition() {
+    public double getLastSetPosition() {
         return turretServo.getPosition();
     }
 
