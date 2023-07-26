@@ -8,6 +8,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -28,50 +29,49 @@ public class AutonomousRight extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         aprilTag = new AprilTagAutonomous(camera, new int[]{0, 1, 2});
         aprilTag.getCamera().initialize(this);
-
+        waitForStart();
+        if (isStopRequested()) return;
         //set starting position
         Pose2d startPose = new Pose2d(-35.6,-49.6, Math.toRadians(90));
         drive.setPoseEstimate(startPose);
-        TrajectorySequence start = drive.trajectorySequenceBuilder(startPose)
-                .splineToSplineHeading(new Pose2d(-25.6,-2, Math.toRadians(47)), Math.toRadians(47))
+        Trajectory start = drive.trajectoryBuilder(startPose)
+                .splineToLinearHeading(new Pose2d(-25.6,-2, Math.toRadians(47)), Math.toRadians(47))
                 .build();
         TrajectorySequence cycle = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .setReversed(true)
-                .splineToSplineHeading(new Pose2d(-53.6,-12.4, Math.toRadians(0)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(-53.6,-12.4, Math.toRadians(0)), Math.toRadians(0))
                 .setReversed(false)
-                .splineToSplineHeading(new Pose2d(-25.6,-2, Math.toRadians(47)), Math.toRadians(47))
+                .splineToLinearHeading(new Pose2d(-25.6,-2, Math.toRadians(47)), Math.toRadians(47))
                 .build();
         TrajectorySequence park1 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .setReversed(true)
-                .splineToSplineHeading(new Pose2d(-35.2,-10.8, Math.toRadians(-90)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(-35.2,-10.8, Math.toRadians(-90)), Math.toRadians(-90))
                 .setReversed(false)
-                .splineToSplineHeading(new Pose2d(-22.8,-10.4, Math.toRadians(-90)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(-22.8,-10.4, Math.toRadians(-90)), Math.toRadians(-90))
                 .build();
         TrajectorySequence park2 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .setReversed(true)
-                .splineToSplineHeading(new Pose2d(-36,-36, Math.toRadians(-90)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(-36,-36, Math.toRadians(-90)), Math.toRadians(-90))
                 .setReversed(false)
-                .splineToSplineHeading(new Pose2d(-23.2,-36.4, Math.toRadians(-90)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(-23.2,-36.4, Math.toRadians(-90)), Math.toRadians(-90))
                 .build();
         TrajectorySequence park3 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .setReversed(true)
-                .splineToSplineHeading(new Pose2d(-36,-60, Math.toRadians(-90)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(-36,-60, Math.toRadians(-90)), Math.toRadians(-90))
                 .setReversed(false)
-                .splineToSplineHeading(new Pose2d(-22.8,-59.2, Math.toRadians(-90)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(-22.8,-59.2, Math.toRadians(-90)), Math.toRadians(-90))
                 .build();
-
-        waitForStart();
         tag = aprilTag.findTagIDSimple();
-        drive.followTrajectorySequence(start);
+        drive.followTrajectory(start);
         for (int i = 1; i <= 5; i++) {
             drive.followTrajectorySequence(cycle);
         }
-        if (tag == 0) { //state 1
+        /*if (tag == 0) { //state 1
             drive.followTrajectorySequence(park1);
         } else if (tag == 1) { //state 2
             drive.followTrajectorySequence(park2);
         } else if (tag == 2) { //state 3
             drive.followTrajectorySequence(park3);
-        }
+        }*/
     }
 }
