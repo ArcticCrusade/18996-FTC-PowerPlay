@@ -5,7 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.common.Interfaces.Subsystem;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+
+import java.util.ArrayList;
+import java.util.List;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -115,6 +120,8 @@ public class Camera implements Subsystem {
     class RedConeDetection extends OpenCvPipeline {
         Mat hsvImage;
         Mat inRange;
+        Mat mask;
+        int center_x;
         Scalar lowerRange = new Scalar(150, 150, 59);
         Scalar upperRange = new Scalar(180, 180, 255);
 
@@ -133,7 +140,40 @@ public class Camera implements Subsystem {
             inRange = new Mat();
             Imgproc.cvtColor(mat, hsvImage, Imgproc.COLOR_RGB2HSV);
             Core.inRange(hsvImage, lowerRange, upperRange, inRange);
-            return inRange;
+            List<MatOfPoint> contours = new ArrayList<>();
+            Mat hierarchy = new Mat();
+            Imgproc.findContours(mask, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+
+            MatOfPoint largestContour = findLargestContour(contours);
+
+            // todo: add function that takes mean or median of these for higher accuracy
+            center_x = findBoundingRectCenter(largestContour);
+            return mat;
+        }
+
+        public MatOfPoint findLargestContour(List<MatOfPoint> contours) {
+            if (contours.size() == 0) {
+                return null;
+            }
+
+            double largestArea = 0;
+            MatOfPoint largestContour = null;
+
+            for (MatOfPoint contour : contours) {
+                double area = Imgproc.contourArea(contour);
+                if (area > largestArea) {
+                    largestArea = area;
+                    largestContour = contour;
+                }
+            }
+
+            return largestContour;
+        }
+
+        public int findBoundingRectCenter(MatOfPoint contour) {
+            Rect boundingRect = Imgproc.boundingRect(contour);
+            int cX = boundingRect.x + boundingRect.width / 2;
+            return cX;
         }
     }
 }
