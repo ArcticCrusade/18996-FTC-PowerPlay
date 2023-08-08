@@ -37,8 +37,8 @@ public class DrivingConfig extends LinearOpMode {
     private DcMotor leftFront;
     private DcMotor rightFront;
     private DcMotor leftRear;
-    private boolean aPressed, bPressed, xPressed, yPressed;
     private DcMotor rightRear;
+    private boolean aPressed, bPressed, xPressed, yPressed;
     private double LF, RF, LR, RR, rightY, rightX, leftY, leftX;
     private int index = 0;
 

@@ -9,6 +9,7 @@ import org.opencv.core.MatOfPoint;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
@@ -25,16 +26,17 @@ import org.firstinspires.ftc.common.Software.AprilTagDetectionPipeline;
 public class Camera implements Subsystem {
     OpenCvCamera webcam;
     SignalDetection SignalPipeline;
-    RedConeDetection RedConePipeline;
+    ConeDetection ConePipeline;
     AprilTagDetectionPipeline AprilTagPipeline;
+    Scalar lowerBound;
+    Scalar upperBound;
     double tagsize = .2; // in meters
 
-    @Override
     public void initialize(LinearOpMode opMode) {
         int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(opMode.hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        ConePipeline = new ConeDetection(lowerBound, upperBound);
         AprilTagPipeline = new AprilTagDetectionPipeline(tagsize, 1430, 1430, 480, 620); // these values might be wrong I got them off some random website
-
         webcam.setPipeline(AprilTagPipeline);
         // webcam.setMillisecondsPermissionTimeout(7000); // Timeout for obtaining permission is configurable. Set before opening.
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
@@ -50,19 +52,34 @@ public class Camera implements Subsystem {
         });
     }
 
+
+    public void switchPipeline(String color) {
+        switch (color) {
+            case "red":
+                lowerBound = new Scalar(150, 170, 130); // these might be wrong
+                upperBound = new Scalar(180, 255, 255);
+                break;
+            case "blue":
+                lowerBound = null; // TODO: figure out these values (also red might be representative of blue?)
+                upperBound = null;
+                break;
+        }
+        ConePipeline = new ConeDetection(lowerBound, upperBound);
+        webcam.setPipeline(ConePipeline);
+    }
+
     public AprilTagDetectionPipeline getAprilTagPipeline() {
         return AprilTagPipeline;
     }
 
-    public void switchPipeline(String coneColor) {
-        switch (coneColor) {
-            case "Red": webcam.setPipeline(RedConePipeline);
-        }
+    public ConeDetection getConePipeline() {
+        return ConePipeline;
     }
 
     public OpenCvCamera getWebcam() {
         return webcam;
     }
+
     public String getColor() {
         return SignalPipeline.getViewedColor();
     }
@@ -85,8 +102,7 @@ public class Camera implements Subsystem {
                 viewedColor = "BLUE";
             } else if (green > red && green > blue) {
                 viewedColor = "GREEN";
-            }
-            else {
+            } else {
                 viewedColor = "if you see this idk what happened but good luck!!!!";
             }
             Imgproc.rectangle(
@@ -104,32 +120,43 @@ public class Camera implements Subsystem {
         public String getViewedColor() {
             return viewedColor;
         }
+
         @Override
         public void onViewportTapped() {
 
             viewportPaused = !viewportPaused;
 
-            if(viewportPaused) {
+            if (viewportPaused) {
                 webcam.pauseViewport();
-            }
-            else {
+            } else {
                 webcam.resumeViewport();
             }
         }
     }
 
-    class RedConeDetection extends OpenCvPipeline {
+    public class ConeDetection extends OpenCvPipeline {
         Mat hsvImage;
         Mat inRange;
         Mat mask;
         int center_x;
-        Scalar lowerRange = new Scalar(150, 150, 59);
-        Scalar upperRange = new Scalar(180, 180, 255);
+        Scalar lowerRange;
+        Scalar upperRange;
+        List<MatOfPoint> contours;
+        Mat hierarchy;
+        MatOfPoint largestContour;
 
         @Override
         public Mat processFrame(Mat mat) {
-
+            center_x = findCenterX(mat);
             // Scale Down Image
+            return mat;
+        }
+
+        public int getCenter() {
+            return center_x;
+        }
+
+        private int findCenterX(Mat mat) {
             double scalePercent = 20;
             int width = (int) Math.round(mat.size().width * scalePercent / 100);
             int height = (int) Math.round(mat.size().height * scalePercent / 100);
@@ -141,18 +168,22 @@ public class Camera implements Subsystem {
             inRange = new Mat();
             Imgproc.cvtColor(mat, hsvImage, Imgproc.COLOR_RGB2HSV);
             Core.inRange(hsvImage, lowerRange, upperRange, inRange);
-            List<MatOfPoint> contours = new ArrayList<>();
-            Mat hierarchy = new Mat();
+            contours = new ArrayList<>();
+            hierarchy = new Mat();
             Imgproc.findContours(mask, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
 
-            MatOfPoint largestContour = findLargestContour(contours);
+            if (contours != null) {
+                largestContour = findLargestContour(contours);
+            }
+            else {
+                return 600; // placeholder value - treat 600 as null
+            }
 
             // todo: add function that takes mean or median of these for higher accuracy
-            center_x = findBoundingRectCenter(largestContour);
-            return mat;
+            return findBoundingRectCenter(largestContour);
         }
 
-        public MatOfPoint findLargestContour(List<MatOfPoint> contours) {
+        private MatOfPoint findLargestContour(List<MatOfPoint> contours) {
             if (contours.size() == 0) {
                 return null;
             }
@@ -171,10 +202,15 @@ public class Camera implements Subsystem {
             return largestContour;
         }
 
-        public int findBoundingRectCenter(MatOfPoint contour) {
+        private int findBoundingRectCenter(MatOfPoint contour) {
             Rect boundingRect = Imgproc.boundingRect(contour);
             int cX = boundingRect.x + boundingRect.width / 2;
             return cX;
+        }
+
+        ConeDetection(Scalar lowerBound, Scalar upperBound) {
+            lowerRange = lowerBound;
+            upperRange = upperBound;
         }
     }
 }
