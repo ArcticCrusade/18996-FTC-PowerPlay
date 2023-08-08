@@ -16,8 +16,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name="Rightside Autonomous V25", group="Linear Opmode")
-public class AutoV25 extends LinearOpMode{
+@Autonomous(name="Depreciated", group="Linear Opmode")
+public class OldAuto extends LinearOpMode{
     private Servo rotator, elbow, cone, popper, release; //servo dec.
     private DcMotor leftFront, rightFront, leftRear, rightRear; //motor dec.
     private DcMotor xOdometer, yLeftOdometer, yRightOdometer; //odometer dec.

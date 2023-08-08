@@ -1,6 +1,6 @@
 Check for if using drive encoders (run_with_encoder)
 Input drive constants in drive.driveConstants. Ignore PID and feedforward parameters for now.
-WARNING: Make sure to analyze programs for gamepad controls first.
+Note: Make sure to analyze programs for gamepad controls first.
 WARNING: Steps are designed for dead wheel setups WITHOUT drive encoders. If using them, will need
 a lot of extra steps and stuff. Some major differences btwn drive and dead wheel tuning are noted
 in this document.
@@ -17,7 +17,6 @@ Tune odometry in drive.opmode.StandardTrackingWheelLocalizer:
 8. You should also have learned how the dashboard works.
 9. If needed, troubleshoot with directions online.
 10. Congratulations on completing steps 1-2/9! :) ;(
-11. Optional: Find where localization is calculated to see how it works
 
 If NOT using drive encoders, skip step 3 (tuning the PIDF).
 Instead, step 4 (opened-loop control) with feedforward is recommended.
