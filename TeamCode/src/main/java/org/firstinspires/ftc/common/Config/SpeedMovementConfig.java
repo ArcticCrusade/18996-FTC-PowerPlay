@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.common.Config;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SpeedMovementConfig {
     private DimensionalMovementConfig X1;
@@ -45,6 +46,15 @@ public class SpeedMovementConfig {
         X2 = new DimensionalMovementConfig(0.05, 0.2, 0.3, "linear", 2.1);
         Y1 = new DimensionalMovementConfig(0.05, 0.2, 0.3, "linear", 2.1);
         Y2 = new DimensionalMovementConfig(0.05, 0.2, 0.3, "linear", 2.1);
+        name = newName;
+    }
+
+    public SpeedMovementConfig(String newName, List<Double> inputList, String type) {
+        // this code is awful and disgusting but it works
+        X1 = new DimensionalMovementConfig(inputList.get(0), inputList.get(1), inputList.get(2), type, inputList.get(3));
+        X2 = new DimensionalMovementConfig(inputList.get(0), inputList.get(1), inputList.get(2), type, inputList.get(3));
+        Y1 = new DimensionalMovementConfig(inputList.get(0), inputList.get(1), inputList.get(2), type, inputList.get(3));
+        Y2 = new DimensionalMovementConfig(inputList.get(0), inputList.get(1), inputList.get(2), type, inputList.get(3));
         name = newName;
     }
 
