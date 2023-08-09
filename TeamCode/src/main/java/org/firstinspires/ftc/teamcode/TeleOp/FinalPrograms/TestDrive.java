@@ -11,7 +11,7 @@ public class TestDrive extends LinearOpMode {
     @Override
     public void runOpMode() {
         drivetrain.initialize(this);
-        drivetrain.setLinearSpeedConfig(0.05, 1.0, 1.0);
+        drivetrain.setLinearSpeedConfig(0.05, 0.0, 1.0);
 
         waitForStart();
 
