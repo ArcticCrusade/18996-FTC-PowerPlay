@@ -17,17 +17,24 @@ import org.firstinspires.ftc.common.Software.AprilTagAutonomous;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Config
 @Autonomous(name="Imitation Right-Auto", group="Linear Opmode")
 public class AutonomousRight extends LinearOpMode {
     int tag;
     Camera camera = new Camera();
+    List<Integer> tagIDs = new ArrayList<>(3);
     AprilTagAutonomous aprilTag;
     @Override
     public void runOpMode() {
+        tagIDs.add(0);
+        tagIDs.add(1);
+        tagIDs.add(2);
         //yoink all of the motor declarations and their methods
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        aprilTag = new AprilTagAutonomous(camera, new int[]{0, 1, 2});
+        aprilTag = new AprilTagAutonomous(camera, tagIDs);
         aprilTag.getCamera().initialize(this);
         waitForStart();
         if (isStopRequested()) return;
@@ -37,25 +44,25 @@ public class AutonomousRight extends LinearOpMode {
         Trajectory start = drive.trajectoryBuilder(startPose)
                 .splineToLinearHeading(new Pose2d(-25.6,-2, Math.toRadians(47)), Math.toRadians(47))
                 .build();
-        TrajectorySequence cycle = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+        TrajectorySequence cycle = drive.trajectorySequenceBuilder(start.end())
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(-53.6,-12.4, Math.toRadians(0)), Math.toRadians(0))
                 .setReversed(false)
                 .splineToLinearHeading(new Pose2d(-25.6,-2, Math.toRadians(47)), Math.toRadians(47))
                 .build();
-        TrajectorySequence park1 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+        TrajectorySequence park1 = drive.trajectorySequenceBuilder(cycle.end())
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(-35.2,-10.8, Math.toRadians(-90)), Math.toRadians(-90))
                 .setReversed(false)
                 .splineToLinearHeading(new Pose2d(-22.8,-10.4, Math.toRadians(-90)), Math.toRadians(-90))
                 .build();
-        TrajectorySequence park2 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+        TrajectorySequence park2 = drive.trajectorySequenceBuilder(cycle.end())
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(-36,-36, Math.toRadians(-90)), Math.toRadians(-90))
                 .setReversed(false)
                 .splineToLinearHeading(new Pose2d(-23.2,-36.4, Math.toRadians(-90)), Math.toRadians(-90))
                 .build();
-        TrajectorySequence park3 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+        TrajectorySequence park3 = drive.trajectorySequenceBuilder(cycle.end())
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(-36,-60, Math.toRadians(-90)), Math.toRadians(-90))
                 .setReversed(false)
@@ -66,12 +73,12 @@ public class AutonomousRight extends LinearOpMode {
         for (int i = 1; i <= 5; i++) {
             drive.followTrajectorySequence(cycle);
         }
-        /*if (tag == 0) { //state 1
+        if (tag == 0) { //state 1 - left
             drive.followTrajectorySequence(park1);
-        } else if (tag == 1) { //state 2
+        } else if (tag == 1) { //state 2 - middle
             drive.followTrajectorySequence(park2);
-        } else if (tag == 2) { //state 3
+        } else if (tag == 2) { //state 3 - right
             drive.followTrajectorySequence(park3);
-        }*/
+        }
     }
 }

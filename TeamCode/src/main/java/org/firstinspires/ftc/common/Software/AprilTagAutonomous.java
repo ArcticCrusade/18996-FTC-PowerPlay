@@ -10,11 +10,12 @@ import org.firstinspires.ftc.common.Software.AprilTagDetectionPipeline;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class AprilTagAutonomous {
     private Camera camera;
     private static final double FEET_PER_METER = 3.28084;
-    private int tagIDs[];
+    private List<Integer> tagIDs;
     private AprilTagDetection tagOfInterest = null;
     ArrayList<AprilTagDetection> currentDetections;
 
@@ -24,7 +25,7 @@ public class AprilTagAutonomous {
     private final float THRESHOLD_HIGH_DECIMATION_RANGE_METERS;
     private final int THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION;
 
-    public AprilTagAutonomous(Camera camera, int[] tagIDs) {
+    public AprilTagAutonomous(Camera camera, List<Integer> tagIDs) {
         this.camera = camera;
         this.tagIDs = tagIDs;
         DECIMATION_HIGH = 3;
@@ -32,7 +33,7 @@ public class AprilTagAutonomous {
         THRESHOLD_HIGH_DECIMATION_RANGE_METERS = 1.0f;
         THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION = 4;
     }
-    public AprilTagAutonomous(Camera camera, int[] tagIDs,
+    public AprilTagAutonomous(Camera camera, List<Integer> tagIDs,
                               float DECIMATION_HIGH, float DECIMATION_LOW,
                               float THRESHOLD_HIGH_DECIMATION_RANGE_METERS,
                               int THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION) {
@@ -50,7 +51,7 @@ public class AprilTagAutonomous {
         currentDetections = camera.getAprilTagPipeline().getLatestDetections();
         if (currentDetections.size() > 0) {
             for (AprilTagDetection tag : currentDetections) {
-                if (Arrays.asList(tagIDs).contains(tag.id)) {
+                if (tagIDs.contains(tag.id)) {
                     tagOfInterest = tag;
                     return tagOfInterest.id;
                 }
