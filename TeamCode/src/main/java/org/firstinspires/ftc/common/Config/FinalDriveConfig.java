@@ -10,15 +10,15 @@ public class FinalDriveConfig {
     static double slowY1MinInput = 0.05;
     static double slowY2MinInput = 0.05;
 
-    static double slowX1MinSpeed = 0.2;
-    static double slowX2MinSpeed = 0.2;
-    static double slowY1MinSpeed = 0.2;
-    static double slowY2MinSpeed = 0.2;
+    static double slowX1MinSpeed = 0;
+    static double slowX2MinSpeed = 0;
+    static double slowY1MinSpeed = 0;
+    static double slowY2MinSpeed = 0;
 
-    static double slowX1MaxSpeed = 0.3;
-    static double slowX2MaxSpeed = 0.3;
-    static double slowY1MaxSpeed = 0.3;
-    static double slowY2MaxSpeed = 0.3;
+    static double slowX1MaxSpeed = 1;
+    static double slowX2MaxSpeed = 1;
+    static double slowY1MaxSpeed = 1;
+    static double slowY2MaxSpeed = 1;
 
     static String slowX1type = "linear";
     static String slowX2type = "linear";
