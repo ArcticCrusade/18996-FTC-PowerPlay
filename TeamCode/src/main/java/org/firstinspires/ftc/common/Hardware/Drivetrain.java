@@ -4,12 +4,9 @@ package org.firstinspires.ftc.common.Hardware;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
-import org.checkerframework.checker.units.qual.Speed;
 import org.firstinspires.ftc.common.Config.SpeedMovementConfig;
 import org.firstinspires.ftc.common.Interfaces.Subsystem;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,6 +16,7 @@ public class Drivetrain implements Subsystem {
     private DcMotor leftRear;
     private DcMotor rightRear;
     private List<DcMotor> motors;
+    private List<SpeedMovementConfig> configs;
     private SpeedMovementConfig config;
 
     @Override
@@ -37,8 +35,22 @@ public class Drivetrain implements Subsystem {
            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
     }
-    public void setLinearSpeedConfig(double minInput, double minSpeed, double maxSpeed) {
-        config = new SpeedMovementConfig("Config", Arrays.asList(minInput, minSpeed, maxSpeed, 1.0), "linear");
+
+    public SpeedMovementConfig getConfig() { return config; }
+    public void createNewLinearConfig(String name, double minInput, double minSpeed, double maxSpeed) {
+        config = new SpeedMovementConfig(name, Arrays.asList(minInput, minSpeed, maxSpeed, 1.0), "linear");
+        configs.add(config);
+    }
+    public void createNewNonlinearConfig(String name, double minInput, double minSpeed, double maxSpeed, double base) {
+        config = new SpeedMovementConfig(name, Arrays.asList(minInput, minSpeed, maxSpeed, base), "exponential");
+        configs.add(config);
+    }
+    public void switchConfig(String name) {
+        for (SpeedMovementConfig config : configs) {
+            if (config.getName().equals(name)) {
+                this.config = config;
+            }
+        }
     }
     public void calculateAndSetPower(double leftX, double leftY, double rightX, double rightY) {
         double x1 = config.getConfigList()[0].calculateSpeed(rightX);

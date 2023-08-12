@@ -50,7 +50,6 @@ public class SpeedMovementConfig {
     }
 
     public SpeedMovementConfig(String newName, List<Double> inputList, String type) {
-        // this code is awful and disgusting but it works
         X1 = new DimensionalMovementConfig(inputList.get(0), inputList.get(1), inputList.get(2), type, inputList.get(3));
         X2 = new DimensionalMovementConfig(inputList.get(0), inputList.get(1), inputList.get(2), type, inputList.get(3));
         Y1 = new DimensionalMovementConfig(inputList.get(0), inputList.get(1), inputList.get(2), type, inputList.get(3));
