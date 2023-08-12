@@ -10,15 +10,15 @@ public class FinalDriveConfig {
     static double slowY1MinInput = 0.05;
     static double slowY2MinInput = 0.05;
 
-    static double slowX1MinSpeed = 0.1;
-    static double slowX2MinSpeed = 0.1;
-    static double slowY1MinSpeed = 0.1;
-    static double slowY2MinSpeed = 0.1;
+    static double slowX1MinSpeed = 0.2;
+    static double slowX2MinSpeed = 0.2;
+    static double slowY1MinSpeed = 0.2;
+    static double slowY2MinSpeed = 0.2;
 
-    static double slowX1MaxSpeed = 0.25;
-    static double slowX2MaxSpeed = 0.25;
-    static double slowY1MaxSpeed = 0.25;
-    static double slowY2MaxSpeed = 0.25;
+    static double slowX1MaxSpeed = 0.3;
+    static double slowX2MaxSpeed = 0.3;
+    static double slowY1MaxSpeed = 0.3;
+    static double slowY2MaxSpeed = 0.3;
 
     static String slowX1type = "linear";
     static String slowX2type = "linear";
@@ -35,15 +35,15 @@ public class FinalDriveConfig {
     static double medY1MinInput = 0.05;
     static double medY2MinInput = 0.05;
 
-    static double medX1MinSpeed = 0.2;
-    static double medX2MinSpeed = 0.2;
-    static double medY1MinSpeed = 0.2;
-    static double medY2MinSpeed = 0.2;
+    static double medX1MinSpeed = 0.3;
+    static double medX2MinSpeed = 0.3;
+    static double medY1MinSpeed = 0.3;
+    static double medY2MinSpeed = 0.3;
 
-    static double medX1MaxSpeed = 0.35;
-    static double medX2MaxSpeed = 0.35;
-    static double medY1MaxSpeed = 0.35;
-    static double medY2MaxSpeed = 0.35;
+    static double medX1MaxSpeed = 0.5;
+    static double medX2MaxSpeed = 0.5;
+    static double medY1MaxSpeed = 0.5;
+    static double medY2MaxSpeed = 0.5;
 
     static String medX1type = "linear";
     static String medX2type = "linear";
@@ -60,15 +60,15 @@ public class FinalDriveConfig {
     static double fastY1MinInput = 0.05;
     static double fastY2MinInput = 0.05;
 
-    static double fastX1MinSpeed = 0.45;
-    static double fastX2MinSpeed = 0.45;
-    static double fastY1MinSpeed = 0.45;
-    static double fastY2MinSpeed = 0.45;
+    static double fastX1MinSpeed = 0.6;
+    static double fastX2MinSpeed = 0.6;
+    static double fastY1MinSpeed = 0.6;
+    static double fastY2MinSpeed = 0.6;
 
-    static double fastX1MaxSpeed = 0.6;
-    static double fastX2MaxSpeed = 0.6;
-    static double fastY1MaxSpeed = 0.6;
-    static double fastY2MaxSpeed = 0.6;
+    static double fastX1MaxSpeed = 0.8;
+    static double fastX2MaxSpeed = 0.8;
+    static double fastY1MaxSpeed = 0.8;
+    static double fastY2MaxSpeed = 0.8;
 
     static String fastX1type = "linear";
     static String fastX2type = "linear";

@@ -6,7 +6,7 @@ import org.firstinspires.ftc.common.Hardware.Drivetrain;
 
 @TeleOp(name="Full Power Test Drive", group="Linear Opmode")
 public class TestDrive extends LinearOpMode {
-    private Drivetrain drivetrain;
+    private Drivetrain drivetrain = new Drivetrain();
 
     @Override
     public void runOpMode() {
