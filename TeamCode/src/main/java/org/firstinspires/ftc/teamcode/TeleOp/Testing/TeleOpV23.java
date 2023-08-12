@@ -261,15 +261,15 @@ public class TeleOpV23 extends LinearOpMode{
 
 // Get joystick values
             Y1 = gamepad1.right_stick_y;
-            X1 = -gamepad1.right_stick_x;
-            Y2 = -gamepad1.left_stick_y;
+            X1 = gamepad1.right_stick_x;
+            //Y2 = -gamepad1.left_stick_y;
             X2 = gamepad1.left_stick_x;
 
             //calculate motor output from joysticks
-            LF = Y1 - X1 + X2;
-            RF = Y1 + X1 - X2;
-            LR = Y1 + X1 + X2;
-            RR = Y1 - X1 - X2;
+            LF = Y1 + X1 + X2;
+            RF = Y1 - X1 - X2;
+            LR = Y1 - X1 + X2;
+            RR = Y1 + X1 - X2;
 
             powerScale = ((gamepad1.right_trigger)*0.7)+0.3-((gamepad1.left_trigger) * .15);
             //set motor commands

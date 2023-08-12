@@ -45,9 +45,9 @@ public class Drivetrain implements Subsystem {
         double y1 = config.getConfigList()[1].calculateSpeed(rightY);
         double x2 = config.getConfigList()[2].calculateSpeed(leftX);
         //double y2 = config.getConfigList()[3].calculateSpeed(leftY);
-        leftFront.setPower(-x1 - y1 - x2);
+        leftFront.setPower(y1 + x1 + x2);
         rightFront.setPower(y1 - x1 - x2);
-        leftRear.setPower(-x2 + x1 - y1);
+        leftRear.setPower(y1 - x1 + x2);
         rightRear.setPower(y1 + x1 - x2);
     }
 }
