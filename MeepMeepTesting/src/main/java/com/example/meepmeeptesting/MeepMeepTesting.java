@@ -53,7 +53,6 @@ public class MeepMeepTesting {
                                 .splineToLinearHeading(new Pose2d(-58.4,-12, Math.toRadians(0)), Math.toRadians(0))
                                 .setReversed(false)
                                 .splineToLinearHeading(new Pose2d(-34.4,-11.2, Math.toRadians(47)), Math.toRadians(47))
-
                                 .setReversed(true)
                                 .splineToLinearHeading(new Pose2d(-47,-12.6, Math.toRadians(0)), Math.toRadians(0))
                                 .setReversed(false)
