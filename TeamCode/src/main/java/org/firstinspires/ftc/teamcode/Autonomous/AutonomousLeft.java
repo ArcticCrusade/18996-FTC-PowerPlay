@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 
 @Config
-@Autonomous(name="Right", group="Linear Opmode")
-public class AutonomousRight extends LinearOpMode {
+@Autonomous(name="Left", group="Linear Opmode")
+public class AutonomousLeft extends LinearOpMode {
     String tagReading;
     AprilTagAutonomous aprilTag;
     @Override
@@ -26,31 +26,28 @@ public class AutonomousRight extends LinearOpMode {
         waitForStart();
         if (isStopRequested()) return;
 
-        Pose2d startPose = new Pose2d(36,-60.8, Math.toRadians(90));
+        Pose2d startPose = new Pose2d(-35.6,-60, Math.toRadians(90));
         drive.setPoseEstimate(startPose);
         Trajectory start = drive.trajectoryBuilder(startPose)
-                .splineTo(new Vector2d(36,-30), Math.toRadians(90))
-                .splineToSplineHeading(new Pose2d(32,-7, Math.toRadians(-43)), Math.toRadians(-43))
+                .splineTo(new Vector2d(-35.2,-21.6), Math.toRadians(90))
+                .splineToSplineHeading(new Pose2d(-30,-8, Math.toRadians(-127)), Math.toRadians(-127))
                 .build();
         TrajectorySequence cycle = drive.trajectorySequenceBuilder(start.end())
-                .splineToLinearHeading(new Pose2d(57,-12.4, Math.toRadians(0)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(-59.2,-12, Math.toRadians(180)), Math.toRadians(180))
                 .setReversed(true)
-                .lineToLinearHeading(new Pose2d(32,-7, Math.toRadians(-43)))
+                .lineToSplineHeading(new Pose2d(-30,-8, Math.toRadians(-127)))
                 .setReversed(false)
                 .build();
         TrajectorySequence park1 = drive.trajectorySequenceBuilder(cycle.end())
-                .splineTo(new Vector2d(36,-20), Math.toRadians(-90))
-                .splineTo(new Vector2d(36,-35), Math.toRadians(225))
-                .splineTo(new Vector2d(11, -35), Math.toRadians(180))
+                .splineTo(new Vector2d(-35,-35), Math.toRadians(225))
+                .splineTo(new Vector2d(-59, -35), Math.toRadians(180))
                 .build();
         TrajectorySequence park2 = drive.trajectorySequenceBuilder(cycle.end())
-                .splineTo(new Vector2d(36,-20), Math.toRadians(-90))
-                .splineTo(new Vector2d(36,-35), Math.toRadians(225))
+                .splineToSplineHeading(new Pose2d(-35.2,-35, Math.toRadians(-90)), Math.toRadians(-90))
                 .build();
         TrajectorySequence park3 = drive.trajectorySequenceBuilder(cycle.end())
-                .splineTo(new Vector2d(36,-20), Math.toRadians(-90))
-                .splineTo(new Vector2d(36,-35), Math.toRadians(-45))
-                .splineTo(new Vector2d(59, -35), Math.toRadians(0))
+                .splineTo(new Vector2d(-35,-35), Math.toRadians(-45))
+                .splineTo(new Vector2d(-11, -35), Math.toRadians(0))
                 .build();
 
         aprilTag.findTagIDSimple();

@@ -1,13 +1,15 @@
 Tips from experience:
 - Lines tend to be inaccurate when it comes to odometry but is direct.
 - Splines are ultra smooth but tend to do stupid things.
+-- DO NOT combine moving backwards with splineTo bc you need splineToLinear or Constant.
+-- Only combining splineTo and splineToLinear works for continuous motion profiles.
+Moving backwards also splits motion profiles.
+-- If you try to use splineToConstant with a new angle it won't turn to the new angle.
 - Trajectory sequence just better.
 - The endTangent is the same as ending heading.
 - Don't bother with using UNSTABLE commands.
 - Falling-command rule: non-temporal markers and waits are executed in groups up to the next
 movement command. Waits are prioritized. In other words NEVER chain a marker and a wait.
-- Coordinates: Uses standard odometry coordinates, where the field center is (0, 0).
-Going "forwards" in our perspective is -y direction.
 - Don't add displacement markers at the very end. It won't work.
 - To ignore the traj.end(pos) condition:
 -- set pos = getPoseEstimate (may not work)
