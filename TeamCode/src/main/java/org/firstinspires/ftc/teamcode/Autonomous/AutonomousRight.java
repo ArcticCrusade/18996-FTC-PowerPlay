@@ -32,22 +32,27 @@ public class AutonomousRight extends LinearOpMode {
                 .splineTo(new Vector2d(36,-30), Math.toRadians(90))
                 .splineToSplineHeading(new Pose2d(32,-7, Math.toRadians(-43)), Math.toRadians(-43))
                 .build();
-        TrajectorySequence cycle = drive.trajectorySequenceBuilder(start.end())
+        TrajectorySequence toStack = drive.trajectorySequenceBuilder(start.end())
                 .splineToLinearHeading(new Pose2d(57,-12.4, Math.toRadians(0)), Math.toRadians(0))
+                .build();
+        TrajectorySequence toPole = drive.trajectorySequenceBuilder(toStack.end())
+                .addDisplacementMarker(() -> {
+                    //robot.takeConeFromIntakeToOuttake
+                })
                 .setReversed(true)
                 .lineToLinearHeading(new Pose2d(32,-7, Math.toRadians(-43)))
                 .setReversed(false)
                 .build();
-        TrajectorySequence park1 = drive.trajectorySequenceBuilder(cycle.end())
+        TrajectorySequence park1 = drive.trajectorySequenceBuilder(toPole.end())
                 .splineTo(new Vector2d(36,-20), Math.toRadians(-90))
                 .splineTo(new Vector2d(36,-35), Math.toRadians(225))
                 .splineTo(new Vector2d(11, -35), Math.toRadians(180))
                 .build();
-        TrajectorySequence park2 = drive.trajectorySequenceBuilder(cycle.end())
+        TrajectorySequence park2 = drive.trajectorySequenceBuilder(toPole.end())
                 .splineTo(new Vector2d(36,-20), Math.toRadians(-90))
                 .splineTo(new Vector2d(36,-35), Math.toRadians(225))
                 .build();
-        TrajectorySequence park3 = drive.trajectorySequenceBuilder(cycle.end())
+        TrajectorySequence park3 = drive.trajectorySequenceBuilder(toPole.end())
                 .splineTo(new Vector2d(36,-20), Math.toRadians(-90))
                 .splineTo(new Vector2d(36,-35), Math.toRadians(-45))
                 .splineTo(new Vector2d(59, -35), Math.toRadians(0))
@@ -57,8 +62,12 @@ public class AutonomousRight extends LinearOpMode {
         tagReading = aprilTag.getTagOfInterest();
 
         drive.followTrajectory(start);
+        //outtake.depositCone();
         for (int i = 1; i <= 5; i++) {
-            drive.followTrajectorySequence(cycle);
+            drive.followTrajectorySequence(toStack);
+            //intake.getCone();
+            drive.followTrajectorySequence(toPole);
+            //outtake.depositCone();
         }
         if (tagReading.equals("LEFT")) { //state 1 - left
             drive.followTrajectorySequence(park1);
@@ -69,5 +78,6 @@ public class AutonomousRight extends LinearOpMode {
         } else {
             drive.followTrajectorySequence(park1);
         }
+        //robot.resetAndPrepareForTeleOp
     }
 }
