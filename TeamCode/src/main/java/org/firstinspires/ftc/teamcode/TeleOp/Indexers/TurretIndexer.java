@@ -22,8 +22,8 @@ public class TurretIndexer extends LinearOpMode {
         }
 
         if (gamepad1.dpad_down) {
-            if (!upPressed) {
-                turret.incrementAndSetPosition();
+            if (!downPressed) {
+                turret.decrementAndSetPosition();
             }
             upPressed = true;
         } else {

@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.common.Hardware;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;;
 
 import org.firstinspires.ftc.common.Interfaces.Subsystem;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -20,7 +20,6 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.opencv.core.Size;
 import org.opencv.core.Core;
-import org.openftc.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.common.Software.AprilTagDetectionPipeline;
 
 public class Camera implements Subsystem {
@@ -138,7 +137,8 @@ public class Camera implements Subsystem {
         Mat hsvImage;
         Mat inRange;
         Mat mask;
-        int center_x;
+        int centerX;
+        int width;
         Scalar lowerRange;
         Scalar upperRange;
         List<MatOfPoint> contours;
@@ -147,16 +147,17 @@ public class Camera implements Subsystem {
 
         @Override
         public Mat processFrame(Mat mat) {
-            center_x = findCenterX(mat);
+            updateVals(mat);
             // Scale Down Image
             return mat;
         }
 
         public int getCenter() {
-            return center_x;
+            return centerX;
         }
+        public int getWidth() { return width; }
 
-        private int findCenterX(Mat mat) {
+        private void updateVals(Mat mat) {
             double scalePercent = 20;
             int width = (int) Math.round(mat.size().width * scalePercent / 100);
             int height = (int) Math.round(mat.size().height * scalePercent / 100);
@@ -174,13 +175,10 @@ public class Camera implements Subsystem {
 
             if (contours != null) {
                 largestContour = findLargestContour(contours);
+                Rect boundingRect = Imgproc.boundingRect(largestContour);
+                centerX = boundingRect.x + boundingRect.width / 2;
+                width = boundingRect.width;
             }
-            else {
-                return 600; // placeholder value - treat 600 as null
-            }
-
-            // todo: add function that takes mean or median of these for higher accuracy
-            return findBoundingRectCenter(largestContour);
         }
 
         private MatOfPoint findLargestContour(List<MatOfPoint> contours) {
@@ -202,11 +200,6 @@ public class Camera implements Subsystem {
             return largestContour;
         }
 
-        private int findBoundingRectCenter(MatOfPoint contour) {
-            Rect boundingRect = Imgproc.boundingRect(contour);
-            int cX = boundingRect.x + boundingRect.width / 2;
-            return cX;
-        }
 
         ConeDetection(Scalar lowerBound, Scalar upperBound) {
             lowerRange = lowerBound;

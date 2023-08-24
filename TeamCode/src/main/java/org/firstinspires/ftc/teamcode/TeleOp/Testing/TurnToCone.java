@@ -10,6 +10,7 @@ public class TurnToCone extends LinearOpMode {
     final double speed = .2;
     Camera camera = new Camera();
     int currentCenter;
+    int currentWidth;
     private DcMotor leftFront, rightFront, leftRear, rightRear;
 
     @Override
@@ -25,18 +26,26 @@ public class TurnToCone extends LinearOpMode {
 
         while (opModeIsActive()) {
             currentCenter = camera.getConePipeline().getCenter();
+            currentWidth = camera.getConePipeline().getWidth();
+
             if (currentCenter != 600) {
                 if (currentCenter > 170) {
-                    leftFront.setPower(speed);
-                    leftRear.setPower(speed);
-                    rightFront.setPower(-speed);
-                    rightRear.setPower(-speed);
+                    leftFront.setPower(speed + .2);
+                    leftRear.setPower(speed + .2);
+                    rightFront.setPower(-speed + .2);
+                    rightRear.setPower(-speed + .2);
                 }
                 else if (currentCenter < 150) {
-                    leftFront.setPower(-speed);
-                    leftRear.setPower(-speed);
-                    rightFront.setPower(speed);
-                    rightRear.setPower(speed);
+                    leftFront.setPower(-speed + .2);
+                    leftRear.setPower(-speed + .2);
+                    rightFront.setPower(speed + .2);
+                    rightRear.setPower(speed + .2);
+                }
+                else if (currentWidth > 50) {
+                    leftFront.setPower(0.2);
+                    leftRear.setPower(0.2);
+                    rightFront.setPower(0.2);
+                    rightRear.setPower(0.2);
                 }
                 else {
                     leftFront.setPower(0);

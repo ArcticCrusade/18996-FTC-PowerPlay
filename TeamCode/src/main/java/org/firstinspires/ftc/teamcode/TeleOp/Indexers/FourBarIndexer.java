@@ -22,8 +22,8 @@ public class FourBarIndexer extends LinearOpMode {
             }
 
             if (gamepad1.dpad_down) {
-                if (!upPressed) {
-                    fourBar.incrementAndSetPosition();
+                if (!downPressed) {
+                    fourBar.decrementAndSetPosition();
                 }
                 upPressed = true;
             } else {
