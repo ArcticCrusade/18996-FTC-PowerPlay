@@ -11,9 +11,8 @@ public class DeliverySystem implements Subsystem {
     Lift lift;
     Grabber grabber;
     FourBar fourBar;
-    enum State {
 
-    }
+
 
     @Override
     public void initialize(LinearOpMode opMode) {
@@ -22,15 +21,16 @@ public class DeliverySystem implements Subsystem {
         fourBar = new FourBar();
     }
 
+    // DO NOT CHANGE THE ORDER OF THESE COMMANDS - WILL (probably) BREAK IF YOU DO
     public void intake() throws InterruptedException {
-        // lift.setLow()
         fourBar.setPickUpPosition();
+        lift.setLow();
         grabber.grab();
     }
 
     public void dropHigh() throws InterruptedException {
-        // lift.setHigh()
         fourBar.setHigh();
+        lift.setHigh();
         grabber.release();
     }
 }

@@ -17,6 +17,8 @@ public class Grabber implements Subsystem {
     @Override
     public void initialize(LinearOpMode opmode) {
         grabberServo = opmode.hardwareMap.servo.get("Grabber");
+        grabPosition = .4;
+        releasePosition = .5;
     }
 
     public void grab() throws InterruptedException {

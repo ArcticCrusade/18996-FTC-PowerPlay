@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.common.Hardware.DeliverySystem;
 import org.firstinspires.ftc.common.Software.AprilTagAutonomous;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -17,9 +18,11 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 public class AutonomousRight extends LinearOpMode {
     String tagReading;
     AprilTagAutonomous aprilTag;
+    DeliverySystem deliverySystem;
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
         //yoink all of the motor declarations and their methods
+        deliverySystem = new DeliverySystem();
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         aprilTag = new AprilTagAutonomous(this);
 
@@ -62,12 +65,12 @@ public class AutonomousRight extends LinearOpMode {
         tagReading = aprilTag.getTagOfInterest();
 
         drive.followTrajectory(start);
-        //outtake.depositCone();
+        deliverySystem.dropHigh();
         for (int i = 1; i <= 5; i++) {
             drive.followTrajectorySequence(toStack);
-            //intake.getCone();
+            deliverySystem.intake();
             drive.followTrajectorySequence(toPole);
-            //outtake.depositCone();
+            deliverySystem.dropHigh();
         }
         if (tagReading.equals("LEFT")) { //state 1 - left
             drive.followTrajectorySequence(park1);
@@ -78,6 +81,5 @@ public class AutonomousRight extends LinearOpMode {
         } else {
             drive.followTrajectorySequence(park1);
         }
-        //robot.resetAndPrepareForTeleOp
     }
 }

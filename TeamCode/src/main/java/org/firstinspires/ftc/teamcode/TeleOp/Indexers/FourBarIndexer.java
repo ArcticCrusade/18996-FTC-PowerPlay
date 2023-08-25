@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.common.Hardware.FourBar;
 
-@TeleOp(name="FourBarIndexer", group="Linear Opmode")
+@TeleOp(name="FourBar Indexer", group="Linear Opmode")
 public class FourBarIndexer extends LinearOpMode {
     FourBar fourBar;
     boolean upPressed = false;
