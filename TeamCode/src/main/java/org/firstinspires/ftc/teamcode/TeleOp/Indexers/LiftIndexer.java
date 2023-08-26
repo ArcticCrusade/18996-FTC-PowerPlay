@@ -20,9 +20,10 @@ public class LiftIndexer extends LinearOpMode {
     boolean rightPressed = false;
     boolean leftPressed = false;
     boolean downPressed = false;
-    int stepSize = 3;
+    int stepSize = 1;
     @Override
     public void runOpMode() throws InterruptedException {
+        lift.initialize(this);
         waitForStart();
         while (opModeIsActive()) {
             if (gamepad1.dpad_up) {
@@ -70,9 +71,13 @@ public class LiftIndexer extends LinearOpMode {
             if (gamepad1.y) {
                 currentState = State.high;
             }
+            if (gamepad1.x) {
+
+            }
 
             telemetry.addData("Currently Adjusting:", currentState.toString());
-            telemetry.addData("Current Value:", lift.getStateValue(currentState.toString()));
+            telemetry.addData("Current Encoder Value:", lift.getStateValue(currentState.toString()));
+            telemetry.addData("Current Step Size: ", stepSize);
             telemetry.update();
         }
     }

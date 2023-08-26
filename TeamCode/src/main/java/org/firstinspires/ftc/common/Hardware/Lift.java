@@ -19,6 +19,8 @@ public class Lift implements Subsystem {
         rightLiftMotor = opMode.hardwareMap.dcMotor.get("rightLiftMotor");
         leftLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lowPosition = 0;
         mediumPosition = 1;
         highPosition = 2;
