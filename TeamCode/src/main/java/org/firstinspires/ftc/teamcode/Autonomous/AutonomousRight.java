@@ -21,8 +21,9 @@ public class AutonomousRight extends LinearOpMode {
     DeliverySystem deliverySystem;
     @Override
     public void runOpMode() throws InterruptedException {
-        //yoink all of the motor declarations and their methods
+        // yoink all of the motor declarations and their methods
         deliverySystem = new DeliverySystem();
+        deliverySystem.initialize(this);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         aprilTag = new AprilTagAutonomous(this);
 

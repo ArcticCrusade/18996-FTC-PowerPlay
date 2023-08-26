@@ -19,6 +19,9 @@ public class DeliverySystem implements Subsystem {
         lift = new Lift();
         grabber = new Grabber();
         fourBar = new FourBar();
+        lift.initialize(opMode);
+        grabber.initialize(opMode);
+        fourBar.initialize(opMode);
     }
 
     // DO NOT CHANGE THE ORDER OF THESE COMMANDS - WILL (probably) BREAK IF YOU DO

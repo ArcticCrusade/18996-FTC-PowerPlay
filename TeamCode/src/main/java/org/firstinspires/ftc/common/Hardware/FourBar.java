@@ -17,10 +17,14 @@ public class FourBar implements Subsystem {
     public void initialize(LinearOpMode opMode) {
         fourBarServo1 = opMode.hardwareMap.servo.get("4bar 1");
         fourBarServo2 = opMode.hardwareMap.servo.get("4bar 2");
+        fourBarServo1.setDirection(Servo.Direction.REVERSE);
+        fourBarServo2.setDirection(Servo.Direction.FORWARD);
+        fourBarServo1.setPosition(0.002);
+        fourBarServo2.setPosition(0.002);
         // TODO: find out what these values are
-        pickUpPosition = .1;
-        highDropPosition = .2;
-        flatPosition = .3;
+        pickUpPosition = 0;
+        highDropPosition = 0.01;
+        flatPosition = 0.02;
     }
 
     public void setHigh() {
@@ -39,13 +43,13 @@ public class FourBar implements Subsystem {
     }
 
     public void incrementAndSetPosition() {
-        fourBarServo1.setPosition(Math.min(fourBarServo1.getPosition() + .01, 1));
-        fourBarServo2.setPosition(Math.min(fourBarServo2.getPosition() + .01, 1));
+        fourBarServo1.setPosition(Math.min(fourBarServo1.getPosition() + .002, 1));
+        fourBarServo2.setPosition(Math.min(fourBarServo2.getPosition() + .002, 1));
     }
 
     public void decrementAndSetPosition() {
-        fourBarServo1.setPosition(Math.min(fourBarServo1.getPosition() - .01, 0));
-        fourBarServo2.setPosition(Math.min(fourBarServo2.getPosition() - .01, 0));
+        fourBarServo1.setPosition(Math.max(fourBarServo1.getPosition() - .002, 0));
+        fourBarServo2.setPosition(Math.max(fourBarServo2.getPosition() - .002, 0));
     }
 
     public double getLastSetPosition() {

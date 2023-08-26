@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.common.Hardware;
 
+import static java.lang.Thread.sleep;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.common.Interfaces.Subsystem;
@@ -23,11 +25,11 @@ public class Grabber implements Subsystem {
 
     public void grab() throws InterruptedException {
         grabberServo.setPosition(grabPosition);
-        wait(waitTime);
+        sleep(waitTime);
     }
 
     public void release() throws InterruptedException {
         grabberServo.setPosition(releasePosition);
-        wait(waitTime);
+        sleep(waitTime);
     }
 }

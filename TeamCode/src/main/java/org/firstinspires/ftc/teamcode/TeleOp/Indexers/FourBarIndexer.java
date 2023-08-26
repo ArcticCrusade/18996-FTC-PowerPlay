@@ -11,6 +11,9 @@ public class FourBarIndexer extends LinearOpMode {
     boolean downPressed = false;
     @Override
     public void runOpMode() throws InterruptedException {
+        fourBar = new FourBar();
+        waitForStart();
+        fourBar.initialize(this);
         while (opModeIsActive()) {
             if (gamepad1.dpad_up) {
                 if (!upPressed) {
@@ -31,7 +34,7 @@ public class FourBarIndexer extends LinearOpMode {
             }
             telemetry.addData("Current Position:", fourBar.getLastSetPosition());
             telemetry.update();
-            wait(20);
+            sleep(20);
         }
     }
 }

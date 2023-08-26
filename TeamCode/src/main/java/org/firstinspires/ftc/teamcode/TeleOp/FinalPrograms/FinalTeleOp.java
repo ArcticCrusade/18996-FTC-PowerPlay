@@ -15,16 +15,17 @@ import org.firstinspires.ftc.common.Hardware.DeliverySystem;
 
 @TeleOp(name="Final TeleOp", group="Linear Opmode")
 public class FinalTeleOp extends LinearOpMode {
-    private DcMotor leftFront;
-    private DcMotor rightFront;
-    private DcMotor leftRear;
-    private boolean aPressed, bPressed, xPressed, yPressed;
-    private DcMotor rightRear;
-    private double LF, RF, LR, RR, rightY, rightX, leftY, leftX;
+    DcMotor leftFront;
+    DcMotor rightFront;
+    DcMotor leftRear;
+    boolean aPressed, bPressed, xPressed, yPressed;
+    DcMotor rightRear;
+    double LF, RF, LR, RR, rightY, rightX, leftY, leftX;
 
     @Override
     public void runOpMode() throws InterruptedException {
         DeliverySystem deliverySystem = new DeliverySystem();
+        deliverySystem.initialize(this);
         leftFront = hardwareMap.dcMotor.get("leftFront");
         rightFront = hardwareMap.dcMotor.get("rightFront");
         leftRear = hardwareMap.dcMotor.get("leftRear");
