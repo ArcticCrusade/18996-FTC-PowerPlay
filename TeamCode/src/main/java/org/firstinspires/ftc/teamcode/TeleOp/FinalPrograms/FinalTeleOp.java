@@ -42,6 +42,7 @@ public class FinalTeleOp extends LinearOpMode {
         SpeedMovementConfig normal = new SpeedMovementConfig("Normal", populateArray("Normal"), getTypes("Normal"));
         SpeedMovementConfig fast = new SpeedMovementConfig("Fast", populateArray("Fast"), getTypes("Fast"));
         SpeedMovementConfig[] speeds = {slow, normal, fast};
+        deliverySystem.initialize(this);
 
         waitForStart();
 

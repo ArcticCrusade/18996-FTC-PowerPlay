@@ -25,9 +25,11 @@ public class LiftIndexer extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         lift.initialize(this);
         waitForStart();
+        int count = 0;
         while (opModeIsActive()) {
             if (gamepad1.dpad_up) {
-                if (!upPressed) {
+                count++;
+                if (!upPressed && count % 10 == 0) {
                     lift.overrideValue(currentState.toString(), lift.getStateValue(currentState.toString()) + stepSize);
                 }
                 upPressed = true;
@@ -35,8 +37,9 @@ public class LiftIndexer extends LinearOpMode {
                 upPressed = false;
             }
 
-            if (gamepad1.dpad_down) {
+            if (gamepad1.dpad_down && count % 10 == 0) {
                 if (!downPressed) {
+                    count++;
                     lift.overrideValue(currentState.toString(), lift.getStateValue(currentState.toString()) - stepSize);
                 }
                 upPressed = true;
