@@ -20,7 +20,7 @@ public class LiftIndexer extends LinearOpMode {
     boolean rightPressed = false;
     boolean leftPressed = false;
     boolean downPressed = false;
-    int stepSize = 1;
+    int stepSize = 400;
     @Override
     public void runOpMode() throws InterruptedException {
         lift.initialize(this);
@@ -28,8 +28,7 @@ public class LiftIndexer extends LinearOpMode {
         int count = 0;
         while (opModeIsActive()) {
             if (gamepad1.dpad_up) {
-                count++;
-                if (!upPressed && count % 10 == 0) {
+                if (!upPressed) {
                     lift.overrideValue(currentState.toString(), lift.getStateValue(currentState.toString()) + stepSize);
                 }
                 upPressed = true;
@@ -37,19 +36,18 @@ public class LiftIndexer extends LinearOpMode {
                 upPressed = false;
             }
 
-            if (gamepad1.dpad_down && count % 10 == 0) {
+            if (gamepad1.dpad_down) {
                 if (!downPressed) {
-                    count++;
                     lift.overrideValue(currentState.toString(), lift.getStateValue(currentState.toString()) - stepSize);
                 }
-                upPressed = true;
+                downPressed = true;
             } else {
-                upPressed = false;
+                downPressed = false;
             }
 
             if (gamepad1.dpad_left) {
                 if (!leftPressed) {
-                    stepSize -= 1;
+                    stepSize -= 50;
                     leftPressed = true;
                 }
             } else {
@@ -58,7 +56,7 @@ public class LiftIndexer extends LinearOpMode {
 
             if (gamepad1.dpad_right) {
                 if (!rightPressed) {
-                    stepSize += 1;
+                    stepSize += 50;
                     rightPressed = true;
                 }
             } else {
@@ -75,7 +73,17 @@ public class LiftIndexer extends LinearOpMode {
                 currentState = State.high;
             }
             if (gamepad1.x) {
-
+                switch (currentState) {
+                    case low:
+                        lift.setLow();
+                        break;
+                    case medium:
+                        lift.setMedium();
+                        break;
+                    case high:
+                        lift.setHigh();
+                        break;
+                }
             }
 
             telemetry.addData("Currently Adjusting:", currentState.toString());
