@@ -16,10 +16,9 @@ public class DeliverySystem implements Subsystem {
 
     @Override
     public void initialize(LinearOpMode opMode) {
-        lift = new Lift();
+        lift = new Lift(opMode);
         grabber = new Grabber();
         fourBar = new FourBar();
-        lift.initialize(opMode);
         grabber.initialize(opMode);
         fourBar.initialize(opMode);
     }

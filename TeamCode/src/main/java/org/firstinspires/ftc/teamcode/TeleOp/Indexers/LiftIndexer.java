@@ -14,7 +14,7 @@ public class LiftIndexer extends LinearOpMode {
     }
 
 
-    Lift lift = new Lift();
+    Lift lift;
     State currentState = State.low;
     boolean upPressed = false;
     boolean rightPressed = false;
@@ -23,7 +23,7 @@ public class LiftIndexer extends LinearOpMode {
     int stepSize = 400;
     @Override
     public void runOpMode() throws InterruptedException {
-        lift.initialize(this);
+        lift = new Lift(this);
         waitForStart();
         int count = 0;
         while (opModeIsActive()) {

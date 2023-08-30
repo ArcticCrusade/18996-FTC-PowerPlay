@@ -1,18 +1,17 @@
 package org.firstinspires.ftc.common.Hardware;
 
+import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import org.firstinspires.ftc.common.Interfaces.Subsystem;
 
-public class Lift implements Subsystem {
+public class Lift extends SubsystemBase {
     DcMotor leftLiftMotor;
     DcMotor rightLiftMotor;
     int lowPosition;
     int mediumPosition;
     int highPosition;
 
-    @Override
-    public void initialize(LinearOpMode opMode) {
+    public Lift(LinearOpMode opMode) {
         leftLiftMotor = opMode.hardwareMap.dcMotor.get("leftLiftMotor");
         rightLiftMotor = opMode.hardwareMap.dcMotor.get("rightLiftMotor");
         leftLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
