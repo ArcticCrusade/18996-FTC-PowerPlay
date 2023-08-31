@@ -1,26 +1,33 @@
 package org.firstinspires.ftc.teamcode.TeleOp.Indexers;
 
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.common.Hardware.Lift;
+import org.firstinspires.ftc.common.Hardware.Lift.Positions;
+import com.arcrobotics.ftclib.command.CommandOpMode;
 
 @TeleOp(name="lift indexer", group="Linear OpMode")
-public class LiftIndexer extends LinearOpMode {
-    enum State {
-        low,
-        medium,
-        high
-    }
-
-
+public class LiftIndexer extends CommandOpMode {
     Lift lift;
-    State currentState = State.low;
+    Positions currentState = Positions.LOW;
     boolean upPressed = false;
     boolean rightPressed = false;
     boolean leftPressed = false;
     boolean downPressed = false;
     int stepSize = 400;
+    @Override
+    public void initialize() {
+        lift = new Lift(this);
+        CommandScheduler.getInstance().reset();
+        register(lift);
+
+    }
+    @Override
+    public void run() {
+
+    }
     @Override
     public void runOpMode() throws InterruptedException {
         lift = new Lift(this);
@@ -29,7 +36,7 @@ public class LiftIndexer extends LinearOpMode {
         while (opModeIsActive()) {
             if (gamepad1.dpad_up) {
                 if (!upPressed) {
-                    lift.overrideValue(currentState.toString(), lift.getStateValue(currentState.toString()) + stepSize);
+                    lift.overrideValue(currentState, lift.getStateValue(currentState) + stepSize);
                 }
                 upPressed = true;
             } else {
@@ -38,7 +45,7 @@ public class LiftIndexer extends LinearOpMode {
 
             if (gamepad1.dpad_down) {
                 if (!downPressed) {
-                    lift.overrideValue(currentState.toString(), lift.getStateValue(currentState.toString()) - stepSize);
+                    lift.overrideValue(currentState, lift.getStateValue(currentState) - stepSize);
                 }
                 downPressed = true;
             } else {
@@ -64,30 +71,30 @@ public class LiftIndexer extends LinearOpMode {
             }
 
             if (gamepad1.a) {
-                currentState = State.low;
+                currentState = Positions.LOW;
             }
             if (gamepad1.b) {
-                currentState = State.medium;
+                currentState = Positions.MEDIUM;
             }
             if (gamepad1.y) {
-                currentState = State.high;
+                currentState = Positions.HIGH;
             }
             if (gamepad1.x) {
                 switch (currentState) {
-                    case low:
+                    case LOW:
                         lift.setLow();
                         break;
-                    case medium:
+                    case MEDIUM:
                         lift.setMedium();
                         break;
-                    case high:
+                    case HIGH:
                         lift.setHigh();
                         break;
                 }
             }
 
             telemetry.addData("Currently Adjusting:", currentState.toString());
-            telemetry.addData("Current Encoder Value:", lift.getStateValue(currentState.toString()));
+            telemetry.addData("Current Encoder Value:", lift.getStateValue(currentState));
             telemetry.addData("Current Step Size: ", stepSize);
             telemetry.update();
         }

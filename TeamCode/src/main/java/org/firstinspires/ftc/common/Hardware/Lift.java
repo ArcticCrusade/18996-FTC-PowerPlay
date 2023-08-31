@@ -4,72 +4,77 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+
 public class Lift extends SubsystemBase {
     DcMotor leftLiftMotor;
     DcMotor rightLiftMotor;
-    int lowPosition;
-    int mediumPosition;
-    int highPosition;
+    DcMotor[] motors = new DcMotor[]{leftLiftMotor, rightLiftMotor};
+    int[] positions = new int[]{0, 1, 2};
+    int tolerance = 10;
+    public enum Positions {
+        LOW,
+        MEDIUM,
+        HIGH
+    }
 
-    public Lift(LinearOpMode opMode) {
+
+    public Lift (LinearOpMode opMode) {
         leftLiftMotor = opMode.hardwareMap.dcMotor.get("leftLiftMotor");
         rightLiftMotor = opMode.hardwareMap.dcMotor.get("rightLiftMotor");
-        leftLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        leftLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lowPosition = 0;
-        mediumPosition = 1;
-        highPosition = 2;
+        for (DcMotor motor: motors) {
+            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
     }
 
     public void setLow() {
-        leftLiftMotor.setTargetPosition(lowPosition);
-        rightLiftMotor.setTargetPosition(lowPosition);
-        leftLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        while (leftLiftMotor.isBusy() && rightLiftMotor.isBusy()) {}
+        leftLiftMotor.setTargetPosition(positions[0]);
+        rightLiftMotor.setTargetPosition(positions[0]);
     }
 
     public void setMedium() {
-        leftLiftMotor.setTargetPosition(mediumPosition);
-        rightLiftMotor.setTargetPosition(mediumPosition);
-        leftLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        while (leftLiftMotor.isBusy() && rightLiftMotor.isBusy()) {}
+        leftLiftMotor.setTargetPosition(positions[1]);
+        rightLiftMotor.setTargetPosition(positions[1]);
     }
 
     public void setHigh() {
-        leftLiftMotor.setTargetPosition(highPosition);
-        rightLiftMotor.setTargetPosition(highPosition);
-        leftLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        while (leftLiftMotor.isBusy() && rightLiftMotor.isBusy()) {}
+        leftLiftMotor.setTargetPosition(positions[2]);
+        rightLiftMotor.setTargetPosition(positions[2]);
+    }
+    @Override
+    public void periodic() {
+        for (DcMotor motor: motors) {
+            if (motor.getCurrentPosition() - motor.getTargetPosition() >= tolerance) {
+                motor.setPower(0.4);
+            } else {
+                motor.setPower(0);
+            }
+        }
     }
 
-    public void overrideValue(String height, int value) {
-        switch (height) {
-            case "low":
-                lowPosition = value;
+    public void overrideValue(Positions position, int value) {
+        switch (position) {
+            case LOW:
+                positions[0] = value;
                 break;
-            case "medium":
-                mediumPosition = value;
+            case MEDIUM:
+                positions[1] = value;
                 break;
-            case "high":
-                highPosition = value;
+            case HIGH:
+                positions[2] = value;
                 break;
         }
     }
 
-    public int getStateValue(String height) {
-        switch (height) {
-            case "low":
-                return lowPosition;
-            case "medium":
-                return mediumPosition;
-            case "high":
-                return highPosition;
+    public int getStateValue(Positions position) {
+        switch (position) {
+            case LOW:
+                return positions[0];
+            case MEDIUM:
+                return positions[1];
+            case HIGH:
+                return positions[2];
         }
         return 0;
     }
