@@ -42,6 +42,16 @@ public class Lift extends SubsystemBase {
         leftLiftMotor.setTargetPosition(positions[2]);
         rightLiftMotor.setTargetPosition(positions[2]);
     }
+    public void setHeight(Positions position) {
+        switch (position) {
+            case LOW:
+                setLow();
+            case MEDIUM:
+                setMedium();
+            case HIGH:
+                setHigh();
+        }
+    }
     @Override
     public void periodic() {
         for (DcMotor motor: motors) {
