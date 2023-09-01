@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 
-public class Lift extends SubsystemBase {
+public class LiftSubsystem extends SubsystemBase {
     DcMotor leftLiftMotor;
     DcMotor rightLiftMotor;
     DcMotor[] motors = new DcMotor[]{leftLiftMotor, rightLiftMotor};
@@ -18,7 +18,7 @@ public class Lift extends SubsystemBase {
     }
 
 
-    public Lift (LinearOpMode opMode) {
+    public LiftSubsystem(LinearOpMode opMode) {
         leftLiftMotor = opMode.hardwareMap.dcMotor.get("leftLiftMotor");
         rightLiftMotor = opMode.hardwareMap.dcMotor.get("rightLiftMotor");
         for (DcMotor motor: motors) {

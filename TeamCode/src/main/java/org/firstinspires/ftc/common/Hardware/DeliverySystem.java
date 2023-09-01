@@ -3,12 +3,12 @@ package org.firstinspires.ftc.common.Hardware;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.common.Hardware.FourBar;
-import org.firstinspires.ftc.common.Hardware.Lift;
+import org.firstinspires.ftc.common.Hardware.LiftSubsystem;
 import org.firstinspires.ftc.common.Hardware.Grabber;
 import org.firstinspires.ftc.common.Interfaces.Subsystem;
 
 public class DeliverySystem implements Subsystem {
-    Lift lift;
+    LiftSubsystem lift;
     Grabber grabber;
     FourBar fourBar;
 
@@ -16,11 +16,10 @@ public class DeliverySystem implements Subsystem {
 
     @Override
     public void initialize(LinearOpMode opMode) {
-        lift = new Lift(opMode);
+        lift = new LiftSubsystem(opMode);
         grabber = new Grabber();
-        fourBar = new FourBar();
+        fourBar = new FourBar(opMode);
         grabber.initialize(opMode);
-        fourBar.initialize(opMode);
     }
 
     // DO NOT CHANGE THE ORDER OF THESE COMMANDS - WILL (probably) BREAK IF YOU DO

@@ -6,19 +6,19 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.common.Hardware.Lift;
-import org.firstinspires.ftc.common.Hardware.Lift.Positions;
+import org.firstinspires.ftc.common.Hardware.LiftSubsystem;
+import org.firstinspires.ftc.common.Hardware.LiftSubsystem.Positions;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 
-@TeleOp(name="lift indexer", group="Linear OpMode")
+@TeleOp(name="lift indexer", group="Indexer")
 public class LiftIndexer extends CommandOpMode {
-    Lift lift;
+    LiftSubsystem lift;
     GamepadEx gamepadEx;
     Positions currentState = Positions.LOW;
     int stepSize = 400;
     @Override
     public void initialize() {
-        lift = new Lift(this);
+        lift = new LiftSubsystem(this);
         gamepadEx = new GamepadEx(gamepad1);
         CommandScheduler.getInstance().reset();
         register(lift);

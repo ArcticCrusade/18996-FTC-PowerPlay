@@ -1,20 +1,21 @@
 package org.firstinspires.ftc.common.Hardware;
 
+import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.common.Interfaces.Subsystem;
 
-public class FourBar implements Subsystem {
+public class FourBar extends SubsystemBase {
     Servo fourBarServo1;
     Servo fourBarServo2;
 
     double pickUpPosition;
     double highDropPosition;
     double flatPosition;
+    double targetPosition;
 
-    @Override
-    public void initialize(LinearOpMode opMode) {
+    public FourBar(LinearOpMode opMode) {
         fourBarServo1 = opMode.hardwareMap.servo.get("4bar 1");
         fourBarServo2 = opMode.hardwareMap.servo.get("4bar 2");
         fourBarServo1.setDirection(Servo.Direction.REVERSE);
@@ -55,5 +56,4 @@ public class FourBar implements Subsystem {
     public double getLastSetPosition() {
         return fourBarServo1.getPosition();
     }
-
 }
