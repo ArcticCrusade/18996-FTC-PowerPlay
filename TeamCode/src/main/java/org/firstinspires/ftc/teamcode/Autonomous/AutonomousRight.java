@@ -1,3 +1,23 @@
+/**
+ * UNUSABLE
+ * DO NOT USE WITHOUT FURTHER TRANSITIONING TO LIB
+ */
+/**
+ * UNUSABLE
+ * DO NOT USE WITHOUT FURTHER TRANSITIONING TO LIB
+ */
+/**
+ * UNUSABLE
+ * DO NOT USE WITHOUT FURTHER TRANSITIONING TO LIB
+ */
+/**
+ * UNUSABLE
+ * DO NOT USE WITHOUT FURTHER TRANSITIONING TO LIB
+ */
+/**
+ * UNUSABLE
+ * DO NOT USE WITHOUT FURTHER TRANSITIONING TO LIB
+ */
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -8,6 +28,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.common.Hardware.DeliverySystem;
+import org.firstinspires.ftc.common.Hardware.RobotHardware;
 import org.firstinspires.ftc.common.Software.AprilTagAutonomous;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -19,11 +40,12 @@ public class AutonomousRight extends LinearOpMode {
     String tagReading;
     AprilTagAutonomous aprilTag;
     DeliverySystem deliverySystem;
+    RobotHardware robot = RobotHardware.getInstance();
     @Override
     public void runOpMode() throws InterruptedException {
         // yoink all of the motor declarations and their methods
-        deliverySystem = new DeliverySystem();
-        deliverySystem.initialize(this);
+        robot.init(hardwareMap);
+        deliverySystem = new DeliverySystem(robot);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         aprilTag = new AprilTagAutonomous(this);
 

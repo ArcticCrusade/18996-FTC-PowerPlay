@@ -1,6 +1,23 @@
+/**
+ * UNUSABLE
+ * DO NOT USE WITHOUT FURTHER TRANSITIONING TO LIB
+ *//**
+ * UNUSABLE
+ * DO NOT USE WITHOUT FURTHER TRANSITIONING TO LIB
+ *//**
+ * UNUSABLE
+ * DO NOT USE WITHOUT FURTHER TRANSITIONING TO LIB
+ *//**
+ * UNUSABLE
+ * DO NOT USE WITHOUT FURTHER TRANSITIONING TO LIB
+ *//**
+ * UNUSABLE
+ * DO NOT USE WITHOUT FURTHER TRANSITIONING TO LIB
+ *//**
+ * UNUSABLE
+ * DO NOT USE WITHOUT FURTHER TRANSITIONING TO LIB
+ */
 package org.firstinspires.ftc.teamcode.TeleOp.FinalPrograms;
-
-
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -11,7 +28,7 @@ import org.firstinspires.ftc.common.Config.SpeedMovementConfig;
 import static org.firstinspires.ftc.common.Config.FinalDriveConfig.getTypes;
 import static org.firstinspires.ftc.common.Config.FinalDriveConfig.populateArray;
 import org.firstinspires.ftc.common.Hardware.DeliverySystem;
-
+import org.firstinspires.ftc.common.Hardware.RobotHardware;
 
 @TeleOp(name="Final TeleOp", group="Linear Opmode")
 public class FinalTeleOp extends LinearOpMode {
@@ -21,11 +38,12 @@ public class FinalTeleOp extends LinearOpMode {
     boolean aPressed, bPressed, xPressed, yPressed;
     DcMotor rightRear;
     double LF, RF, LR, RR, rightY, rightX, leftY, leftX;
+    RobotHardware robot = RobotHardware.getInstance();
 
     @Override
     public void runOpMode() throws InterruptedException {
-        DeliverySystem deliverySystem = new DeliverySystem();
-        deliverySystem.initialize(this);
+        robot.init(hardwareMap);
+        DeliverySystem deliverySystem = new DeliverySystem(robot);
         leftFront = hardwareMap.dcMotor.get("leftFront");
         rightFront = hardwareMap.dcMotor.get("rightFront");
         leftRear = hardwareMap.dcMotor.get("leftRear");
@@ -42,7 +60,6 @@ public class FinalTeleOp extends LinearOpMode {
         SpeedMovementConfig normal = new SpeedMovementConfig("Normal", populateArray("Normal"), getTypes("Normal"));
         SpeedMovementConfig fast = new SpeedMovementConfig("Fast", populateArray("Fast"), getTypes("Fast"));
         SpeedMovementConfig[] speeds = {slow, normal, fast};
-        deliverySystem.initialize(this);
 
         waitForStart();
 

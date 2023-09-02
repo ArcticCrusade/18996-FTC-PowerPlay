@@ -7,17 +7,21 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.common.Hardware.FourBar;
+import org.firstinspires.ftc.common.Hardware.FourBarSubsystem;
+import org.firstinspires.ftc.common.Hardware.RobotHardware;
 
 @TeleOp(name="FourBar Indexer", group="Indexer")
 public class FourBarIndexer extends CommandOpMode {
-    FourBar fourBar;
+    FourBarSubsystem fourBar;
     GamepadEx gamepadEx;
+    RobotHardware robot = RobotHardware.getInstance();
 
     @Override
     public void initialize() {
-        fourBar = new FourBar(this);
+        robot.init(hardwareMap);
+        fourBar = new FourBarSubsystem(robot);
         gamepadEx = new GamepadEx(gamepad1);
+
         CommandScheduler.getInstance().reset();
         register(fourBar);
 

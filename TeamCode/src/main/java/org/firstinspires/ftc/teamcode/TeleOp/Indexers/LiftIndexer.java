@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.common.Hardware.LiftSubsystem;
 import org.firstinspires.ftc.common.Hardware.LiftSubsystem.Positions;
+import org.firstinspires.ftc.common.Hardware.RobotHardware;
+
 import com.arcrobotics.ftclib.command.CommandOpMode;
 
 @TeleOp(name="lift indexer", group="Indexer")
@@ -16,10 +18,13 @@ public class LiftIndexer extends CommandOpMode {
     GamepadEx gamepadEx;
     Positions currentState = Positions.LOW;
     int stepSize = 400;
+    RobotHardware robot = RobotHardware.getInstance();
     @Override
     public void initialize() {
-        lift = new LiftSubsystem(this);
+        robot.init(hardwareMap);
+        lift = new LiftSubsystem(robot);
         gamepadEx = new GamepadEx(gamepad1);
+
         CommandScheduler.getInstance().reset();
         register(lift);
 

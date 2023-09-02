@@ -1,25 +1,22 @@
 package org.firstinspires.ftc.common.Hardware;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.common.Hardware.FourBar;
-import org.firstinspires.ftc.common.Hardware.LiftSubsystem;
-import org.firstinspires.ftc.common.Hardware.Grabber;
 import org.firstinspires.ftc.common.Interfaces.Subsystem;
 
-public class DeliverySystem implements Subsystem {
+public class DeliverySystem extends SubsystemBase {
     LiftSubsystem lift;
     Grabber grabber;
-    FourBar fourBar;
+    FourBarSubsystem fourBar;
+    RobotHardware robot;
 
-
-
-    @Override
-    public void initialize(LinearOpMode opMode) {
-        lift = new LiftSubsystem(opMode);
+    public DeliverySystem(RobotHardware robot) {
+        this.robot = robot;
+        lift = new LiftSubsystem(robot);
         grabber = new Grabber();
-        fourBar = new FourBar(opMode);
-        grabber.initialize(opMode);
+        fourBar = new FourBarSubsystem(robot);
+        //grabber.initialize(new OpMode());
     }
 
     // DO NOT CHANGE THE ORDER OF THESE COMMANDS - WILL (probably) BREAK IF YOU DO
