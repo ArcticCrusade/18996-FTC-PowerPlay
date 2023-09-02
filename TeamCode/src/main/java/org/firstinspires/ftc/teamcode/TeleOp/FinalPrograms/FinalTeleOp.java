@@ -19,6 +19,12 @@
  */
 package org.firstinspires.ftc.teamcode.TeleOp.FinalPrograms;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.button.Button;
+import com.arcrobotics.ftclib.command.button.GamepadButton;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.ButtonReader;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -34,6 +40,7 @@ import org.firstinspires.ftc.common.Hardware.RobotHardware;
 public class FinalTeleOp extends LinearOpMode {
     DcMotor leftFront;
     DcMotor rightFront;
+    GamepadEx driver = new GamepadEx(gamepad1);
     DcMotor leftRear;
     boolean aPressed, bPressed, xPressed, yPressed;
     DcMotor rightRear;
@@ -61,30 +68,27 @@ public class FinalTeleOp extends LinearOpMode {
         SpeedMovementConfig fast = new SpeedMovementConfig("Fast", populateArray("Fast"), getTypes("Fast"));
         SpeedMovementConfig[] speeds = {slow, normal, fast};
 
+        Button buttonA = new GamepadButton(
+                driver, GamepadKeys.Button.A
+        ).whenPressed(new InstantCommand(() -> {
+            try {
+                deliverySystem.intake();
+            } catch (InterruptedException e) {}
+        }));
+
+        Button buttonY = new GamepadButton(
+                driver, GamepadKeys.Button.Y
+        ).whenPressed(new InstantCommand(() -> {
+            try {
+                deliverySystem.dropHigh();
+            } catch (InterruptedException e) {}
+        }));
+
+
+
         waitForStart();
 
         while (opModeIsActive()) {
-
-            if (gamepad1.a) {
-                if (!aPressed) {
-                    deliverySystem.intake();
-                    aPressed = true;
-                }
-            } else {
-                aPressed = false;
-            }
-
-            if (gamepad1.y) {
-                if (!yPressed) {
-                    deliverySystem.dropHigh();
-                    yPressed = true;
-                }
-            } else {
-                yPressed = false;
-            }
-
-
-
             int index = 1;
             SpeedMovementConfig currentSpeed = speeds[(gamepad1.right_trigger > 0.3) ? 2 : ((gamepad1.left_trigger > 0.3) ? 0 : 1)];
 

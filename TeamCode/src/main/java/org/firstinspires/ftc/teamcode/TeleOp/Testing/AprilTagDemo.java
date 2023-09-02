@@ -22,9 +22,15 @@ package org.firstinspires.ftc.teamcode.TeleOp.Testing;
  */
 
 
+import static java.lang.Math.atan;
+
+import android.annotation.SuppressLint;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.common.Hardware.Drivetrain;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -50,13 +56,13 @@ public class AprilTagDemo extends LinearOpMode
     // UNITS ARE PIXELS
     // NOTE: this calibration is for the C920 webcam at 800x448.
     // You will need to do your own calibration for other configurations!
-    double fx = 578.272;
-    double fy = 578.272;
-    double cx = 402.145;
-    double cy = 221.506;
+    double fx = 1430;
+    double fy = 1430;
+    double cx = 480;
+    double cy = 620;
 
     // UNITS ARE METERS
-    double tagsize = 0.166;
+    double tagsize = 0.033;
 
     int numFramesWithoutDetection = 0;
 
@@ -65,9 +71,18 @@ public class AprilTagDemo extends LinearOpMode
     final float THRESHOLD_HIGH_DECIMATION_RANGE_METERS = 1.0f;
     final int THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION = 4;
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void runOpMode()
     {
+        DcMotor leftFront = hardwareMap.dcMotor.get("leftFront");
+        DcMotor rightFront = hardwareMap.dcMotor.get("rightFront");
+        DcMotor leftRear = hardwareMap.dcMotor.get("leftRear");
+        DcMotor rightRear = hardwareMap.dcMotor.get("rightRear");
+        leftFront.setDirection(DcMotor.Direction.REVERSE);
+        rightFront.setDirection(DcMotor.Direction.FORWARD);
+        leftRear.setDirection(DcMotor.Direction.REVERSE);
+        rightRear.setDirection(DcMotor.Direction.FORWARD);
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
@@ -78,7 +93,7 @@ public class AprilTagDemo extends LinearOpMode
             @Override
             public void onOpened()
             {
-                camera.startStreaming(800,448, OpenCvCameraRotation.UPRIGHT);
+                camera.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
@@ -130,7 +145,21 @@ public class AprilTagDemo extends LinearOpMode
                     {
                         aprilTagDetectionPipeline.setDecimation(DECIMATION_HIGH);
                     }
-
+                    if (detections.size() == 1) {
+                        double angle = atan(detections.get(0).pose.x / detections.get(0).pose.z);
+                        if (angle > 5) {
+                            leftFront.setPower(-.4);
+                            rightFront.setPower(.4);
+                            leftRear.setPower(-.4);
+                            rightRear.setPower(.4);
+                        }
+                        if (angle < 5) {
+                            leftFront.setPower(.4);
+                            rightFront.setPower(-.4);
+                            leftRear.setPower(.4);
+                            rightRear.setPower(-.4);
+                        }
+                    }
                     for(AprilTagDetection detection : detections)
                     {
                         Orientation rot = Orientation.getOrientation(detection.pose.R, AxesReference.INTRINSIC, AxesOrder.YXZ, AngleUnit.DEGREES);
