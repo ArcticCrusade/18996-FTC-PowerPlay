@@ -2,34 +2,33 @@ package org.firstinspires.ftc.common.Hardware;
 
 import static java.lang.Thread.sleep;
 
+import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.common.Interfaces.Subsystem;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
-public class Grabber implements Subsystem {
-    Servo grabberServo;
+public class Grabber extends SubsystemBase {
+    RobotHardware robot;
     double grabPosition;
     double releasePosition;
-    long waitTime;
+    double targetPosition;
 
-    // TODO: Figure out values
-
-    @Override
-    public void initialize(LinearOpMode opmode) {
-        grabberServo = opmode.hardwareMap.servo.get("Grabber");
+    public Grabber(RobotHardware robot) {
+        this.robot = robot;
         grabPosition = .4;
         releasePosition = .5;
     }
 
-    public void grab() throws InterruptedException {
-        grabberServo.setPosition(grabPosition);
-        //sleep(waitTime);
+    public void grab() {
+        targetPosition = grabPosition;
     }
 
-    public void release() throws InterruptedException {
-        grabberServo.setPosition(releasePosition);
-        //sleep(waitTime);
+    public void release() {
+        targetPosition = releasePosition;
+    }
+    public void periodic() {
+        robot.grabber.setPosition(targetPosition);
     }
 }

@@ -14,7 +14,7 @@ public class DeliverySystem extends SubsystemBase {
     public DeliverySystem(RobotHardware robot) {
         this.robot = robot;
         lift = new LiftSubsystem(robot);
-        grabber = new Grabber();
+        grabber = new Grabber(robot);
         fourBar = new FourBarSubsystem(robot);
         //grabber.initialize(new OpMode());
     }

@@ -12,6 +12,7 @@ public class RobotHardware {
     public DcMotor leftLift, rightLift;
 
     public Servo fourBar1, fourBar2;
+    public Servo grabber;
 
     private static RobotHardware instance = new RobotHardware();
     private HardwareMap hardwareMap;
@@ -50,5 +51,7 @@ public class RobotHardware {
         fourBar1.setDirection(Servo.Direction.REVERSE);
         fourBar2 = hardwareMap.servo.get("4bar 2");
         fourBar2.setDirection(Servo.Direction.FORWARD);
+
+        grabber = hardwareMap.servo.get("Grabber");
     }
 }
