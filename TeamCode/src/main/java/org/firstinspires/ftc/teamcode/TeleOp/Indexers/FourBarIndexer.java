@@ -18,7 +18,7 @@ public class FourBarIndexer extends CommandOpMode {
 
     @Override
     public void initialize() {
-        robot.init(hardwareMap);
+        robot.init(hardwareMap, RobotHardware.OpModes.TELEOP);
         fourBar = new FourBarSubsystem(robot);
         gamepadEx = new GamepadEx(gamepad1);
 

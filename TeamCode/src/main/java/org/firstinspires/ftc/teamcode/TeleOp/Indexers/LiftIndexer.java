@@ -21,7 +21,7 @@ public class LiftIndexer extends CommandOpMode {
     RobotHardware robot = RobotHardware.getInstance();
     @Override
     public void initialize() {
-        robot.init(hardwareMap);
+        robot.init(hardwareMap, RobotHardware.OpModes.TELEOP);
         lift = new LiftSubsystem(robot);
         gamepadEx = new GamepadEx(gamepad1);
 

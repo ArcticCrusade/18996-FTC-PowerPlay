@@ -42,7 +42,7 @@ public class FinalTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot.init(hardwareMap);
+        robot.init(hardwareMap, RobotHardware.OpModes.TELEOP);
         DeliverySystem deliverySystem = new DeliverySystem(robot);
         leftFront = hardwareMap.dcMotor.get("leftFront");
         rightFront = hardwareMap.dcMotor.get("rightFront");
