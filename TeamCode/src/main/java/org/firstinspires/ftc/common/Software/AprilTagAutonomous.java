@@ -2,7 +2,6 @@ package org.firstinspires.ftc.common.Software;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.common.Hardware.RobotHardware;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -16,7 +15,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AprilTagAutonomous {
-    RobotHardware robot;
     private Camera camera;
     private static final double FEET_PER_METER = 3.28084;
     private AprilTagDetection tagOfInterest = null;
@@ -28,15 +26,14 @@ public class AprilTagAutonomous {
     private final float THRESHOLD_HIGH_DECIMATION_RANGE_METERS;
     private final int THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION;
 
-    public AprilTagAutonomous(RobotHardware robot) {
+    public AprilTagAutonomous(LinearOpMode opMode) {
         DECIMATION_HIGH = 3;
         DECIMATION_LOW = 2;
         THRESHOLD_HIGH_DECIMATION_RANGE_METERS = 1.0f;
         THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION = 4;
-        this.robot = robot;
-        camera = robot.webcam;
+        camera.initialize(opMode);
     }
-    public AprilTagAutonomous(RobotHardware robot,
+    public AprilTagAutonomous(LinearOpMode opMode,
                               float DECIMATION_HIGH, float DECIMATION_LOW,
                               float THRESHOLD_HIGH_DECIMATION_RANGE_METERS,
                               int THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION) {
