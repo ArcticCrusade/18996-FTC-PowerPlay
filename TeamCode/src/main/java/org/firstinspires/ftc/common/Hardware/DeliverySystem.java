@@ -7,14 +7,14 @@ import org.firstinspires.ftc.common.Interfaces.Subsystem;
 
 public class DeliverySystem extends SubsystemBase {
     LiftSubsystem lift;
-    Grabber grabber;
+    GrabberSubsystem grabber;
     FourBarSubsystem fourBar;
     RobotHardware robot;
 
     public DeliverySystem(RobotHardware robot) {
         this.robot = robot;
         lift = new LiftSubsystem(robot);
-        grabber = new Grabber(robot);
+        grabber = new GrabberSubsystem(robot);
         fourBar = new FourBarSubsystem(robot);
         //grabber.initialize(new OpMode());
     }
