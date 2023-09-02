@@ -25,11 +25,11 @@ public class Grabber implements Subsystem {
 
     public void grab() throws InterruptedException {
         grabberServo.setPosition(grabPosition);
-        sleep(waitTime);
+        //sleep(waitTime);
     }
 
     public void release() throws InterruptedException {
         grabberServo.setPosition(releasePosition);
-        sleep(waitTime);
+        //sleep(waitTime);
     }
 }

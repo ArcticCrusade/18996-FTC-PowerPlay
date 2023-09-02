@@ -4,12 +4,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class RobotHardware {
-    public DcMotor leftLift;
-    public DcMotor rightLift;
+import java.util.Arrays;
+import java.util.List;
 
-    public Servo fourBar1;
-    public Servo fourBar2;
+public class RobotHardware {
+    public DcMotor leftFront, rightFront, leftRear, rightRear;
+    public DcMotor leftLift, rightLift;
+
+    public Servo fourBar1, fourBar2;
 
     private static RobotHardware instance = new RobotHardware();
     private HardwareMap hardwareMap;
@@ -21,14 +23,28 @@ public class RobotHardware {
     public void init(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
 
+        leftFront = hardwareMap.dcMotor.get("leftFront");
+        leftFront.setDirection(DcMotor.Direction.REVERSE);
+        rightFront = hardwareMap.dcMotor.get("rightFront");
+        rightFront.setDirection(DcMotor.Direction.FORWARD);
+        leftRear = hardwareMap.dcMotor.get("leftRear");
+        leftRear.setDirection(DcMotor.Direction.REVERSE);
+        rightRear = hardwareMap.dcMotor.get("rightRear");
+        rightRear.setDirection(DcMotor.Direction.FORWARD);
+        List<DcMotor> driveMotors = Arrays.asList(leftFront, rightFront, leftRear, rightRear);
+        for (DcMotor motor : driveMotors) {
+            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
+
         leftLift = hardwareMap.dcMotor.get("leftLiftMotor");
-        leftLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightLift = hardwareMap.dcMotor.get("rightLiftMotor");
-        rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        List<DcMotor> liftMotors = Arrays.asList(leftLift, rightLift);
+        for (DcMotor motor : liftMotors) {
+            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
 
         fourBar1 = hardwareMap.servo.get("4bar 1");
         fourBar1.setDirection(Servo.Direction.REVERSE);

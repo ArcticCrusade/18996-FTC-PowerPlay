@@ -1,4 +1,16 @@
 //incompatible with any rr stuff
+/**
+ * TEMPOARILY OBSOLETED
+ */
+/**
+ * TEMPOARILY OBSOLETED
+ */
+/**
+ * TEMPOARILY OBSOLETED
+ */
+/**
+ * TEMPOARILY OBSOLETED
+ */
 
 package org.firstinspires.ftc.common.Hardware;
 
