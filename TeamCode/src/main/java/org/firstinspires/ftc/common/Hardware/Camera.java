@@ -3,7 +3,6 @@ package org.firstinspires.ftc.common.Hardware;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;;
 
-import org.firstinspires.ftc.common.Interfaces.Subsystem;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;

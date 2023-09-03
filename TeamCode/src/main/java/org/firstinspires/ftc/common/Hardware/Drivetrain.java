@@ -14,15 +14,15 @@
 
 package org.firstinspires.ftc.common.Hardware;
 
+import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.common.Config.SpeedMovementConfig;
-import org.firstinspires.ftc.common.Interfaces.Subsystem;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class Drivetrain implements Subsystem {
+public class Drivetrain extends SubsystemBase {
     private DcMotor leftFront;
     private DcMotor rightFront;
     private DcMotor leftRear;
@@ -31,7 +31,6 @@ public class Drivetrain implements Subsystem {
     private List<SpeedMovementConfig> configs;
     private SpeedMovementConfig config;
 
-    @Override
     public void initialize(LinearOpMode opMode) {
         leftFront = opMode.hardwareMap.dcMotor.get("leftFront");
         rightFront = opMode.hardwareMap.dcMotor.get("rightFront");
