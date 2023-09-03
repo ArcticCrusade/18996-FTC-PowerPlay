@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.common.Hardware;
 
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -18,7 +19,7 @@ public class RobotHardware {
         AUTO,
         TELEOP
     }
-    public DcMotor leftFront, rightFront, leftRear, rightRear;
+    public Motor leftFront, rightFront, leftRear, rightRear;
     public DcMotor leftLift, rightLift;
 
     public Servo fourBar1, fourBar2;
@@ -37,19 +38,14 @@ public class RobotHardware {
     public void init(HardwareMap hardwareMap, OpModes mode) {
         this.hardwareMap = hardwareMap;
 
-        leftFront = hardwareMap.dcMotor.get("leftFront");
-        leftFront.setDirection(DcMotor.Direction.REVERSE);
-        rightFront = hardwareMap.dcMotor.get("rightFront");
-        rightFront.setDirection(DcMotor.Direction.FORWARD);
-        leftRear = hardwareMap.dcMotor.get("leftRear");
-        leftRear.setDirection(DcMotor.Direction.REVERSE);
-        rightRear = hardwareMap.dcMotor.get("rightRear");
-        rightRear.setDirection(DcMotor.Direction.FORWARD);
-        List<DcMotor> driveMotors = Arrays.asList(leftFront, rightFront, leftRear, rightRear);
-        for (DcMotor motor : driveMotors) {
-            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        }
+        leftFront = new Motor(hardwareMap, "leftFront");
+        leftFront.setRunMode(Motor.RunMode.RawPower);
+        rightFront = new Motor(hardwareMap,"rightFront");
+        rightFront.setRunMode(Motor.RunMode.RawPower);
+        leftRear = new Motor(hardwareMap,"leftRear");
+        leftRear.setRunMode(Motor.RunMode.RawPower);
+        rightRear = new Motor(hardwareMap,"rightRear");
+        rightRear.setRunMode(Motor.RunMode.RawPower);
 
         leftLift = hardwareMap.dcMotor.get("leftLiftMotor");
         rightLift = hardwareMap.dcMotor.get("rightLiftMotor");
