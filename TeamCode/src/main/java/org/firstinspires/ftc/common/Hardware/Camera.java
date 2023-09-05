@@ -56,12 +56,12 @@ public class Camera extends SubsystemBase {
     public void switchPipeline(String color) {
         switch (color) {
             case "red":
-                lowerBound = new Scalar(150, 170, 130); // these might be wrong
-                upperBound = new Scalar(180, 255, 255);
+                lowerBound = new Scalar(0, 93, 130); // these might be wrong
+                upperBound = new Scalar(8, 255, 255);
                 break;
             case "blue":
-                lowerBound = null; // TODO: figure out these values (also red might be representative of blue?)
-                upperBound = null;
+                lowerBound = new Scalar(102, 76, 0);
+                upperBound = new Scalar(120, 255, 255);
                 break;
         }
         ConePipeline = new ConeDetection(lowerBound, upperBound);
