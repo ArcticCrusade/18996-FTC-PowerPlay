@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.common.Hardware.RobotHardware;
 import org.firstinspires.ftc.common.Software.AprilTagAutonomous;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -17,11 +18,13 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 public class AutonomousLeft extends LinearOpMode {
     String tagReading;
     AprilTagAutonomous aprilTag;
+    RobotHardware robot = RobotHardware.getInstance();
     @Override
     public void runOpMode() {
         //yoink all of the motor declarations and their methods
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        aprilTag = new AprilTagAutonomous(this);
+        robot.init(hardwareMap, RobotHardware.OpModes.AUTO);
+        aprilTag = new AprilTagAutonomous(robot.camera);
 
         waitForStart();
         if (isStopRequested()) return;

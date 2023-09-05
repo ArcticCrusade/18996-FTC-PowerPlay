@@ -42,6 +42,11 @@ public class DriveSubsystem extends SubsystemBase {
         forward = config.getConfigList()[1].calculateSpeed(ly);
         turn = config.getConfigList()[2].calculateSpeed(rx);
     }
+    public void manualPower(double strafe, double forward, double turn) {
+        this.strafe = strafe;
+        this.forward = forward;
+        this.turn = turn;
+    }
     @Override
     public void periodic() {
         drive.driveRobotCentric(strafe, forward, turn);

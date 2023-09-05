@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.common.Hardware;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.HardwareMap;;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.Mat;
@@ -23,7 +24,6 @@ import org.opencv.core.Core;
 import org.firstinspires.ftc.common.Software.AprilTagDetectionPipeline;
 
 public class Camera extends SubsystemBase {
-    RobotHardware robot;
     OpenCvCamera webcam;
     SignalDetection SignalPipeline;
     ConeDetection ConePipeline;
@@ -32,9 +32,9 @@ public class Camera extends SubsystemBase {
     Scalar upperBound;
     double tagsize = .2; // in meters
 
-    public void initialize(LinearOpMode opMode) {
-        int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(opMode.hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+    public Camera(HardwareMap hardwareMap) {
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         ConePipeline = new ConeDetection(lowerBound, upperBound);
         AprilTagPipeline = new AprilTagDetectionPipeline(tagsize, 1430, 1430, 480, 620); // these values might be wrong I got them off some random website
         webcam.setPipeline(AprilTagPipeline);

@@ -25,19 +25,14 @@ public class RobotHardware {
     public Servo fourBar1, fourBar2;
     public Servo grabber;
 
-    public OpenCvCamera webcam;
-    public AprilTagDetectionPipeline AprilTagPipeline;
+    public Camera camera;
 
     private static RobotHardware instance = new RobotHardware();
-    private HardwareMap hardwareMap;
-
     public static RobotHardware getInstance() {
         return instance;
     }
 
     public void init(HardwareMap hardwareMap, OpModes mode) {
-        this.hardwareMap = hardwareMap;
-
         leftFront = new Motor(hardwareMap, "leftFront");
         leftFront.setRunMode(Motor.RunMode.RawPower);
         rightFront = new Motor(hardwareMap,"rightFront");
@@ -63,16 +58,7 @@ public class RobotHardware {
 
         grabber = hardwareMap.servo.get("Grabber");
         if (mode.equals(OpModes.AUTO)) {
-            int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-            webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-            AprilTagPipeline = new AprilTagDetectionPipeline(0.2, 1430, 1430, 480, 620); // these values might be wrong I got them off some random website
-            webcam.setPipeline(AprilTagPipeline);
-            webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-                @Override
-                public void onOpened() { webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT); }
-                @Override
-                public void onError(int errorCode) {}
-            });
+            camera = new Camera(hardwareMap);
         }
     }
 }

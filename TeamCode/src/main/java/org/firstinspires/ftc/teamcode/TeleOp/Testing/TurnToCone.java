@@ -8,14 +8,13 @@ import org.firstinspires.ftc.common.Hardware.Camera;
 
 public class TurnToCone extends LinearOpMode {
     final double speed = .2;
-    Camera camera = new Camera();
+    Camera camera = new Camera(hardwareMap);
     int currentCenter;
     int currentWidth;
     private DcMotor leftFront, rightFront, leftRear, rightRear;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        camera.initialize(this);
         camera.switchPipeline("red");
         leftFront = hardwareMap.dcMotor.get("leftFront");
         rightFront = hardwareMap.dcMotor.get("rightFront");

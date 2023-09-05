@@ -47,7 +47,7 @@ public class AutonomousRight extends LinearOpMode {
         robot.init(hardwareMap, RobotHardware.OpModes.AUTO);
         deliverySystem = new DeliverySystem(robot);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        aprilTag = new AprilTagAutonomous(this);
+        aprilTag = new AprilTagAutonomous(robot.camera);
 
         waitForStart();
         if (isStopRequested()) return;

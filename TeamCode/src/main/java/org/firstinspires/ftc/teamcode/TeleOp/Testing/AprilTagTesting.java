@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 @TeleOp(name="April Tag Testing", group="Linear Opmode")
 public class AprilTagTesting extends LinearOpMode {
-    Camera camera = new Camera();
+    Camera camera = new Camera(hardwareMap);
     static final double FEET_PER_METER = 3.28084;
 
     int numFramesWithoutDetection = 0;
@@ -28,7 +28,6 @@ public class AprilTagTesting extends LinearOpMode {
     @SuppressLint("DefaultLocale")
     @Override
     public void runOpMode() {
-        camera.initialize(this);
 
         waitForStart();
         while (opModeIsActive()) {

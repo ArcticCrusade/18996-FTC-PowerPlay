@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.common.Software;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -26,14 +27,14 @@ public class AprilTagAutonomous {
     private final float THRESHOLD_HIGH_DECIMATION_RANGE_METERS;
     private final int THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION;
 
-    public AprilTagAutonomous(LinearOpMode opMode) {
+    public AprilTagAutonomous(Camera camera) {
         DECIMATION_HIGH = 3;
         DECIMATION_LOW = 2;
         THRESHOLD_HIGH_DECIMATION_RANGE_METERS = 1.0f;
         THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION = 4;
-        camera.initialize(opMode);
+        this.camera = camera;
     }
-    public AprilTagAutonomous(LinearOpMode opMode,
+    public AprilTagAutonomous(Camera camera,
                               float DECIMATION_HIGH, float DECIMATION_LOW,
                               float THRESHOLD_HIGH_DECIMATION_RANGE_METERS,
                               int THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION) {
@@ -41,7 +42,7 @@ public class AprilTagAutonomous {
         this.DECIMATION_LOW = DECIMATION_LOW;
         this.THRESHOLD_HIGH_DECIMATION_RANGE_METERS = THRESHOLD_HIGH_DECIMATION_RANGE_METERS;
         this.THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION = THRESHOLD_NUM_FRAMES_NO_DETECTION_BEFORE_LOW_DECIMATION;
-        camera.initialize(opMode);
+        this.camera = camera;
     }
     public Camera getCamera() {
         return camera;
@@ -92,5 +93,6 @@ public class AprilTagAutonomous {
                             rot.thirdAngle};
         //feet, degrees
         //translation x, y, z, rotation yaw, pitch, roll
+        //yaw = side to side (z is constant), pitch = up or down, roll = barrel roll
     }
 }
