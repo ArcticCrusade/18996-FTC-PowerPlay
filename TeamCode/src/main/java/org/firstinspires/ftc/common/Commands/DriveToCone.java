@@ -20,6 +20,11 @@ public class DriveToCone extends CommandBase {
     }
 
     @Override
+    public void initialize() {
+        camera.switchPipeline("red");
+    }
+
+    @Override
     public void execute() {
         centerVal = camera.getConePipeline().getCenter();
         if (centerVal < 160) {
