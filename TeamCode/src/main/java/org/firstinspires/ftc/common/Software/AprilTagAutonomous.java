@@ -1,7 +1,7 @@
+/**
+ * DEPRECIATED
+ */
 package org.firstinspires.ftc.common.Software;
-
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -9,11 +9,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.openftc.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.common.Hardware.Camera;
-import org.firstinspires.ftc.common.Software.AprilTagDetectionPipeline;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class AprilTagAutonomous {
     private Camera camera;
