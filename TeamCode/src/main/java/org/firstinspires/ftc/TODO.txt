@@ -1,5 +1,5 @@
 Highest Priority:
-Drivetrain Subsystem needs to be written (all good - clark)
+Drivetrain Subsystem needs to be written
 Drivetrain Command system needs to be written
 Computer Vision Working
 Camera Subsystem needs to be written
@@ -8,4 +8,3 @@ Lower Priority:
 Learn how to integrate RR with lib
 Command Groups needs to be written
 Rewrite DeliverySystem to be its own subsystem without composition - not needed to be modular
-Tune new rr
