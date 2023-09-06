@@ -2,18 +2,17 @@ package org.firstinspires.ftc.common.Commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.checkerframework.checker.units.qual.C;
 import org.firstinspires.ftc.common.Hardware.Camera;
 import org.firstinspires.ftc.common.Hardware.DriveSubsystem;
 
 
-public class DriveToCone extends CommandBase {
+public class TurnToCone extends CommandBase {
 
     private final DriveSubsystem drivetrain;
     private final Camera camera;
     int centerVal;
 
-    public DriveToCone(DriveSubsystem newDrivetrain, Camera newCamera) {
+    public TurnToCone(DriveSubsystem newDrivetrain, Camera newCamera) {
         drivetrain = newDrivetrain;
         camera = newCamera;
         addRequirements(newDrivetrain, newCamera);
@@ -26,10 +25,15 @@ public class DriveToCone extends CommandBase {
 
     @Override
     public void execute() {
-        centerVal = camera.getConePipeline().getCenter();
-        if (centerVal < 160) {
-            drivetrain.manualPower(0, 0, .3);
-        } else {
+        if (camera.getConePipeline().foundContour) {
+            centerVal = camera.getConePipeline().getCenter();
+            if (centerVal < 160) {
+                drivetrain.manualPower(0, 0, .3);
+            } else {
+                drivetrain.manualPower(0, 0, -.3);
+            }
+        }
+        else {
             drivetrain.manualPower(0, 0, -.3);
         }
     }

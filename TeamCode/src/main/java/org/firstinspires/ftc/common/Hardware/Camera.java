@@ -2,7 +2,8 @@ package org.firstinspires.ftc.common.Hardware;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.HardwareMap;;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.sun.tools.javac.code.Attribute;;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.Mat;
@@ -143,6 +144,7 @@ public class Camera extends SubsystemBase {
         Scalar lowerRange;
         Scalar upperRange;
         List<MatOfPoint> contours;
+        public boolean foundContour;
         Mat hierarchy;
         MatOfPoint largestContour;
 
@@ -174,18 +176,18 @@ public class Camera extends SubsystemBase {
             hierarchy = new Mat();
             Imgproc.findContours(mask, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
 
-            if (contours != null) {
+            if (contours != null && findLargestContour(contours) != null) {
                 largestContour = findLargestContour(contours);
                 Rect boundingRect = Imgproc.boundingRect(largestContour);
                 centerX = boundingRect.x + boundingRect.width / 2;
                 width = boundingRect.width;
+                foundContour = true;
+            } else {
+                foundContour = false;
             }
         }
 
         private MatOfPoint findLargestContour(List<MatOfPoint> contours) {
-            if (contours.size() == 0) {
-                return null;
-            }
 
             double largestArea = 0;
             MatOfPoint largestContour = null;
@@ -198,7 +200,9 @@ public class Camera extends SubsystemBase {
                 }
             }
 
-            return largestContour;
+
+
+            return largestArea >= 40 ? largestContour : null;
         }
 
 
