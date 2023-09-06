@@ -1,9 +1,10 @@
 Highest Priority:
-Drivetrain Command system needs to be written - in progress
-Test Camera Programs
-Command Groups needs to be written
+Drivetrain Subsystem needs to be written
+Drivetrain Command system needs to be written
+Computer Vision Working
+Camera Subsystem needs to be written
 
 Lower Priority:
-Differentiate Blue from Red cones
 Learn how to integrate RR with lib
+Command Groups needs to be written
 Rewrite DeliverySystem to be its own subsystem without composition - not needed to be modular
