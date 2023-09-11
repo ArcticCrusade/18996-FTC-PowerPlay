@@ -42,7 +42,7 @@ public class RobotHardware {
         rightRear = new Motor(hardwareMap,"rightRear");
         rightRear.setRunMode(Motor.RunMode.RawPower);
 
-        leftLift = hardwareMap.dcMotor.get("leftLiftMotor");
+        /*leftLift = hardwareMap.dcMotor.get("leftLiftMotor");
         rightLift = hardwareMap.dcMotor.get("rightLiftMotor");
         List<DcMotor> liftMotors = Arrays.asList(leftLift, rightLift);
         for (DcMotor motor : liftMotors) {
@@ -56,7 +56,7 @@ public class RobotHardware {
         fourBar2 = hardwareMap.servo.get("4bar 2");
         fourBar2.setDirection(Servo.Direction.FORWARD);
 
-        grabber = hardwareMap.servo.get("Grabber");
+        grabber = hardwareMap.servo.get("Grabber");*/
         if (mode.equals(OpModes.AUTO)) {
             camera = new Camera(hardwareMap);
         }

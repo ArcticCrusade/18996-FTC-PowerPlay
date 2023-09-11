@@ -202,7 +202,7 @@ public class Camera extends SubsystemBase {
 
 
 
-            return largestArea >= 40 ? largestContour : null;
+            return largestContour;
         }
 
 
