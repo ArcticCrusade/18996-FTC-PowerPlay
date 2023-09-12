@@ -138,7 +138,6 @@ public class Camera extends SubsystemBase {
     public class ConeDetection extends OpenCvPipeline {
         Mat hsvImage;
         Mat inRange;
-        Mat mask;
         int centerX;
         int width;
         Scalar lowerRange;
@@ -174,13 +173,13 @@ public class Camera extends SubsystemBase {
             Core.inRange(hsvImage, lowerRange, upperRange, inRange);
             contours = new ArrayList<>();
             hierarchy = new Mat();
-            Imgproc.findContours(mask, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+            Imgproc.findContours(inRange, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
 
             if (contours != null && findLargestContour(contours) != null) {
                 largestContour = findLargestContour(contours);
                 Rect boundingRect = Imgproc.boundingRect(largestContour);
                 centerX = boundingRect.x + boundingRect.width / 2;
-                width = boundingRect.width;
+                this.width = boundingRect.width;
                 foundContour = true;
             } else {
                 foundContour = false;

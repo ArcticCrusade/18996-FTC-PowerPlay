@@ -15,16 +15,16 @@ public class TurnToCone extends CommandBase {
     public TurnToCone(DriveSubsystem newDrivetrain, Camera newCamera) {
         drivetrain = newDrivetrain;
         camera = newCamera;
-        addRequirements(newDrivetrain, newCamera);
+        addRequirements(newDrivetrain, drivetrain);
     }
 
     @Override
     public void initialize() {
-        camera.switchPipeline("red");
     }
 
     @Override
     public void execute() {
+        camera.switchPipeline("red");
         if (camera.getConePipeline().foundContour) {
             centerVal = camera.getConePipeline().getCenter();
             if (centerVal < 160) {
