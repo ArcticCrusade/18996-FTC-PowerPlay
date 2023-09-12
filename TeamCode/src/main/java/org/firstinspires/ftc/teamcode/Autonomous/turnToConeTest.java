@@ -14,19 +14,19 @@ import org.firstinspires.ftc.common.Commands.TurnToCone;
 public class turnToConeTest extends CommandOpMode {
     RobotHardware robot = RobotHardware.getInstance();
     DriveSubsystem driveSubsystem;
-    Camera camera;
-
     @Override
     public void initialize() {
+        CommandScheduler.getInstance().reset();
         robot.init(hardwareMap, RobotHardware.OpModes.AUTO);
         driveSubsystem = new DriveSubsystem(robot);
-        camera = new Camera(hardwareMap);
+        register(driveSubsystem, robot.camera);
     }
 
     @Override
-    public void runOpMode() {
+    public void run() {
+        CommandScheduler.getInstance().run();
         CommandScheduler.getInstance().schedule(
-                new TurnToCone(driveSubsystem, camera)
+                new TurnToCone(driveSubsystem, robot.camera)
         );
     }
 }
