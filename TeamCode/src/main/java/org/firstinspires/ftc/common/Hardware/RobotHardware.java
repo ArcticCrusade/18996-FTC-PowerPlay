@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.common.Hardware;
 
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -27,7 +28,8 @@ public class RobotHardware {
 
     public Camera camera;
 
-    private static RobotHardware instance = new RobotHardware();
+    public BNO055IMU imu;
+    private final static RobotHardware instance = new RobotHardware();
     public static RobotHardware getInstance() {
         return instance;
     }
@@ -59,6 +61,13 @@ public class RobotHardware {
         grabber = hardwareMap.servo.get("Grabber");*/
         if (mode.equals(OpModes.AUTO)) {
             camera = new Camera(hardwareMap);
+            imu = hardwareMap.get(BNO055IMU.class, "imu");
+            BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+            parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+            imu.initialize(parameters);
         }
+    }
+    public double getAngle() {
+        return imu.getAngularOrientation().firstAngle;
     }
 }
